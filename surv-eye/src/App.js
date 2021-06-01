@@ -1,28 +1,20 @@
-import React, { useState } from 'react';
-
+import React from 'react';
+import RadioButtonGroup from './RadioButtonGroup.js'
 import './App.css';
-import  RadioButton  from "./RadioButton.js";
+
 
 
 const App = () => {
 
-  const [selected, setSelected] = useState("0");
+
 
   return (
-    <>
-      <RadioButton
-        value= "0"
-        selected={selected}
-        text="First Radio Button"
-        onChange={() => setSelected("0")}
-      />
-      <RadioButton
-        value= "1"
-        selected={selected}
-        text="Second Radio Button"
-        onChange={() => setSelected("1")}
-      />
-    </>
+    <div className="App">
+      <RadioButtonGroup 
+      question= "What is your favorite animal?"
+      left= "Dog"
+      right= "Cat"/>
+    </div>
   );
 }
 
