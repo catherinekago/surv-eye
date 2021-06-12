@@ -1,21 +1,93 @@
 import React from 'react';
-import RadioButtonGroup from './RadioButtonGroup.js'
+import { WebGazeContext } from './WebGazeContext';
+import MainApp from './Main';
+
 import './App.css';
 
 
+import Script from 'react-load-script'
+declare var GazeCloudAPI;
 
-const App = () => {
+class GazeCloudAPILoader extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            context: { x: -1, y: -1 }, 
+            gazeDisplay: "none"
+        };
+    }
 
+    handleScriptLoad() {
 
+        function processGaze(GazeData) {
+            var x_ = GazeData.docX;
+            var y_ = GazeData.docY;
 
-  return (
-    <div className="App">
-      <RadioButtonGroup 
-      question= "Some Radio Button Group - Prototype"
-      left= "Nice"
-      right= "REALLY Nice"/>
-    </div>
-  );
+            this.setState({ context: { x: x_, y: y_ } });
+
+            var gaze = document.getElementById("gaze");
+            x_ -= gaze.clientWidth / 2;
+            y_ -= gaze.clientHeight / 2;
+
+            // console.log(x_, y_);
+
+            gaze.style.left = x_ + "px";
+            gaze.style.top = y_ + "px";
+
+            if (GazeData.state !== 0) {
+                if (this.state.gazeDisplay === "block")
+                    this.setState({gazeDisplay: 'none'});
+            } else {
+                if (this.state.gazeDisplay === 'none')
+                    this.setState({gazeDisplay: "block"});
+            }
+            
+        }
+        GazeCloudAPI.OnCalibrationComplete = function () {
+            console.log('gaze Calibration Complete');
+            this.setState({gazeDisplay: "block"})
+        }
+        GazeCloudAPI.OnCamDenied = function () { console.log('camera access denied') }
+        GazeCloudAPI.OnError = function (msg) { console.log('err: ' + msg) }
+        GazeCloudAPI.UseClickRecalibration = true;
+        GazeCloudAPI.OnResult = processGaze.bind(this);
+
+    }
+
+    handleScriptError() {
+        console.log('Script loading Error!');
+    }
+
+    render() {
+
+        const gazeDisplayStyle = {
+            display: this.state.gazeDisplay
+        }
+
+        return (
+            <WebGazeContext.Provider value={this.state.context}>
+                <button onClick={() => GazeCloudAPI.StartEyeTracking()}> Calibrate </button>
+                <button onClick={() => GazeCloudAPI.StopEyeTracking()}> Stop Tracking </button>
+                <div id="gaze" style = {gazeDisplayStyle}></div> 
+                <MainApp />
+                <Script
+                    url="https://api.gazerecorder.com/GazeCloudAPI.js"
+                    onLoad={this.handleScriptLoad.bind(this)}
+                    onError={this.handleScriptError.bind(this)}
+                />
+            </WebGazeContext.Provider>
+
+        );
+    }
+}
+GazeCloudAPILoader.contextType = WebGazeContext;
+
+function App() {
+    return (
+        <div className="App">
+            <GazeCloudAPILoader />
+        </div>
+    );
 }
 
 export default App;
