@@ -38,3 +38,16 @@
   width: 80px !important;
   height: 80px !important;
 }
+
+#webgazerGazeDot {
+  width: 100px !important;
+  height: 100px !important;
+  border-radius: 50% !important;
+  border: solid 2px  rgba(255, 255,255, .2) !important;	
+  box-shadow: 0 0 100px 3px rgba(125, 125,125, .5) !important;	
+  pointer-events: none !important;
+  background: none !important;	
+  z-index: 999999;
+  left: 0;
+  top:0;
+}
