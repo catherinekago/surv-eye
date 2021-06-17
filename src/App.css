@@ -1,8 +1,8 @@
 .App {
-  margin: 80px;
+  margin: 0;
 }
 
-#gaze {
+/* #gaze {
   position: absolute;
   width: 100px;
   height: 100px;
@@ -13,4 +13,28 @@
   z-index: 999999;
   left: 0;
   top:0;
+
+} */
+
+#webgazerVideoContainer {
+  margin:20px;
+  width: 160px !important;
+  height:120px !important;
+}
+
+#webgazerVideoFeed {
+  width: 160px !important;
+  height:120px !important;
+}
+
+#webgazerFaceOverlay {
+  width: 160px !important;
+  height:120px !important;
+}
+
+#webgazerFaceFeedbackBox {
+  left:40px !important;
+  top: 10px !important;
+  width: 80px !important;
+  height: 80px !important;
 }
