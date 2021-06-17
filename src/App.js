@@ -32,7 +32,7 @@ class WebGazeLoader extends React.Component {
       if (data == null) {
         return;
       }
-      if (this.dataPoints != this.smoothFactor) {
+      if (this.dataPoints !== this.smoothFactor) {
         var newData = [webgazer.util.bound(data)];
         this.setState({dataX: this.dataX + newData["x"]});
         this.setState({dataY: this.dataY + newData["y"]});
