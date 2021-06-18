@@ -14,7 +14,7 @@ class WebGazeLoader extends React.Component {
     super();
     this.state = {
       context: {x: -1, y: -1}, 
-      smoothFactor: 10,
+      smoothFactor: 8,
       dataX: 0,
       dataY: 0,
       dataPoints: 0
@@ -32,20 +32,25 @@ class WebGazeLoader extends React.Component {
       if (data == null) {
         return;
       }
-      if (this.dataPoints !== this.smoothFactor) {
+      // this code only smoothens the data, NOT the dot transformation!!
+      if (this.state.dataPoints !== this.state.smoothFactor) {
         var newData = [webgazer.util.bound(data)];
-        this.setState({dataX: this.dataX + newData["x"]});
-        this.setState({dataY: this.dataY + newData["y"]});
-        this.setState({dataPoints: this.dataPoints + 1});
+
+        this.setState({dataX: this.state.dataX + newData[0]["x"]});
+        this.setState({dataY: this.state.dataY + newData[0]["y"]});
+        this.setState({dataPoints: this.state.dataPoints + 1});
+
       } else {
+
       // Make sure predictions are alway in bounds of the viewport
-      var averageX = this.dataX / this.smoothFactor; 
-      var averageY = this.dataY / this.smoothFactor; 
+      var averageX = this.state.dataX / this.state.smoothFactor; 
+      var averageY = this.state.dataY / this.state.smoothFactor; 
       var averaged = {x: averageX, y: averageY};
       this.setState({context: webgazer.util.bound(averaged)})
       this.setState({dataX: 0});
       this.setState({dataY: 0});
       this.setState({dataPoints: 0});
+
       }
 
     }).begin();
