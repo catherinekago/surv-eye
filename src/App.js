@@ -53,7 +53,7 @@ class WebGazeLoader extends React.Component {
 
       }
 
-    }).begin();
+    }).saveDataAcrossSessions(false).begin();
   }
 
   handleScriptError() {
