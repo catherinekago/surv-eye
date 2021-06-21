@@ -18,11 +18,6 @@ class WebGazeLoader extends React.Component {
       dataX: 0,
       dataY: 0,
       dataPoints: 0
-    //         gazeDisplay: "none", // do not display gaze
-    //         fixRange: 100, // radius for fixation
-    //         fixTime: 2, // dwelltime
-    //         fixPoint: { x: -1, y: -1, time: Math.floor(Date.now() / 1000) }, // last fixpoint
-    //         fixation: false // is fixatiing
     };
   }
 

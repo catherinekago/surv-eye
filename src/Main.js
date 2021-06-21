@@ -2,19 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import Calibration from "./Calibration";
 
 const MainApp = () => {
-  const [state, setState] = useState("EYE-GAZE-ACCURACY");
-  const [cycleTime, setCycleTime] = useState(new Date().getTime());
-  const [cycleInterval, setCycleInterval] = useState(3000);
-  const [clickNum, setClickNum] = useState(0);
-  const [gazePoints, setGazePoints] = useState({ in: 0, total: 0 });
-  const [gazeTime, setGazeTime] = useState(new Date().getTime());
-  // From 30ms on about 50 data points
-  const [gazePointInterval, setGazePointInterval] = useState(30);
-  const [result, setResult] = useState(0);
-  const [hasCalibrated, setHasCalibrated] = useState(false);
-  const [calibrationComplete, setCalibrationComplete] = useState(false);
-  const calibrationPoint01 = useRef(null);
-
 
   // const performCalibrationCycle = (context) => {
   //   const newTime = new Date().getTime();

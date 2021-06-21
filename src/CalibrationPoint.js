@@ -5,7 +5,7 @@ import './calibrationpoint.css';
 
 const CalibrationPoint = (props) => {
 
-let display = props.phase === "INACTIVE" ? "none" : "flex";
+let display = "none"
 const reference = useRef(props.reference);
 
 
