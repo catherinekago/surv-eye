@@ -1,18 +1,1 @@
-button {
-    height: 100px;
-    width: 100px;
-    border-radius: 50%;
-    border: none; 
-}
 
-.LOOK-LOOK, .CLICK-CLICK{
-    background-color: maroon;
-}
-
-.EYE-GAZE-ACCURACY, .CALIBRATION-ACCURACY{
-    background-color: seagreen;
-}
-
-.DONE {
-    display: none; 
-}
