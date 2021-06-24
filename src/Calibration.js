@@ -10,7 +10,7 @@ const Calibration = (props) => {
     const [currentPointClickCount, setCurrentPointClickCount] = useState(0);
 
     const [calibrationComplete, setCalibrationComplete] = useState(false);
-    const [validationComplete, setValidationComplete] = useState(false);
+    // const [validationComplete, setValidationComplete] = useState(false);
 
     const pointReference = "calibrationPoint";
 
