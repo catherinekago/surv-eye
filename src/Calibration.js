@@ -95,7 +95,7 @@ const Calibration = (props) => {
                 // Stop calibration process if last point has been reached.
                 if (currentPoint + 1 === pointPositions.length) {
                     setCurrentPoint(0);
-                    if (currentRound == 2) {
+                    if (currentRound === 2) {
                         setCalibrationComplete(true);
                         setPointLabel("🎉 CALIBRATION COMPLETE  🎉");
                         setHasRoundStarted(false);
