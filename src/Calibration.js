@@ -42,8 +42,8 @@ const Calibration = (props) => {
         // Perform calibration until it is complete 
         if (!calibrationComplete) {
             performCalibration(); 
-        } else if (calibrationComplete && !validationComplete) {
-            // console.log("Lets validate!");
+        // } else if (calibrationComplete && !validationComplete) {
+        //     // console.log("Lets validate!"); }
         }
     });
 
