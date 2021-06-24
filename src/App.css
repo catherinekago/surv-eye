@@ -1,7 +1,9 @@
 
 .App {
-  margin-top: 120px;
+  margin-top: 40px;
   background-color: white; 
+  height:inherit;
+
 }
 
 #webgazerVideoContainer {
@@ -29,8 +31,8 @@
 }
 
 #webgazerGazeDot {
-  width: 100px !important;
-  height: 100px !important;
+  width: 50px !important;
+  height: 50px !important;
   border-radius: 50% !important;
   border: solid 2px  rgba(49, 34,68, .2) !important;	
   box-shadow: 0 0 100px 3px rgba(49, 34, 68, .5) !important;	

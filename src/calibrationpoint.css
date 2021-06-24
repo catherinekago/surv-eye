@@ -1,8 +1,9 @@
 button {
-    height: 100px;
-    width: 100px;
+    height: 50px;
+    width: 50px;
     border-radius: 50%;
     border: none; 
+    align-self: center;
 }
 
 .LOOK-LOOK, .CLICK-CLICK{
