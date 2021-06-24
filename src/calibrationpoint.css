@@ -10,8 +10,8 @@ button {
     background-color: #4d194d;
 }
 
-.EYE-GAZE-ACCURACY, .CALIBRATION-ACCURACY{
-    background-color: #006466;
+.ACCURACY-RESULT {
+    background-color: #006466 !important;
 }
 
 .INACTIVE {

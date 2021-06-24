@@ -13,7 +13,7 @@ const reference = useRef(props.reference);
             {context => (
                 <div style={{display:"flex", margin:"40px", "flexDirection": "column",  justifyContent: "center", alignItems:"center"}}>
                     <button id= "calibrationPoint" style={{display: display}} ref={reference} className={props.phase}></button>
-                    <p style={{display:"flex"}}>{props.result}</p>
+                    <p style={{display:"flex"}}>{props.label}</p>
                 </div >
             )}
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import Calibration from "./Calibration";
+import { WebGazeContext } from './WebGazeContext';
 
 const MainApp = () => {
 
@@ -82,7 +83,12 @@ const MainApp = () => {
 
 
   return (
-    <Calibration />
+    <WebGazeContext.Consumer>
+    {context => (
+    <Calibration context = {context}/>
+    )}
+
+    </WebGazeContext.Consumer>
 
   );
 }
