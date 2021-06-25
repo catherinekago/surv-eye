@@ -4,16 +4,18 @@ button {
     border-radius: 50%;
     border: none; 
     align-self: center;
+    transition-duration: 2s;
 }
 
-.LOOK-LOOK, .CLICK-CLICK{
-    background-color: #4d194d;
+.CALIBRATION{
+    background-color: #4d194d !important;
+    transform: 2s;
 }
 
-.ACCURACY-RESULT {
+.VALIDATION {
     background-color: #006466 !important;
 }
 
 .INACTIVE {
-    display: none; 
+    display:none;
 }

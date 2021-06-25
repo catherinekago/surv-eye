@@ -34,8 +34,8 @@
   width: 50px !important;
   height: 50px !important;
   border-radius: 50% !important;
-  border: solid 2px  rgba(49, 34,68, 0) !important;	
-  box-shadow: 0 0 100px 3px rgba(49, 34, 68, 0) !important;	
+  border: solid 2px  rgba(49, 34,68, 1.0) !important;	
+  box-shadow: 0 0 100px 3px rgba(49, 34, 68, 1.0) !important;	
   pointer-events: none !important;
   background: none !important;	
   z-index: 999999;

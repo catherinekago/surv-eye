@@ -26,7 +26,8 @@ class WebGazeLoader extends React.Component {
     webgazer.setGazeListener((data, elapsedTime) => {
       if (data == null) {
 
-      this.click(window.innerHeight/2, window.innerWidth/2);
+       (document.getElementById("INTRO").click());
+
 
         return;
       }
