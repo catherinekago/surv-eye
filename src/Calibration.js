@@ -64,7 +64,7 @@ const Calibration = (props) => {
             setCurrentPhase("INACTIVE");
         }
 
-    }, [calibrationComplete, validationComplete, currentPoint, performCycle]);
+    });
 
 
     // Perform click calibration cycle for all given points.
