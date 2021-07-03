@@ -23,7 +23,7 @@ const Calibration = (props) => {
     const pointWidth = 50 + 50  // margin of point 
 
     const [introHeader, setIntroHeader] = useState("Welcome to SurvEye!");
-    const [introText, setIntroText] = useState("To complete the calibration process, please follow the dot. 🟣")
+    const [introText, setIntroText] = useState("To complete the calibration process, please follow the dot. 🟢")
 
 
 
