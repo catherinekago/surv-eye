@@ -21,8 +21,6 @@ const Calibration = (props) => {
 
     const pointReference = "calibrationPoint";
     const pointWidth = 50 + 50  // margin of point 
-    const headerHeight = 0;
-    const calibrationWindowMarginBottom = 80;
 
     const [introHeader, setIntroHeader] = useState("Welcome to SurvEye!");
     const [introText, setIntroText] = useState("To complete the calibration process, please follow the dot. 🟣")
@@ -30,18 +28,23 @@ const Calibration = (props) => {
 
 
     // Absolute positions of all points
-    const pointPositions = [
-        { x: window.innerWidth / 2 - 0.5 * pointWidth, y: window.innerHeight / 3 - headerHeight },
-        { x: 0, y: headerHeight },
-        { x: window.innerWidth / 2 - 0.5 * pointWidth, y: headerHeight },
-        { x: window.innerWidth - pointWidth, y: headerHeight },
-        { x: 0, y: window.innerHeight / 3 },
-        { x: window.innerWidth / 2 - 0.5 * pointWidth, y: window.innerHeight / 3 },
-        { x: window.innerWidth - pointWidth, y: window.innerHeight / 3 },
-        { x: 0, y: window.innerHeight / 3 + window.innerHeight / 3 },
-        { x: window.innerWidth / 2 - 0.5 * pointWidth, y: window.innerHeight / 3 + window.innerHeight / 3 },
-        { x: window.innerWidth - pointWidth, y: window.innerHeight / 3 + window.innerHeight / 3 },
-        { x: window.innerWidth / 2 - 0.5 * pointWidth, y: window.innerHeight / 3 - headerHeight }];
+    const [pointPositions, setPointPositions] = useState([
+        { x: 0, y: 0 },
+        { x: window.innerWidth * 0.25 - 0.5 * pointWidth, y: 0 },    
+        { x: window.innerWidth * 0.5 - 0.5 * pointWidth, y: 0 },
+        { x: window.innerWidth * 0.75 - 0.5 * pointWidth, y: 0 }, 
+        { x: window.innerWidth - pointWidth, y: 0},
+        { x: 0, y: window.innerHeight / 2 },
+        { x: window.innerWidth * 0.25 - 0.5 * pointWidth, y: window.innerHeight / 2 - 0.5 * pointWidth },  
+        { x: window.innerWidth * 0.5 - 0.5 * pointWidth, y: window.innerHeight / 2 - 0.5 * pointWidth},
+        { x: window.innerWidth * 0.75 - 0.5 * pointWidth, y: window.innerHeight / 2 - 0.5 * pointWidth}, 
+        { x: window.innerWidth - pointWidth, y: window.innerHeight / 2 - 0.5 * pointWidth},
+        { x: 0, y: window.innerHeight / 2 - 0.5 * pointWidth},
+        { x: window.innerWidth * 0.25 - 0.5 * pointWidth, y: window.innerHeight - pointWidth}, 
+        { x: window.innerWidth * 0.5 - 0.5 * pointWidth, y: window.innerHeight  - pointWidth},
+        { x: window.innerWidth * 0.75 - 0.5 * pointWidth, y: window.innerHeight  - pointWidth}, 
+        { x: window.innerWidth - pointWidth, y: window.innerHeight - pointWidth},
+]);
 
     // To allow timing length of phases, length of start sequence, and intervals of actions
     const [lastMovementTime, setLastMovementTime] = useState(new Date().getTime());
@@ -66,6 +69,16 @@ const Calibration = (props) => {
 
     });
 
+    const randomizePointPositions = (array) => {
+        let newArray = array; 
+        for (var i = newArray.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = newArray[i];
+            newArray[i] = newArray[j];
+            newArray[j] = temp;
+    }
+    return newArray; 
+}
 
     // Perform click calibration cycle for all given points.
     const performCycle = (type) => {
@@ -79,12 +92,11 @@ const Calibration = (props) => {
 
             // Check if new action (click or check) has to be taken 
             if (type === "CALIBRATION") {
+                console.log(pointPositions[currentPoint]);
                 clickOnPoint();
             } else if (type === "VALIDATION") {
                 handleGazeValidation();
             }
-
-
         }
     }
 
@@ -92,10 +104,13 @@ const Calibration = (props) => {
     const startRound = (type) => {
         let currentTime = new Date().getTime();
         if (currentTime - lastMovementTime >= introTime) {
+            setPointPositions(randomizePointPositions(pointPositions));
             setLastMovementTime(currentTime);
             setCurrentPhase(type);
             setHasRoundStarted(true);
         }
+
+
     }
 
 
@@ -121,7 +136,7 @@ const Calibration = (props) => {
                     let result = Math.round(validationTotal / pointPositions.length);
                     setValidationTotal(Math.round(validationTotal / pointPositions.length));
                     setIntroHeader("You did it! 🎉");
-                    setIntroText("Your (tweaked) validation result is: " + result + "%");
+                    setIntroText("Your validation result is: " + result + "%");
                 }
                 setCurrentPhase("INACTIVE");
 
@@ -145,7 +160,7 @@ const Calibration = (props) => {
         let currentTime = new Date().getTime();
         if (isTransitionOver && currentTime - lastActionTime >= actionInterval) {
             setLastActionTime(currentTime);
-            let calibrationPoint = document.getElementById("calibrationPoint");
+            let calibrationPoint = document.getElementById("calibrationPointCenter");
             let pointXCenter = calibrationPoint.getBoundingClientRect().left + calibrationPoint.getBoundingClientRect().width * 0.5;
             let pointYCenter = calibrationPoint.getBoundingClientRect().top + calibrationPoint.getBoundingClientRect().width * 0.5;
             click(pointXCenter, pointYCenter);
@@ -174,7 +189,6 @@ const Calibration = (props) => {
         if (isTransitionOver && currentTime - lastActionTime >= actionInterval) {
             setLastActionTime(currentTime);
             if (isGazeWithinPoint()) {
-                clickOnPoint();
                 setCurrentValidationResult(currentValidationResult + 1);
             }
             console.log("validated");
@@ -203,11 +217,11 @@ const Calibration = (props) => {
 
     const determineIntroColor = () => {
         if (!calibrationComplete) {
-            return "#4d194d";
+            return "#28666e";
         } else if (!validationComplete) {
-            return "#006466";
+            return "#28666e";
         } else {
-            return "#272640";
+            return "#28666e";
         }
     }
 
@@ -216,8 +230,10 @@ return (
 
     <div style={{
         display: hasRoundStarted ? "block" : "flex",
-        "marginBottom": calibrationWindowMarginBottom,
-        height: "80vh",
+        "marginBottom": 0,
+        "marginTop": 0,
+        height: window.innerHeight,
+    
     }}>
         <CalibrationPoint
             id={pointReference}

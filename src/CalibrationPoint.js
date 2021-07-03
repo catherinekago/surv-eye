@@ -5,19 +5,27 @@ import './calibrationpoint.css';
 
 const CalibrationPoint = (props) => {
 
-let display = props.phase === "INACTIVE" ? "none" : "block";
+let display = props.phase === "INACTIVE" ? "none" : "flex";
 const reference = useRef(props.reference);
 
     return (
         <WebGazeContext.Consumer>
             {context => (
-                    <button id= "calibrationPoint" style={{
-                        display: display,
-                        margin:"25px", 
-                        position: "absolute",
-                        transform: "translate(" + props.position.x +"px," + props.position.y + "px)"
+                <div style = {{
+                    display: display, 
+                    margin:"25px",
+                    position: "absolute",
+                    alignContent: "center",
+                    justifyContent: "center",
+                    transform: "translate(" + props.position.x +"px," + props.position.y + "px)"}}
+                    className={props.phase}
+                    id= {props.reference}
+                    ref={reference}
+                    >
+                <button id="calibrationPointCenter"></button>
+                </div>
 
-                    }} ref={reference} className={props.phase}></button>
+
             )}
 
         </WebGazeContext.Consumer>

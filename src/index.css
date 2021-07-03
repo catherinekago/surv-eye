@@ -9,14 +9,6 @@ body {
   overflow: hidden;
 }
 
-h1 {
-  text-align: center;
-  padding-top: 40px; 
-  margin-block-start: 0em;
-    margin-block-end: 0em;
-    color: white; 
-    font-size: 60px;
-}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
