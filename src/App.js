@@ -26,7 +26,7 @@ class WebGazeLoader extends React.Component {
     webgazer.setGazeListener((data, elapsedTime) => {
       if (data == null) {
 
-       (document.getElementById("INTRO").click());
+      //  (document.getElementById("INTRO").click());
 
 
         return;
@@ -82,7 +82,7 @@ class WebGazeLoader extends React.Component {
 
   render() {
     return (
-<div>
+<div style={{height:"inherit"}}>
 <WebGazeContext.Provider value={this.state.context}>
         <Script
           url="https://webgazer.cs.brown.edu/webgazer.js"

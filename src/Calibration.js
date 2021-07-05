@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import CalibrationPoint from "./CalibrationPoint";
-
-
+import { click }  from "./functions/click";
+import { isGazeWithinElement } from './functions/isGazeWithinElement';
 
 const Calibration = (props) => {
 
@@ -64,7 +64,7 @@ const Calibration = (props) => {
         } else if (!validationComplete) {
             performCycle("VALIDATION");
         } else if (calibrationComplete && validationComplete && currentPoint === 0) {
-            setCurrentPhase("INACTIVE");
+            handleSwitchToQuestionnaire(); 
         }
 
     });
@@ -92,7 +92,7 @@ const Calibration = (props) => {
 
             // Check if new action (click or check) has to be taken 
             if (type === "CALIBRATION") {
-                console.log(pointPositions[currentPoint]);
+                // console.log(pointPositions[currentPoint]);
                 clickOnPoint();
             } else if (type === "VALIDATION") {
                 handleGazeValidation();
@@ -137,9 +137,9 @@ const Calibration = (props) => {
                     setValidationTotal(Math.round(validationTotal / pointPositions.length));
                     setIntroHeader("You did it! 🎉");
                     setIntroText("Your validation result is: " + result + "%");
+                    setLastMovementTime(currentTime);
                 }
                 setCurrentPhase("INACTIVE");
-
             } else {
                 setCurrentPoint(currentPoint + 1);
                 setIsTransitionOver(false);
@@ -160,27 +160,8 @@ const Calibration = (props) => {
         let currentTime = new Date().getTime();
         if (isTransitionOver && currentTime - lastActionTime >= actionInterval) {
             setLastActionTime(currentTime);
-            let calibrationPoint = document.getElementById("calibrationPointCenter");
-            let pointXCenter = calibrationPoint.getBoundingClientRect().left + calibrationPoint.getBoundingClientRect().width * 0.5;
-            let pointYCenter = calibrationPoint.getBoundingClientRect().top + calibrationPoint.getBoundingClientRect().width * 0.5;
-            click(pointXCenter, pointYCenter);
+            click("calibrationPointCenter");
         }
-    }
-
-    // Simulate a mouse click at given x and y coordinates
-    const click = (x, y) => {
-        var ev = new MouseEvent('click', {
-            'view': window,
-            'bubbles': true,
-            'cancelable': true,
-            'screenX': x,
-            'screenY': y,
-            'clientX': x,
-            'clientY': y
-        });
-
-        var el = document.elementFromPoint(x, y);
-        el.dispatchEvent(ev);
     }
 
     // Compare if gaze and point position match and handle 
@@ -188,30 +169,18 @@ const Calibration = (props) => {
         let currentTime = new Date().getTime();
         if (isTransitionOver && currentTime - lastActionTime >= actionInterval) {
             setLastActionTime(currentTime);
-            if (isGazeWithinPoint()) {
+            if (isGazeWithinElement("calibrationPoint", 50, props.context.x, props.context.y)) {
                 setCurrentValidationResult(currentValidationResult + 1);
             }
-            console.log("validated");
             setCurrentValidationCount(currentValidationCount + 1);
         }
     }
 
-
-    // Determine whether current gaze points lie within boundaries of the calibration point. 
-    const isGazeWithinPoint = () => {
-        let currentGazeX = props.context.x;
-        let currentGazeY = props.context.y;
-
-        let calibrationPoint = document.getElementById("calibrationPoint");
-
-        let pointMinX = calibrationPoint.getBoundingClientRect().left - 50;
-        let pointMinY = calibrationPoint.getBoundingClientRect().top - 50;
-        let pointMaxX = calibrationPoint.getBoundingClientRect().right + 50;
-        let pointMaxY = calibrationPoint.getBoundingClientRect().bottom + 50;
-
-        let isGazeWithinButton = currentGazeX >= pointMinX && currentGazeX < pointMaxX && currentGazeY >= pointMinY && currentGazeY < pointMaxY
-
-        return isGazeWithinButton;
+    const handleSwitchToQuestionnaire = () => {
+        let currentTime = new Date().getTime();
+        if (currentTime - lastMovementTime >= introTime) {
+            props.onCalibrationComplete(false);
+        }
 
     }
 
