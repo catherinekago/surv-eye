@@ -2,7 +2,7 @@ import React from 'react';
 import { WebGazeContext } from './WebGazeContext';
 import MainApp from './Main';
 
-import './App.css';
+import './css/App.css';
 
 
 import Script from 'react-load-script'

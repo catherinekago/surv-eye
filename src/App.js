@@ -2,7 +2,7 @@ import React from 'react';
 import { WebGazeContext } from './WebGazeContext';
 import MainApp from './Main';
 
-import './App.css';
+import './css/App.css';
 
 
 
@@ -82,7 +82,7 @@ class WebGazeLoader extends React.Component {
 
   render() {
     return (
-<div style={{height:"inherit"}}>
+<div style={{height:"100%"}}>
 <WebGazeContext.Provider value={this.state.context}>
         <Script
           url="https://webgazer.cs.brown.edu/webgazer.js"

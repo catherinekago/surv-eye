@@ -1,42 +1,51 @@
 
 
 .radio-container {
-    margin: 24px 0;
+    margin: 24px;
     cursor: pointer;
     user-select: none;
+  }
+
+  .radio-button-label {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+    margin-top:0;
   }
   
   .radio-outer-circle {
 
       /* Style size thickness, and color of outer circle*/
-    width: 56px;
-    height: 56px;
-    border: 2px solid #34a0a4;
+    width: 75px;
+    height: 75px;
+    border: 2px solid #ff0095;
     border-radius: 50%;
+    margin-top: 100px;
 
     /* Position inner circle in the middle*/
     display: flex;
     justify-content: center;
     align-items: center;
 
-    margin-right: 24px;
-    margin-left: 24px;
+    margin-right: 50px;
+    margin-left: 50px;
+    margin-bottom:50px;
 
     /* Speed of color change */
     transition: all 1s linear;
   }
   
   .radio-inner-circle {
-    width: 48px;
-    height: 48px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    background-color: #34a0a4;
+    background-color: #ff0095;
 
     /* Speed of color change */
     transition: all 1s linear;
   }
   .unselected {
-    border: 2px solid #006d77;
+    border: 2px solid #ff0095;
   }
   .unselected-circle {
     width: 0;

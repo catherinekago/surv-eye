@@ -1,7 +1,7 @@
 import {useRef} from "react";
 
 import { WebGazeContext } from './WebGazeContext';
-import './calibrationpoint.css';
+import './css/calibrationpoint.css';
 
 const CalibrationPoint = (props) => {
 

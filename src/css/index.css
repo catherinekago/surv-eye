@@ -7,11 +7,12 @@ body {
   margin:0;
   background-color: #272640; 
   overflow: hidden;
-  height: 100vh;
+  height:95vh;
+ 
 }
 
 #root{
-  height: inherit;
+  height:100%;
 }
 
 

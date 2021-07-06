@@ -10,7 +10,7 @@ const MainApp = () => {
 const [calibrationActive, setCalibrationActive] = useState(false);
 
   return (
-    <div style={{ height: "-webkit-fill-available" }}>
+    <div style={{ height: "100%" }}>
 
       {calibrationActive ? (
         <WebGazeContext.Consumer >
