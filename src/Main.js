@@ -1,13 +1,13 @@
 import React from 'react';
 import Calibration from "./Calibration";
 import Questionnaire from "./Questionnaire";
-import { WebGazeContext } from './WebGazeContext';
+import { WebGazeContext } from './context/WebGazeContext';
 import { useState } from 'react';
 
 
 const MainApp = () => {
 
-const [calibrationActive, setCalibrationActive] = useState(false);
+const [calibrationActive, setCalibrationActive] = useState(true);
 
   return (
     <div style={{ height: "100%" }}>

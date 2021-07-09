@@ -1,5 +1,5 @@
 import React from 'react';
-import { WebGazeContext } from './WebGazeContext';
+import { WebGazeContext } from './context/WebGazeContext';
 import MainApp from './Main';
 
 import './css/App.css';
@@ -26,7 +26,7 @@ class WebGazeLoader extends React.Component {
     webgazer.setGazeListener((data, elapsedTime) => {
       if (data == null) {
 
-      //  (document.getElementById("INTRO").click());
+       (document.getElementById("INTRO").click());
 
 
         return;

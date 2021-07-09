@@ -37,7 +37,7 @@
     border-radius: 25px;
     width: 200px;
     background: rgba(30, 104, 189, 0.5);
-    transition: max-height 1s ease-in-out;
+    transition: max-height 0.5s ease-in-out;
 }
 
 .gaze-detected-bottom{
@@ -50,7 +50,7 @@
     transform: scaleY(1);
     transform-origin: top center;
     background: rgba(30, 104, 189, 0.5);
-    transition: max-height 1s ease-in-out;
+    transition: max-height 0.5s ease-in-out;
 }
 
 .no-gaze-detected-top{
@@ -61,7 +61,7 @@
     border-radius: 25px;
     width: 200px;
     background: rgba(30, 104, 189, 0.5);
-    transition: max-height 1s ease-in-out;
+    transition: max-height 0.5s ease-in-out;
 }
 
 .no-gaze-detected-bottom{
@@ -72,7 +72,7 @@
     border-radius: 25px;
     width: 200px;
     background: rgba(30, 104, 189, 0.5);
-    transition: max-height 1s ease-in-out;
+    transition: max-height 0.5s ease-in-out;
 }
 
 .arrow-top {

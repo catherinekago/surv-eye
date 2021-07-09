@@ -1,9 +1,11 @@
 
 
 .radio-container {
-    margin: 24px;
     cursor: pointer;
     user-select: none;
+    margin-bottom: 50px; 
+    margin-right: 1.5%;
+    margin-left: 1.5%; 
   }
 
   .radio-button-label {
@@ -12,42 +14,44 @@
     font-weight: 600;
     margin-top:0;
   }
+
+  .total-target-area-radio{
+    border-radius: 50%;
+    width: 230px;
+    height: 230px;
+    background-color: peru;
+    margin-top: 100px;
+    margin-bottom:0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   
   .radio-outer-circle {
 
       /* Style size thickness, and color of outer circle*/
-    width: 75px;
-    height: 75px;
-    border: 2px solid #ff0095;
+    width: 50%;
+    height: 50%;
+    border: 5px solid #ff0095;
     border-radius: 50%;
-    margin-top: 100px;
-
     /* Position inner circle in the middle*/
     display: flex;
     justify-content: center;
     align-items: center;
-
-    margin-right: 50px;
-    margin-left: 50px;
-    margin-bottom:50px;
-
-    /* Speed of color change */
-    transition: all 1s linear;
   }
   
   .radio-inner-circle {
-    width: 60px;
-    height: 60px;
+    width: 90%;
+    height: 90%;
     border-radius: 50%;
     background-color: #ff0095;
+  }
 
-    /* Speed of color change */
-    transition: all 1s linear;
-  }
-  .unselected {
-    border: 2px solid #ff0095;
-  }
   .unselected-circle {
     width: 0;
     height: 0;
+  }
+
+  .transitioning {
+  transition: all 0.5s linear;
   }

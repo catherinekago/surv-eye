@@ -24,26 +24,26 @@ const Calibration = (props) => {
 
     const [introHeader, setIntroHeader] = useState("Welcome to SurvEye!");
     const [introText, setIntroText] = useState("To complete the calibration process, please follow the dot. 🟢")
+    const appContentHeight = window.innerHeight*0.95
 
 
-
-    // Absolute positions of all points
+    // Absolute positions of all points, relative positioning according to screen width and height 
     const [pointPositions, setPointPositions] = useState([
         { x: 0, y: 0 },
         { x: window.innerWidth * 0.25 - 0.5 * pointWidth, y: 0 },    
         { x: window.innerWidth * 0.5 - 0.5 * pointWidth, y: 0 },
         { x: window.innerWidth * 0.75 - 0.5 * pointWidth, y: 0 }, 
         { x: window.innerWidth - pointWidth, y: 0},
-        { x: 0, y: window.innerHeight / 2 },
-        { x: window.innerWidth * 0.25 - 0.5 * pointWidth, y: window.innerHeight / 2 - 0.5 * pointWidth },  
-        { x: window.innerWidth * 0.5 - 0.5 * pointWidth, y: window.innerHeight / 2 - 0.5 * pointWidth},
-        { x: window.innerWidth * 0.75 - 0.5 * pointWidth, y: window.innerHeight / 2 - 0.5 * pointWidth}, 
-        { x: window.innerWidth - pointWidth, y: window.innerHeight / 2 - 0.5 * pointWidth},
-        { x: 0, y: window.innerHeight / 2 - 0.5 * pointWidth},
-        { x: window.innerWidth * 0.25 - 0.5 * pointWidth, y: window.innerHeight - pointWidth}, 
-        { x: window.innerWidth * 0.5 - 0.5 * pointWidth, y: window.innerHeight  - pointWidth},
-        { x: window.innerWidth * 0.75 - 0.5 * pointWidth, y: window.innerHeight  - pointWidth}, 
-        { x: window.innerWidth - pointWidth, y: window.innerHeight - pointWidth},
+        { x: 0, y: appContentHeight / 2 },
+        { x: window.innerWidth * 0.25 - 0.5 * pointWidth, y: appContentHeight / 2 - 0.5 * pointWidth },  
+        { x: window.innerWidth * 0.5 - 0.5 * pointWidth, y: appContentHeight / 2 - 0.5 * pointWidth},
+        { x: window.innerWidth * 0.75 - 0.5 * pointWidth, y: appContentHeight / 2 - 0.5 * pointWidth}, 
+        { x: window.innerWidth - pointWidth, y: appContentHeight / 2 - 0.5 * pointWidth},
+        { x: 0, y: appContentHeight / 2 - 0.5 * pointWidth},
+        { x: window.innerWidth * 0.25 - 0.5 * pointWidth, y: appContentHeight - pointWidth}, 
+        { x: window.innerWidth * 0.5 - 0.5 * pointWidth, y: appContentHeight  - pointWidth},
+        { x: window.innerWidth * 0.75 - 0.5 * pointWidth, y: appContentHeight  - pointWidth}, 
+        { x: window.innerWidth - pointWidth, y: appContentHeight - pointWidth},
 ]);
 
     // To allow timing length of phases, length of start sequence, and intervals of actions
@@ -169,7 +169,8 @@ const Calibration = (props) => {
         let currentTime = new Date().getTime();
         if (isTransitionOver && currentTime - lastActionTime >= actionInterval) {
             setLastActionTime(currentTime);
-            if (isGazeWithinElement("calibrationPoint", 50, props.context.x, props.context.y)) {
+            // Check if gaze lies within a () 50px size + 180px  = ) 230px radius of the center of the calibration point 
+            if (isGazeWithinElement("calibrationPoint", 180, props.context.x, props.context.y)) {
                 setCurrentValidationResult(currentValidationResult + 1);
             }
             setCurrentValidationCount(currentValidationCount + 1);
@@ -197,11 +198,11 @@ const Calibration = (props) => {
 
 return (
 
-    <div style={{
+    <div id="calibration-container" style={{
         display: hasRoundStarted ? "block" : "flex",
         "marginBottom": 0,
         "marginTop": 0,
-        height: window.innerHeight,
+        height: "100%",
     
     }}>
         <CalibrationPoint
