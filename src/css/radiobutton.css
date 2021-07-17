@@ -17,10 +17,8 @@
 
   .total-target-area-radio{
     border-radius: 50%;
-    width: 230px;
-    height: 230px;
-    background-color: peru;
-    margin-top: 100px;
+    background-color: white;
+    margin-top: 50px;
     margin-bottom:0px;
     display: flex;
     justify-content: center;
@@ -30,9 +28,9 @@
   .radio-outer-circle {
 
       /* Style size thickness, and color of outer circle*/
-    width: 50%;
-    height: 50%;
-    border: 5px solid #ff0095;
+    width: 80%;
+    height: 80%;
+    border: 5px solid;
     border-radius: 50%;
     /* Position inner circle in the middle*/
     display: flex;
@@ -44,7 +42,9 @@
     width: 90%;
     height: 90%;
     border-radius: 50%;
-    background-color: #ff0095;
+    display:flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .unselected-circle {

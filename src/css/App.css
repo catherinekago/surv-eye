@@ -1,7 +1,7 @@
 
 .App {
-  margin-top: 24px;
-  margin-bottom: 24px;
+  margin-top: 0px;
+  margin-bottom: 0px;
   background-color: white; 
   height:100%;
   min-width:1390px;      
@@ -34,11 +34,12 @@
 }
 
 #webgazerGazeDot {
+  /* display:none !important; */
   width: 50px !important;
   height: 50px !important;
   border-radius: 50% !important;
-  border: solid 2px  rgba(49, 34,68, 1.0) !important;	
-  box-shadow: 0 0 100px 3px rgba(49, 34, 68, 1.0) !important;	
+  border: solid 2px  rgb(49, 13, 27) !important;	
+  box-shadow: 0 0 100px 3px rgb(49, 13, 27)!important;	
   pointer-events: none !important;
   background: none !important;	
   z-index: 999999;

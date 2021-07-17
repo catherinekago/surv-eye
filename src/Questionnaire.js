@@ -1,31 +1,38 @@
 import NavBar from "./NavBar";
 import { WebGazeContext } from './context/WebGazeContext';
 import QuestionItem from "./QuestionItem";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const Questionnaire = () => {
 
-
-
     const [questionnaireItems, setQuestionnaireItems] = useState([
-        { number: 0, type: "radio", statement: "Cats are little bastards", input: 0 },
-        { number: 1, type: "radio", statement: "Beer is the best", input: 0 },
-        { number: 2, type: "radio", statement: "Mother knows best", input: 0 }
+        { number: 0, type: "radio", statement: "Mother knows best.", input: 0 },
+        { number: 1, type: "radio", statement: "The lockdown did not bug me at all.", input: 0 },
+        { number: 2, type: "radio", statement: "Taylor Swift sucks.", input: 0 }
     ])
 
-    const [currentQuestionnaireItem, updateCurrentQuestionnaireItem] = useState(0);
+    const [currentQuestionnaireItem, updateCurrentQuestionnaireItem] = useState(2);
 
-    const scroll = (direction) => {
-        if (direction === "up") {
-            updateCurrentQuestionnaireItem(previousValue => previousValue -1)
-        } else {
-            updateCurrentQuestionnaireItem(previousValue => previousValue +1)
+    // Handle activation of navigation element
+    const navigate = (trig) => {
+        if (trig === "up") {
+            updateCurrentQuestionnaireItem(previousValue => previousValue - 1)
+        } else if (trig === "down") {
+            updateCurrentQuestionnaireItem(previousValue => previousValue + 1);
+
         }
     }
 
+    // Handle submit of navigation element
+    const submit = (trig) => {
+        console.log("SUBMIT IT");
+    }
+
+    // Set value of the selected option within a questionnaire item
     const setItemValue = (value) => {
         let allItems = questionnaireItems;
         allItems[currentQuestionnaireItem].input = value;
+        setQuestionnaireItems(allItems);
     }
 
     return (
@@ -36,28 +43,26 @@ const Questionnaire = () => {
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
-                    height: "100%"
+                    height: "99.8%"
 
                 }}>
 
                     <NavBar
                         context={context}
-                        variant="scroll-button-top"
-                        currentItem = {currentQuestionnaireItem}
-                        scroll={scroll}
-                        enabled={currentQuestionnaireItem - 1 >= 0 ? true : false}
+                        type="scroll-button-top"
+                        scrollTrigger={navigate}
+                        scrollEnabled={currentQuestionnaireItem - 1 >= 0 ? true : false}
                     />
 
-                    <QuestionItem passUpItemValue={setItemValue} value = {questionnaireItems[currentQuestionnaireItem].input}
-                    statement={questionnaireItems[currentQuestionnaireItem].statement}/>
-
+                    <QuestionItem passUpItemValue={setItemValue} value={questionnaireItems[currentQuestionnaireItem].input}
+                        statement={questionnaireItems[currentQuestionnaireItem].statement} />
 
                     <NavBar
                         context={context}
-                        enabled={currentQuestionnaireItem + 1 < questionnaireItems.length ? true : false}
-                        currentItem = {currentQuestionnaireItem}
-                        scroll={scroll}
-                        variant="scroll-button-bottom"
+                        // Only allow further scrolling if item has been selected? 
+                        scrollEnabled={currentQuestionnaireItem < questionnaireItems.length-1 ? true : false}
+                        scrollTrigger={navigate}
+                        type={"scroll-button-bottom"}
                     />
 
                 </div >

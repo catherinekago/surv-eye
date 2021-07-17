@@ -5,10 +5,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin:0;
-  background-color: #272640; 
+  background-color:#0f5f63; 
   overflow: hidden;
-  height:95vh;
- 
+  height:100vh;
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 #root{
