@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import './css/radiobutton.css';
-import { click } from "./functions/click";
-import { isGazeWithinElement } from './functions/isGazeWithinElement';
-import { convertAngleToPx } from "./functions/convertAngleToPx";
+import '../css/radiobutton.css';
+import { click } from "../functions/click";
+import { isGazeWithinElement } from '../functions/isGazeWithinElement';
+import { convertAngleToPx } from "../functions/convertAngleToPx";
 
 const RadioButton = (props) => {
 
@@ -10,11 +10,21 @@ const RadioButton = (props) => {
 
   const MINTARGETSIZE = convertAngleToPx(4.17);
 
+  const [eventListener, setEventListener] = useState(false);
+
+
   // eslint-disable-next-line
   useEffect(() => {
-    document.getElementById(props.idSelectionCircle).addEventListener("transitionend", onTransitionEnd, false);
+
     // If this radio button is currently not selected
     if (props.selected !== props.value) {
+      if(!eventListener)
+    {
+      document.getElementById(props.idSelectionCircle).addEventListener("transitionend", onTransitionEnd, false);
+      setEventListener(true);
+      console.log("ADDED EVENTLISTENER)");
+    }
+
       if (isGazeWithinElement(props.idTarget, 0, props.context.x, props.context.y)) {
         setSelectionCircleClass("radio-inner-circle transitioning");
         document.getElementById(props.idSelectionCircle).style.backgroundColor = props.color;
@@ -30,18 +40,28 @@ const RadioButton = (props) => {
       document.getElementById(props.idOutlineCircle).style.borderColor = props.color;
     }
 
+    // This line makes the selected element disappear, but it throws an error when switching to slider element 
     return () => {
+      if(document.getElementById(props.idFill) !== null) {
       document.getElementById(props.idSelectionCircle).removeEventListener("transitionend", onTransitionEnd);
     }
+  }
 
   });
 
   // Handle fixation on scroll button
-  const onTransitionEnd = () => {
-    if (document.getElementById(props.idSelectionCircle).offsetHeight !== 0) {
-      props.onFixation(props.value);
-      click(props.idSelectionCircle);
+  const onTransitionEnd = (event) => {
+    // console.log(document.getElementById(props.idSelectionCircle).offsetHeight);
+    // console.log(Math.round(MINTARGETSIZE * 0.9 *0.8));
+    if (document.getElementById(props.idSelectionCircle).offsetHeight === Math.round(MINTARGETSIZE * 0.9 *0.8) && event.propertyName === "height") {
+      console.log (event.propertyName );
+        props.onFixation(props.value);
+        click(props.idSelectionCircle);
+
     }
+    document.getElementById(props.idSelectionCircle).removeEventListener("transitionend", onTransitionEnd);
+    setEventListener(false);
+    console.log("REMOVED EVENTLISTENER");
 
   }
 
@@ -58,6 +78,7 @@ const RadioButton = (props) => {
         <div id={props.idOutlineCircle} className={`radio-outer-circle`}>
           <div id={props.idSelectionCircle} className={selectionCircleClass} >
             <p style={{ margin: "0", textAlign: "center", fontSize: "40px", color: "white", fontWeight: 800 }}>{props.icon}</p>
+            
           </div>
         </div>
       </div>

@@ -6,12 +6,12 @@ import { useState } from 'react';
 const Questionnaire = () => {
 
     const [questionnaireItems, setQuestionnaireItems] = useState([
-        { number: 0, type: "radio", statement: "Mother knows best.", input: 0 },
+        { number: 0, type: "slider", statement: "How much of an overthinker are you?", min: 0, max: 100, measure:"%", input: 0 },
         { number: 1, type: "radio", statement: "The lockdown did not bug me at all.", input: 0 },
         { number: 2, type: "radio", statement: "Taylor Swift sucks.", input: 0 }
     ])
 
-    const [currentQuestionnaireItem, updateCurrentQuestionnaireItem] = useState(2);
+    const [currentQuestionnaireItem, updateCurrentQuestionnaireItem] = useState(0);
 
     // Handle activation of navigation element
     const navigate = (trig) => {
@@ -54,8 +54,15 @@ const Questionnaire = () => {
                         scrollEnabled={currentQuestionnaireItem - 1 >= 0 ? true : false}
                     />
 
-                    <QuestionItem passUpItemValue={setItemValue} value={questionnaireItems[currentQuestionnaireItem].input}
-                        statement={questionnaireItems[currentQuestionnaireItem].statement} />
+                    <QuestionItem 
+                        type={questionnaireItems[currentQuestionnaireItem].type} 
+                        passUpItemValue={setItemValue} 
+                        value={questionnaireItems[currentQuestionnaireItem].input}
+                        statement={questionnaireItems[currentQuestionnaireItem].statement} 
+                        min={questionnaireItems[currentQuestionnaireItem].type === "slider" ? questionnaireItems[currentQuestionnaireItem].min : ""}
+                        max={questionnaireItems[currentQuestionnaireItem].type === "slider" ? questionnaireItems[currentQuestionnaireItem].max : ""}
+                        measure={questionnaireItems[currentQuestionnaireItem].type === "slider" ? questionnaireItems[currentQuestionnaireItem].measure : ""}
+                        />
 
                     <NavBar
                         context={context}

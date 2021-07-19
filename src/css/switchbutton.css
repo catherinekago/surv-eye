@@ -1,0 +1,44 @@
+
+
+.switch-container {
+    cursor: pointer;
+    user-select: none;
+    margin-bottom: 50px; 
+  }
+
+  .switch-button-label {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+    padding-top:32px;
+    padding-bottom:32px;
+    margin:0; 
+  }
+
+  .total-target-area-switch{
+    border-radius:0;
+    background-color: #b2b2b28a;
+    margin-top: 0px;
+    margin-bottom:0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .button-inner-fill {
+    width: 80%;
+    height: 80%;
+    border-radius: 5%;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .unselected-button {
+    width: 0;
+    height: 0;
+  }
+
+  .transitioning {
+  transition: all 0.5s linear;
+  }
