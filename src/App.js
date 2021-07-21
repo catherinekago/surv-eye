@@ -23,7 +23,7 @@ class WebGazeLoader extends React.Component {
     webgazer.setGazeListener((data, elapsedTime) => {
       if (data == null) {
 
-        //  click("INTRO");
+        click("INTRO");
         return;
       }
       this.setState({ context: webgazer.util.bound(data) });

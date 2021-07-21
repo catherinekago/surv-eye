@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 const MainApp = () => {
 
-const [calibrationActive, setCalibrationActive] = useState(false);
+const [calibrationActive, setCalibrationActive] = useState(true);
 
   return (
     <div style={{ height: "100%" }}>
