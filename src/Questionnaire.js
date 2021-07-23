@@ -6,7 +6,8 @@ import { useState } from 'react';
 const Questionnaire = () => {
 
     const [questionnaireItems, setQuestionnaireItems] = useState([
-        { number: 0, type: "slider", statement: "How much of an overthinker are you?", min: 0, max: 100, measure:"%", input: 0 },
+        // { number: 0, type: "slider", statement: "How much of an overthinker are you?", min: 0, max: 100, measure:"%", input: 0 },
+        { number: 0, type: "radio", statement: "Plants make me happy.", input: 0 },
         { number: 1, type: "radio", statement: "The lockdown did not bug me at all.", input: 0 },
         { number: 2, type: "radio", statement: "Taylor Swift sucks.", input: 0 }
     ])
@@ -21,11 +22,6 @@ const Questionnaire = () => {
             updateCurrentQuestionnaireItem(previousValue => previousValue + 1);
 
         }
-    }
-
-    // Handle submit of navigation element
-    const submit = (trig) => {
-        console.log("SUBMIT IT");
     }
 
     // Set value of the selected option within a questionnaire item

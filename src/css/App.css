@@ -33,6 +33,8 @@
   height: 80px !important;
 }
 
+
+/* The webgazer inherent dot */
 #webgazerGazeDot {
   /* display:none !important; */
   width: 50px !important;
@@ -42,6 +44,20 @@
   box-shadow: 0 0 100px 3px rgb(49, 13, 27)!important;	
   pointer-events: none !important;
   background: none !important;	
+  z-index: 999999;
+  left: 0;
+  top:0;
+}
+
+#gaze-dot{
+  position:fixed;
+  width: 25px;
+  height: 25px;
+  border-radius: 50% !important;
+  border: solid 3px;	
+  box-shadow: 0 0 100px 3px rgb(204, 35, 100);	
+  pointer-events: none;
+  background: none;	
   z-index: 999999;
   left: 0;
   top:0;

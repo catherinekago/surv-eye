@@ -2,7 +2,7 @@
 #radio-button-group-container {
     display: flex;
     flex-direction: row;
-    justify-content: stretch;
+    justify-content: space-evenly;
     align-items: center;
     height:100%;
     width: 100%; 
