@@ -1,0 +1,74 @@
+
+.nav-button{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    height:200px;
+    width: 300px;
+    justify-content: space-around;
+    align-content: center;
+    background: white;
+    
+}
+
+.no-gaze-default{
+    max-width: 0px;
+    height: 200px;
+    grid-column: 1 / 4;
+    grid-row: 1 / 4;
+    background: #13b3bb50;
+}
+
+.gaze-detected-back{
+    max-width:300px;
+    display:flex;
+    grid-column: 1 / 4;
+    grid-row: 1 / 4;
+    height: 200px;
+    transition: max-width 0.5s ease-in-out;
+    transform-origin: center right;
+    background: #13b3bb50;
+}
+
+.gaze-detected-next{
+    max-width:300px;
+    display:flex;
+    grid-column: 1 / 4;
+    grid-row: 1 / 4;
+    height: 200px;
+    transition: max-width 0.5s ease-in-out;
+    background: #13b3bb50;
+}
+
+.no-gaze-detected-back{
+    max-width: 0px;
+    height: 200px;
+    display:flex;
+    grid-column: 1 / 4;
+    grid-row: 1/ 4;
+    transform-origin: center right;
+    transition: max-width 0.5s ease-in-out;
+    background: #13b3bb50;
+}
+
+.no-gaze-detected-next{
+    max-width:0px;
+    display:flex;
+    grid-column: 1 / 4;
+    grid-row: 1 / 4;
+    height: 200px;
+    transition: max-width 0.5s ease-in-out;
+    background: #13b3bb50;
+}
+ 
+.button-icon{
+    grid-column: 2;
+    grid-row: 2;
+    place-self: center;
+    width: 60%;
+    height: 80%;
+}
+
+#submit-button{
+    background: green;
+}

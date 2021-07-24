@@ -48,7 +48,7 @@ class GazeCloudAPILoader extends React.Component {
             }
             this.checkFixation();
 
-        }
+        } 
         GazeCloudAPI.OnCalibrationComplete = function () {
             console.log('gaze Calibration Complete');
             this.setState({ gazeDisplay: "block" })

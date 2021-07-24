@@ -1,7 +1,7 @@
-import './css/navbutton.css';
+import './navbutton.css';
 import { useState, useEffect } from 'react';
-import { click } from "./functions/click";
-import { isGazeWithinElement } from './functions/isGazeWithinElement';
+import { click } from "../../functions/click";
+import { isGazeWithinElement } from '../../functions/isGazeWithinElement';
 import submitIcon from "./assets/submitIcon.svg";
 
 const SubmitButton = (props) => {

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import '../css/radiobutton.css';
+import './radiobutton.css';
 // import { click } from "../functions/click";
-import { isGazeWithinElement } from '../functions/isGazeWithinElement';
-import { convertAngleToPx } from "../functions/convertAngleToPx";
+import { isGazeWithinElement } from '../../functions/isGazeWithinElement';
+import { convertAngleToPx } from "../../functions/convertAngleToPx";
 
 const RadioButton = (props) => {
 

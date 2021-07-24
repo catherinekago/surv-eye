@@ -1,4 +1,5 @@
-import NavBar from "./NavBar";
+import NavBar from "./components/navigation/NavBar";
+import NavBarCombined from "./components/navigation/NavBarCombined";
 import { WebGazeContext } from './context/WebGazeContext';
 import QuestionItem from "./QuestionItem";
 import { useState } from 'react';
@@ -16,9 +17,9 @@ const Questionnaire = () => {
 
     // Handle activation of navigation element
     const navigate = (trig) => {
-        if (trig === "up") {
+        if (trig === "back") {
             updateCurrentQuestionnaireItem(previousValue => previousValue - 1)
-        } else if (trig === "down") {
+        } else if (trig === "next") {
             updateCurrentQuestionnaireItem(previousValue => previousValue + 1);
 
         }
@@ -42,13 +43,19 @@ const Questionnaire = () => {
                     height: "99.8%"
 
                 }}>
-
-                    <NavBar
+                    <NavBarCombined 
                         context={context}
-                        type="scroll-button-top"
+                        scrollTrigger={navigate}
+                        scrollEnabledBack={currentQuestionnaireItem - 1 >= 0 ? true : false}
+                        scrollEnabledNext={currentQuestionnaireItem < questionnaireItems.length-1 ? true : false}
+                        />
+
+                    {/* <NavBar
+                        context={context}
+                        type="scroll-button-back"
                         scrollTrigger={navigate}
                         scrollEnabled={currentQuestionnaireItem - 1 >= 0 ? true : false}
-                    />
+                    /> */}
 
                     <QuestionItem 
                         type={questionnaireItems[currentQuestionnaireItem].type} 
@@ -60,13 +67,13 @@ const Questionnaire = () => {
                         measure={questionnaireItems[currentQuestionnaireItem].type === "slider" ? questionnaireItems[currentQuestionnaireItem].measure : ""}
                         />
 
-                    <NavBar
+                    {/* <NavBar
                         context={context}
                         // Only allow further scrolling if item has been selected? 
                         scrollEnabled={currentQuestionnaireItem < questionnaireItems.length-1 ? true : false}
                         scrollTrigger={navigate}
-                        type={"scroll-button-bottom"}
-                    />
+                        type={"scroll-button-back"}
+                    /> */}
 
                 </div >
             )}

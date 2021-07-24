@@ -1,4 +1,4 @@
-import './css/navbar.css';
+import './navbar.css';
 
 import NavButton from "./NavButton.js";
 

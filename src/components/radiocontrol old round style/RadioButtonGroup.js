@@ -1,7 +1,7 @@
 import RadioButton from "./RadioButton.js";
-import { WebGazeContext } from '../context/WebGazeContext';
+import { WebGazeContext } from '../../context/WebGazeContext';
 
-import '../css/radiobuttongroup.css'
+import './radiobuttongroup old.css'
 
 const RadioButtonGroup = (props) => {
 

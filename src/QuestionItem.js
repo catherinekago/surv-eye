@@ -1,7 +1,6 @@
 
 import "./css/questionitem.css";
-import RatioButtonGroup from "./radiocontrol/RadioButtonGroup"
-import SliderComponent from "./slidercontrol OLD/SliderComponent"
+import RatioButtonGroup from "./components/radiocontrol/RadioButtonGroup"
 
 const QuestionItem = (props) => {
 
