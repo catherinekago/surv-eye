@@ -9,7 +9,7 @@
     width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
 }
 
-#question {
+/* #question {
     margin-top: 60px;
     margin-right: 40px;
     margin-left: 40px; 
@@ -17,7 +17,7 @@
     user-select: none;
     font-size: 40px;
     font-weight: 700;
-}
+} */
 
 .controls-container {
     background-color: white;

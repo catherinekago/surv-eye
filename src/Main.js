@@ -7,27 +7,39 @@ import { useState } from 'react';
 
 const MainApp = () => {
 
-const [calibrationActive, setCalibrationActive] = useState(true);
+  const [calibrationActive, setCalibrationActive] = useState(false);
+  const [accuracyData, setAccuracyData] = useState();
+
+  const participant = "Test";
 
   return (
-    <div style={{ height: "100%" }}>
+    <div id="MainContainer" style={{ height: "100%" }}>
 
-      {calibrationActive ? (
+      {/* {calibrationActive ? (
         <WebGazeContext.Consumer >
-        {context => (
-          <Calibration context={context} onCalibrationComplete={setCalibrationActive}/>
-        )}
-      </WebGazeContext.Consumer>
-      ) : null } 
+          {context => (
+            <Calibration context={context} onCalibrationComplete={setCalibrationActive} retrieveData={setAccuracyData} />
+          )}
+        </WebGazeContext.Consumer>
+      ) : 
+      (<a style={{display:"flex", justifyContent:"center", paddingTop:"300px", fontSize: "100px"}}
+        href={`data:text/json;charset=utf-8,${encodeURIComponent(
+          JSON.stringify(accuracyData)
+        )}`}
+        download={"accuracyData" +  participant + ".json"}
+      >
+        {`Download Data 💌`}
+      </a>) // null
+      } */}
 
 
-{!calibrationActive ? (
+      {!calibrationActive ? (
         <WebGazeContext.Consumer >
-        {context => (
-          <Questionnaire context={context} />
-        )}
-      </WebGazeContext.Consumer>
-      ) : null } 
+          {context => (
+            <Questionnaire context={context} />
+          )}
+        </WebGazeContext.Consumer>
+      ) : null}
 
     </div>
 

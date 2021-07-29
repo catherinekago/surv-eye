@@ -22,7 +22,8 @@ const Calibration = (props) => {
     const targetSize = convertAngleToPx(4.17);
 
     const [introHeader, setIntroHeader] = useState("Welcome to SurvEye!");
-    const [introText, setIntroText] = useState("To complete the calibration process, please follow the dot. 🟢")
+    const [introText, setIntroText] = useState("");
+    // const [introText, setIntroText] = useState("To complete the calibration process, please follow the dot. 🟢")
 
     // Different steps of target sizes to be tested
     const targetS = 100;
@@ -77,7 +78,7 @@ const Calibration = (props) => {
     // ]);
 
 
-    // // 9x9 Calibration Grid
+    // 9x9 Calibration Grid
     // const [pointPositions, setPointPositions] = useState([
     //     { x: 0, y: 0 },  
     //     { x: window.innerWidth * 0.5 - 0.5 * pointWidth, y: 0 },
@@ -183,7 +184,6 @@ const Calibration = (props) => {
 
     }
 
-
     // Move point to designated position and handle end of sequence 
     const handlePointMovement = () => {
         let currentTime = new Date().getTime();
@@ -197,8 +197,8 @@ const Calibration = (props) => {
                 setHasRoundStarted(false);
                 if (currentPhase === "CALIBRATION") {
                     setCalibrationComplete(true);
-                    setIntroHeader("Good job! 💪")
-                    setIntroText("Let's do this again one more time to validate the calibration. 🟢 ");
+                    setIntroHeader("One more time! 💪")
+                    // setIntroText("Let's do this again one more time to validate the calibration. 🟢 ");
                 } else if (currentPhase === "VALIDATION") {
                     setValidationComplete(true);
                     // console.log("Total validation " + validationTotalL);
@@ -226,6 +226,7 @@ const Calibration = (props) => {
 
                     // log calibration data to console to copy out 
                     console.log(accuracyPerPoint);
+                    props.retrieveData(accuracyPerPoint);
 
                 }
                 setCurrentPhase("INACTIVE");
@@ -334,7 +335,6 @@ const Calibration = (props) => {
                 reference={pointReference}
                 position={pointPositions[currentPoint]}
             />
-
 
             <div id="INTRO"
                 style={{

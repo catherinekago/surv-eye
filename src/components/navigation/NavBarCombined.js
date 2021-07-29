@@ -13,6 +13,8 @@ const NavBarCombined = (props) => {
                 scrollTrigger={props.scrollTrigger}
                 scrollEnabled={props.scrollEnabledBack} />
 
+            <p id="question">{props.statement}</p>
+
             <NavButton
                 context={props.context}
                 type={"scroll-button-next"}

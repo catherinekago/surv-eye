@@ -36,11 +36,11 @@ const Questionnaire = () => {
 
         <WebGazeContext.Consumer >
             {context => (
-                <div style={{
+                <div id="QuestionnaireContainer" style={{
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
-                    height: "99.8%"
+                    height: "100%"
 
                 }}>
                     <NavBarCombined 
@@ -48,6 +48,7 @@ const Questionnaire = () => {
                         scrollTrigger={navigate}
                         scrollEnabledBack={currentQuestionnaireItem - 1 >= 0 ? true : false}
                         scrollEnabledNext={currentQuestionnaireItem < questionnaireItems.length-1 ? true : false}
+                        statement={questionnaireItems[currentQuestionnaireItem].statement}
                         />
 
                     {/* <NavBar

@@ -77,7 +77,7 @@ if (this.state.gazeData.length < averaged) {
         console.log("NO gaze detected");
 
         if (document.getElementById("INTRO") !== null) {
-          click("INTRO");
+          // click("INTRO");
           this.setState({dataNull: false});
           console.log(this.state.dataNull);
         }
@@ -104,7 +104,7 @@ if (this.state.gazeData.length < averaged) {
 
   render() {
     return (
-      <div style={{ height: "100%" }}>
+      <div id="AppContainer" style={{ height: "100%" }}>
         <WebGazeContext.Provider value={this.state.context}>
           <Script
             url="https://webgazer.cs.brown.edu/webgazer.js"
@@ -126,9 +126,7 @@ WebGazeLoader.contextType = WebGazeContext;
 function App() {
 
   return (
-    <div className="App">
       <WebGazeLoader />
-    </div>
   );
 }
 

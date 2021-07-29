@@ -7,3 +7,13 @@
     align-items: center;
     user-select: none;
 }
+
+#question {
+    margin-right: 50px;
+    margin-left: 50px; 
+    user-select: none;
+    font-size: 40px;
+    font-weight: 700;
+    align-items: center;
+    justify-self: center;
+}

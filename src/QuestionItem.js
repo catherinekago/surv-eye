@@ -10,7 +10,9 @@ const QuestionItem = (props) => {
 
     return (
         <div className="item-container">
-            <p id="question">{props.statement}</p>
+
+            {/* Currently moved to navigation  */}
+            {/* <p id="question">{props.statement}</p> */}
 
             <div className="controls-container">
                 {/* {props.type === "radio" ? */}
