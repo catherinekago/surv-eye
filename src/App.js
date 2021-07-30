@@ -33,7 +33,6 @@ class WebGazeLoader extends React.Component {
             if (withinXCoordinates && withinYCoordinates) {
                 if (aboveFixationMin && !this.state.fixation) {
                     this.setState({ fixation: true });
-                    console.log("FIXATING");
                 }
             } else {
                 this.setState({ fixPoint: { x: this.state.context.x, y: this.state.context.y, time: Math.floor(Date.now() / 1000) } })

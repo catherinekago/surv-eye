@@ -1,6 +1,7 @@
 
 import "./css/questionitem.css";
-import RatioButtonGroup from "./components/radiocontrol/RadioButtonGroup"
+import RatioButtonGroup from "./components/radiocontrol/RadioButtonGroup";
+import Slider from "./components/slidercontrol/Slider";
 
 const QuestionItem = (props) => {
 
@@ -15,11 +16,11 @@ const QuestionItem = (props) => {
             {/* <p id="question">{props.statement}</p> */}
 
             <div className="controls-container">
-                {/* {props.type === "radio" ? */}
-                    <RatioButtonGroup value={props.value} setItemValue={passUpItemValue} />
-                    {/* // : 
-                    // (<SliderComponent value={props.value} setItemValue={passUpItemValue} min={props.min} max={props.max} measure={props.measure}/>)
-                    // } */}
+                {props.type === "radio" ?
+                    (<RatioButtonGroup value={props.value} setItemValue={passUpItemValue} />)
+                    : 
+                    (<Slider value={props.value} setItemValue={passUpItemValue} min={props.min} max={props.max} measure={props.measure} stepinterval={props.stepinterval}/>)
+                    }
 
             </div>
         </div>
