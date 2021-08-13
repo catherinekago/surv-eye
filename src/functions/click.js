@@ -17,7 +17,7 @@ export const click = (elementID) => {
     
         var el = document.elementFromPoint(x, y);
         el.dispatchEvent(ev);
-        console.log("clicked!");
+        // console.log("clicked!");
 
 
   return;

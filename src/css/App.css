@@ -50,6 +50,7 @@
 }
 
 #gaze-dot{
+  display: block; 
   position:fixed;
   width: 25px;
   height: 25px;

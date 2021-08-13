@@ -8,9 +8,10 @@ const Questionnaire = () => {
 
     const [questionnaireItems, setQuestionnaireItems] = useState([
         // { number: 0, type: "slider", statement: "How much of an overthinker are you?", min: 0, max: 100, measure:"%", stepinterval: 1, input: 0 },
-        { number: 0, type: "radio", statement: "Plants make me happy.", input: 0 },
+        { number: 0, type: "radio", statement: "Kathrin is the very bestest cook.", input: 0 },
         { number: 1, type: "radio", statement: "The lockdown did not bug me at all.", input: 0 },
-        { number: 2, type: "radio", statement: "Taylor Swift sucks.", input: 0 }
+        { number: 2, type: "radio", statement: "Taylor Swift sucks.", input: 0 },
+        { number: 3, type: "radio", statement: "I would love to be drunk right now.", input: 0 }
     ])
 
     const [currentQuestionnaireItem, updateCurrentQuestionnaireItem] = useState(0);
