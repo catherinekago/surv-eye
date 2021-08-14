@@ -6,8 +6,8 @@ import { convertAngleToPx } from './functions/convertAngleToPx';
 
 const Calibration = (props) => {
 
-    // To enable multiple rounds of calibration and determine whether a round has started
-    const [hasRoundStarted, setHasRoundStarted] = useState(false);
+    // To determine whether a phase has started
+    const [hasPhaseStarted, setHasPhaseStarted] = useState(false);
 
     // To determine the values that relate to the current validation point
     const [currentPoint, setCurrentPoint] = useState(0);
@@ -47,33 +47,6 @@ const Calibration = (props) => {
 
     // Format: {x: , y: , accuracyS: , accuracyM: , accuracyL: , accuracyXL: }
     const [accuracyPerPoint, setAccuracyPerPoint] = useState([]);
-
-    //     // Absolute positions of all points, relative positioning according to screen width and height 
-    //     const [pointPositions, setPointPositions] = useState([
-    //         { x: 0, y: 0 },
-    //         { x: window.innerWidth * 0.25 - 0.5 * pointWidth, y: 0 },    
-    //         { x: window.innerWidth * 0.5 - 0.5 * pointWidth, y: 0 },
-    //         { x: window.innerWidth * 0.75 - 0.5 * pointWidth, y: 0 }, 
-    //         { x: window.innerWidth - pointWidth, y: 0},
-
-    //         { x: 0, y: window.innerHeight * (3/9) - 0.5 * pointWidth},
-    //         { x: window.innerWidth * 0.25 - 0.5 * pointWidth, y: window.innerHeight * (3/9) - 0.5 * pointWidth },  
-    //         { x: window.innerWidth * 0.5 - 0.5 * pointWidth, y: window.innerHeight * (3/9) - 0.5 * pointWidth},
-    //         { x: window.innerWidth * 0.75 - 0.5 * pointWidth, y: window.innerHeight * (3/9) - 0.5 * pointWidth}, 
-    //         { x: window.innerWidth - pointWidth, y: window.innerHeight * (3/9) - 0.5 * pointWidth},
-
-    //         { x: 0, y: window.innerHeight * (5/9) - 0.5 * pointWidth},
-    //         { x: window.innerWidth * 0.25 - 0.5 * pointWidth, y: window.innerHeight * (5/9) - 0.5 * pointWidth },  
-    //         { x: window.innerWidth * 0.5 - 0.5 * pointWidth, y: window.innerHeight * (5/9) - 0.5 * pointWidth},
-    //         { x: window.innerWidth * 0.75 - 0.5 * pointWidth, y: window.innerHeight * (5/9) - 0.5 * pointWidth}, 
-    //         { x: window.innerWidth - pointWidth, y: window.innerHeight * (5/9) - 0.5 * pointWidth},
-
-    //         { x: 0, y: window.innerHeight - pointWidth}, 
-    //         { x: window.innerWidth * 0.25 - 0.5 * pointWidth, y: window.innerHeight - pointWidth}, 
-    //         { x: window.innerWidth * 0.5 - 0.5 * pointWidth, y: window.innerHeight  - pointWidth},
-    //         { x: window.innerWidth * 0.75 - 0.5 * pointWidth, y: window.innerHeight  - pointWidth}, 
-    //         { x: window.innerWidth - pointWidth, y: window.innerHeight - pointWidth},
-    // ]);
 
     // 9x9 Calibration Grid
     // const [pointPositions, setPointPositions] = useState([
@@ -115,43 +88,74 @@ const Calibration = (props) => {
     ]);
 
     // To allow timing length of phases, length of start sequence, and intervals of actions
-    const [lastMovementTime, setLastMovementTime] = useState(new Date().getTime());
-    const [lastActionTime, setLastActionTime] = useState(new Date().getTime());
-    const [isTransitionOver, setIsTransitionOver] = useState(false);
-    const pointInterval = 3000;
-    const introTime = 2000;
-    const actionInterval = 100;
-    const transitionInterval = 1000;
+    const TIMEOUT_SEQUENCE = 3000;
+    const TIMEOUT_INTRO = 2000;
+    const INTERVAL_MEASUREMENT = 100;
+    const TIMEOUT_TRANSITION = 1000;
 
-    const [calibrationCount, setCalibrationCount] = useState(0);
-    const calibrationCountTarget = 20; 
+    const [movementTimeout, setMovementTimeout] = useState(false);
+    const [phaseStartedTimeout, setPhaseStartedTimeout] = useState(false);
+    const [measurementInterval, setMeasurementInterval] = useState(false);
 
 
 
     useEffect(() => {
         // Perform calibration until it is complete 
 
-        // setTimeout(() => {
-        //     if (!calibrationComplete) {
-        //         performCycle("CALIBRATION");
-        //     } else if (!validationComplete) {
-        //         performCycle("VALIDATION");
-        //     } else if (calibrationComplete && validationComplete && currentPoint === 0) {
-        //         handleSwitchToQuestionnaire();
-        //     }
-        //   }, pointInterval);
+        // Determine if a phase has already been started or has to be initialized
+        if (!hasPhaseStarted) {
+            if (!phaseStartedTimeout) {
+                setPhaseStartedTimeout(true);
+                console.log("triggered phase start")
+                setTimeout(() => {
+                    let type = !calibrationComplete ? "CALIBRATION" : (!validationComplete ? "VALIDATION" : "QUESTIONNAIRE");
+                    startPhase(type);
+                    setPhaseStartedTimeout(false);
+                }, TIMEOUT_INTRO);
+            }
 
+        } else {
 
-        if (!calibrationComplete) {
-            performCycle("CALIBRATION");
-        } else if (!validationComplete) {
-            performCycle("VALIDATION");
-        } else if (calibrationComplete && validationComplete && currentPoint === 0) {
-            handleSwitchToQuestionnaire();
+            // Make sure to start click / measurement trigger only after transition of point has been completed
+            if (!measurementInterval) {
+                setMeasurementInterval(true);
+                setTimeout(() => {
+                    console.log("triggered timeout for transition")
+                    const measureInterval = setInterval(() => {
+                        console.log("new measurement")
+                        if (currentPhase === "CALIBRATION") {
+                            click("calibrationPointCenter");
+                        } else if (currentPhase === "VALIDATION") {
+                            handleGazeValidation();
+                        }
+                    }, INTERVAL_MEASUREMENT);
+
+                    // Kill measure interval after dedicated measure time 
+                    setTimeout(() => {
+                        console.log("triggered end of measurement");
+                        clearInterval(measureInterval);
+                        setMeasurementInterval(false);
+                    }, TIMEOUT_SEQUENCE - TIMEOUT_TRANSITION);
+
+                }, TIMEOUT_TRANSITION);
+
+            }
+
+            // Change point position / displayed content after XXXX ms
+            if (!movementTimeout) {
+                setMovementTimeout(true);
+                setTimeout(() => {
+                    console.log("move dot interval")
+                    handlePointMovement();
+                    setMovementTimeout(false);
+                }, TIMEOUT_SEQUENCE)
+            }
+
         }
 
     });
 
+    // Randomize calibration points so user cannot predict positions and show anticipated behavior
     const randomizePointPositions = (array) => {
         let newArray = array;
         for (var i = newArray.length - 1; i > 0; i--) {
@@ -163,192 +167,126 @@ const Calibration = (props) => {
         return newArray;
     }
 
-    // Perform click calibration cycle for all given points.
-    const performCycle = (type) => {
 
-
-        if (!hasRoundStarted) {
-            startRound(type);
-            props.onPhaseChange(type);
+    // Start phase 
+    const startPhase = (type) => {
+        // End calibraiton-validation and switch to questionnaire 
+        if (type === "QUESTIONNAIRE") {
+            props.onCalibrationComplete(false);
+            // Start calibration or validation phase
         } else {
-            // Check if point should move to next position 
-            handlePointMovement(type);
-
-            // Check if new action (click or check) has to be taken 
-            if (type === "CALIBRATION") {
-                // console.log(pointPositions[currentPoint]);
-                clickOnPoint();
-            } else if (type === "VALIDATION") {
-                handleGazeValidation();
-            }
-        }
-    }
-
-    // Start cycle 
-    const startRound = (type) => {
-
-        // PREVIOUS VERSION 
-        let currentTime = new Date().getTime();
-        if (currentTime - lastMovementTime >= introTime) {
             setPointPositions(randomizePointPositions(pointPositions));
-            setLastMovementTime(currentTime);
             setCurrentPhase(type);
-            setHasRoundStarted(true);
+            setHasPhaseStarted(true);
         }
-
-        // setTimeout(() => {
-        //     setPointPositions(randomizePointPositions(pointPositions));
-        //     let currentTime = new Date().getTime();
-        //     setLastMovementTime(currentTime);
-        //     setCurrentPhase(type);
-        //     setHasRoundStarted(true);
-        //   }, introTime)
-
+        props.onPhaseChange(type);
     }
 
     // Move point to designated position and handle end of sequence 
     const handlePointMovement = () => {
-        let currentTime = new Date().getTime();
-        if (currentTime - lastMovementTime >= transitionInterval) {
-            setIsTransitionOver(true);
-        }
-        // Set new position when one moving and resting sequence has passed
-        if (currentTime - lastMovementTime >= pointInterval) {
-            setLastMovementTime(currentTime);
-            if (currentPoint + 1 === pointPositions.length) {
-                setCurrentPoint(0);
-                setHasRoundStarted(false);
-                if (currentPhase === "CALIBRATION") {
-                    setCalibrationComplete(true);
-                    setIntroHeader("One more time! 💪")
-                    // setIntroText("Let's do this again one more time to validate the calibration. 🟢 ");
-                } else if (currentPhase === "VALIDATION") {
-                    setValidationComplete(true);
+        if (currentPoint + 1 === pointPositions.length) {
+            handlePhaseEnd();
 
-                    // add for each point percentage of accuracy to array
-                    let newAccuracyArray = accuracyPerPoint;
-                    newAccuracyArray.push({ x: pointPositions[currentPoint].x, y: pointPositions[currentPoint].y, accuracyS: currentValidationResultS / currentValidationCount, accuracyM: currentValidationResultM / currentValidationCount, accuarcyL: currentValidationResultL / currentValidationCount, accuracyXL: currentValidationResultXL / currentValidationCount });
-                    setAccuracyPerPoint(newAccuracyArray);
+        } else {
 
-                    setValidationTotalS(validationTotalS + (currentValidationResultS / currentValidationCount) * 100);
-                    setValidationTotalM(validationTotalM + (currentValidationResultM / currentValidationCount) * 100);
-                    setValidationTotalL(validationTotalL + (currentValidationResultL / currentValidationCount) * 100);
-                    setValidationTotalXL(validationTotalXL + (currentValidationResultXL / currentValidationCount) * 100);
+            if (currentPhase === "VALIDATION") {
 
-                    let resultS = Math.round(validationTotalS / pointPositions.length);
-                    let resultM = Math.round(validationTotalM / pointPositions.length);
-                    let resultL = Math.round(validationTotalL / pointPositions.length);
-                    let resultXL = Math.round(validationTotalXL / pointPositions.length);
+                updateAccuracyPerPoint();
 
-                    setValidationTotalS(resultS);
-                    setValidationTotalM(resultM);
-                    setValidationTotalL(resultL);
-                    setValidationTotalL(resultXL);
+                // console.log(currentValidationResultS + " out of " + currentValidationCount);
+                // console.log(currentValidationResultM + " out of " + currentValidationCount);
+                // console.log(currentValidationResultL + " out of " + currentValidationCount);
+                // console.log(currentValidationResultXL + " out of " + currentValidationCount);
 
-                    // add final percentage of accuracy to array
-                    newAccuracyArray = accuracyPerPoint;
-                    // Format: {x: , y: , accuracyS: , accuracyM: , accuracyL: , accuracyXL: }
-                    newAccuracyArray.push({ x: "TOTAL", y: "TOTAL", accuracyS: resultS / 100, accuracyM: resultM / 100, accuarcyL: resultL / 100, accuracyXL: resultXL / 100 });
-                    setAccuracyPerPoint(newAccuracyArray);
+                setCurrentValidationCount(0);
 
-                    setIntroHeader("You did it! 🎉");
-                    setIntroText("");
-                    // setIntroText("Your validation result is: " + resultM + "%");
-                    setLastMovementTime(currentTime);
-
-                    // log calibration data to console to copy out 
-                    console.log(accuracyPerPoint);
-                    props.retrieveData(accuracyPerPoint);
-                    props.onPhaseChange("QUESTIONNAIRE");
-                }
-                setCurrentPhase("INACTIVE");
-            } else {
-
-                if (currentPhase === "VALIDATION") {
-
-                    // add for each point percentage of accuracy to array
-                    let newAccuracyArray = accuracyPerPoint;
-                    newAccuracyArray.push({ x: pointPositions[currentPoint].x, y: pointPositions[currentPoint].y, accuracyS: currentValidationResultS / currentValidationCount, accuracyM: currentValidationResultM / currentValidationCount, accuarcyL: currentValidationResultL / currentValidationCount, accuracyXL: currentValidationResultXL / currentValidationCount });
-                    setAccuracyPerPoint(newAccuracyArray);
-
-                    setValidationTotalS(validationTotalS + (currentValidationResultS / currentValidationCount) * 100);
-                    setValidationTotalM(validationTotalM + (currentValidationResultM / currentValidationCount) * 100);
-                    setValidationTotalL(validationTotalL + (currentValidationResultL / currentValidationCount) * 100);
-                    setValidationTotalXL(validationTotalXL + (currentValidationResultXL / currentValidationCount) * 100);
-
-                    console.log(currentValidationResultS + " out of " + currentValidationCount);
-                    console.log(currentValidationResultM + " out of " + currentValidationCount);
-                    console.log(currentValidationResultL + " out of " + currentValidationCount);
-                    console.log(currentValidationResultXL + " out of " + currentValidationCount);
-
-                    setCurrentValidationCount(0);
-
-                    setCurrentValidationResultS(0);
-                    setCurrentValidationResultM(0);
-                    setCurrentValidationResultL(0);
-                    setCurrentValidationResultXL(0);
-                }
-
-                setCurrentPoint(currentPoint + 1);
-                setIsTransitionOver(false);
-                setCalibrationCount(0);
+                setCurrentValidationResultS(0);
+                setCurrentValidationResultM(0);
+                setCurrentValidationResultL(0);
+                setCurrentValidationResultXL(0);
             }
 
+            setCurrentPoint(currentPoint + 1);
         }
+
     }
 
+    // Add new accuracy measurements to data set 
+    const updateAccuracyPerPoint = () => {
+        // add for each point percentage of accuracy to array
+        let newAccuracyArray = accuracyPerPoint;
+        newAccuracyArray.push({ x: pointPositions[currentPoint].x, y: pointPositions[currentPoint].y, accuracyS: currentValidationResultS / currentValidationCount, accuracyM: currentValidationResultM / currentValidationCount, accuarcyL: currentValidationResultL / currentValidationCount, accuracyXL: currentValidationResultXL / currentValidationCount });
+        setAccuracyPerPoint(newAccuracyArray);
 
-    // Perform simulated click on the coordiantes of the point 
-    const clickOnPoint = () => {
-        // let currentTime = new Date().getTime();
-        // if (isTransitionOver && currentTime - lastActionTime >= actionInterval) {
-        //     setLastActionTime(currentTime);
-        //     click("calibrationPointCenter");
-        // }
-        if (isTransitionOver && calibrationCount < calibrationCountTarget ) {
-            setCalibrationCount(calibrationCount +1);
-            click("calibrationPointCenter");
+        setValidationTotalS(validationTotalS + (currentValidationResultS / currentValidationCount) * 100);
+        setValidationTotalM(validationTotalM + (currentValidationResultM / currentValidationCount) * 100);
+        setValidationTotalL(validationTotalL + (currentValidationResultL / currentValidationCount) * 100);
+        setValidationTotalXL(validationTotalXL + (currentValidationResultXL / currentValidationCount) * 100);
+    }
+
+    // Handle end of a phase by resetting the current point and determine what should be displayed next
+    const handlePhaseEnd = () => {
+
+        if (currentPhase === "CALIBRATION") {
+            setCalibrationComplete(true);
+            setIntroHeader("One more time! 💪")
+            // setIntroText("Let's do this again one more time to validate the calibration. 🟢 ");
+
+        } else if (currentPhase === "VALIDATION") {
+            setValidationComplete(true);
+            setIntroHeader("You did it! 🎉");
+            setIntroText("");
+            // setIntroText("Your validation result is: " + resultM + "%");
+
+
+            updateAccuracyPerPoint();
+            setValidationTotalS(Math.round(validationTotalS / pointPositions.length));
+            setValidationTotalM(Math.round(validationTotalM / pointPositions.length));
+            setValidationTotalL(Math.round(validationTotalL / pointPositions.length));
+            setValidationTotalXL(Math.round(validationTotalXL / pointPositions.length));
+
+            // add final percentage of accuracy to array
+            let newAccuracyArray = accuracyPerPoint;
+            // Format: {x: , y: , accuracyS: , accuracyM: , accuracyL: , accuracyXL: }
+            newAccuracyArray.push({ x: "TOTAL", y: "TOTAL", accuracyS: validationTotalS / 100, accuracyM: setValidationTotalM / 100, accuarcyL: setValidationTotalL / 100, accuracyXL: validationTotalXL / 100 });
+            setAccuracyPerPoint(newAccuracyArray);
+
+            props.retrieveData(accuracyPerPoint);
+            props.onPhaseChange("QUESTIONNAIRE");
         }
+        setCurrentPhase("INACTIVE");
+        setCurrentPoint(0);
+        setHasPhaseStarted(false);
     }
 
     // Compare if gaze and point position match and handle 
     const handleGazeValidation = () => {
-        let currentTime = new Date().getTime();
-        if (isTransitionOver && currentTime - lastActionTime >= actionInterval && currentValidationCount < 20) {
-            setLastActionTime(currentTime);
-            // Check if gaze lies within the target area (= targetSize - pointWidth)
+        // Check if gaze lies within the target area (= targetSize - pointWidth)
 
-            // 0.5 targetSize - 0.25 point width == padding 
-            if (isGazeWithinElement("calibrationPoint", 0.5 * targetS - 0.5 * 0.5 * pointWidth, props.context.x, props.context.y)) {
-                setCurrentValidationResultS(currentValidationResultS + 1);
-            }
-
-            // 0.5 targetSize - 0.25 point width == padding 
-            if (isGazeWithinElement("calibrationPoint", 0.5 * targetM - 0.5 * 0.5 * pointWidth, props.context.x, props.context.y)) {
-                setCurrentValidationResultM(currentValidationResultM + 1);
-
-            }
-
-            // 0.5 targetSize - 0.25 point width == padding 
-            if (isGazeWithinElement("calibrationPoint", 0.5 * targetL - 0.5 * 0.5 * pointWidth, props.context.x, props.context.y)) {
-                setCurrentValidationResultL(currentValidationResultL + 1);
-            }
-
-            // 0.5 targetSize - 0.25 point width == padding 
-            if (isGazeWithinElement("calibrationPoint", 0.5 * targetXL - 0.5 * 0.5 * pointWidth, props.context.x, props.context.y)) {
-                setCurrentValidationResultXL(currentValidationResultXL + 1);
-            }
-            setCurrentValidationCount(currentValidationCount + 1);
-        }
-    }
-
-    const handleSwitchToQuestionnaire = () => {
-        let currentTime = new Date().getTime();
-        if (currentTime - lastMovementTime >= introTime) {
-            props.onCalibrationComplete(false);
+        // 0.5 targetSize - 0.25 point width == padding 
+        if (isGazeWithinElement("calibrationPoint", 0.5 * targetS - 0.5 * 0.5 * pointWidth, props.context.x, props.context.y)) {
+            setCurrentValidationResultS(currentValidationResultS + 1);
         }
 
+        // 0.5 targetSize - 0.25 point width == padding 
+        if (isGazeWithinElement("calibrationPoint", 0.5 * targetM - 0.5 * 0.5 * pointWidth, props.context.x, props.context.y)) {
+            setCurrentValidationResultM(currentValidationResultM + 1);
+
+        }
+
+        // 0.5 targetSize - 0.25 point width == padding 
+        if (isGazeWithinElement("calibrationPoint", 0.5 * targetL - 0.5 * 0.5 * pointWidth, props.context.x, props.context.y)) {
+            setCurrentValidationResultL(currentValidationResultL + 1);
+        }
+
+        // 0.5 targetSize - 0.25 point width == padding 
+        if (isGazeWithinElement("calibrationPoint", 0.5 * targetXL - 0.5 * 0.5 * pointWidth, props.context.x, props.context.y)) {
+            setCurrentValidationResultXL(currentValidationResultXL + 1);
+        }
+        setCurrentValidationCount(currentValidationCount + 1);
     }
+
+
 
     const determineIntroColor = () => {
         if (!calibrationComplete) {
@@ -364,7 +302,7 @@ const Calibration = (props) => {
     return (
 
         <div id="calibration-container" style={{
-            display: hasRoundStarted ? "block" : "flex",
+            display: hasPhaseStarted ? "block" : "flex",
             "marginBottom": 0,
             "marginTop": 0,
             height: "100%",
@@ -379,7 +317,7 @@ const Calibration = (props) => {
 
             <div id="INTRO"
                 style={{
-                    display: hasRoundStarted ? "none" : "flex",
+                    display: hasPhaseStarted ? "none" : "flex",
                     flexDirection: "column",
                     justifyContent: "space-evenly",
                     padding: 40,
