@@ -6,6 +6,9 @@ import { convertAngleToPx } from './functions/convertAngleToPx';
 
 const Calibration = (props) => {
 
+    const contextRef = useRef(props.context);
+    contextRef.current = props.context;
+
     // To determine whether a phase has started
     const [hasPhaseStarted, setHasPhaseStarted] = useState(false);
 
@@ -173,7 +176,46 @@ const Calibration = (props) => {
             props.onCalibrationComplete(false);
             // Start calibration or validation phase
         } else {
-            setPointPositions(randomizePointPositions(pointPositions));
+            // TODO: ONLY FOR TESTING: create grid OF and BETWEEN 16x16 calibration grid dots to determine differences in accuracy
+            if (type === "VALIDATION") {
+                setPointPositions([
+                    { x: window.innerWidth * (1 / 6) - 0.5 * pointWidth, y: window.innerHeight * (1 / 6) - 0.5 * pointWidth },
+                    { x: window.innerWidth * (3 / 6) - 0.5 * pointWidth, y: window.innerHeight * (1 / 6) - 0.5 * pointWidth },
+                    { x: window.innerWidth * (5 / 6) - 0.5 * pointWidth, y: window.innerHeight * (1 / 6) - 0.5 * pointWidth },
+
+                    { x: window.innerWidth * (1 / 6) - 0.5 * pointWidth, y: window.innerHeight * (3 / 6) - 0.5 * pointWidth },
+                    { x: window.innerWidth * (3 / 6) - 0.5 * pointWidth, y: window.innerHeight * (3 / 6) - 0.5 * pointWidth },
+                    { x: window.innerWidth * (5 / 6) - 0.5 * pointWidth, y: window.innerHeight * (3 / 6) - 0.5 * pointWidth },
+
+                    { x: window.innerWidth * (1 / 6) - 0.5 * pointWidth, y: window.innerHeight * (5 / 6) - 0.5 * pointWidth },
+                    { x: window.innerWidth * (3 / 6) - 0.5 * pointWidth, y: window.innerHeight * (5 / 6) - 0.5 * pointWidth },
+                    { x: window.innerWidth * (5 / 6) - 0.5 * pointWidth, y: window.innerHeight * (5 / 6) - 0.5 * pointWidth },
+
+                    { x: 0, y: 0 },
+                    { x: window.innerWidth * (1 / 3) - 0.5 * pointWidth, y: 0 },
+                    { x: window.innerWidth * (2 / 3) - 0.5 * pointWidth, y: 0 },
+                    { x: window.innerWidth - pointWidth, y: 0 },
+
+                    { x: 0, y: window.innerHeight * (1 / 3) - 0.5 * pointWidth },
+                    { x: window.innerWidth * (1 / 3) - 0.5 * pointWidth, y: window.innerHeight * (1 / 3) - 0.5 * pointWidth },
+                    { x: window.innerWidth * (2 / 3) - 0.5 * pointWidth, y: window.innerHeight * (1 / 3) - 0.5 * pointWidth },
+                    { x: window.innerWidth - pointWidth, y: window.innerHeight * (1 / 3) - 0.5 * pointWidth },
+
+                    { x: 0, y: window.innerHeight * (2 / 3) - 0.5 * pointWidth },
+                    { x: window.innerWidth * (1 / 3) - 0.5 * pointWidth, y: window.innerHeight * (2 / 3) - 0.5 * pointWidth },
+                    { x: window.innerWidth * (2 / 3) - 0.5 * pointWidth, y: window.innerHeight * (2 / 3) - 0.5 * pointWidth },
+                    { x: window.innerWidth - pointWidth, y: window.innerHeight * (2 / 3) - 0.5 * pointWidth },
+
+                    { x: 0, y: window.innerHeight - pointWidth },
+                    { x: window.innerWidth * (1 / 3) - 0.5 * pointWidth, y: window.innerHeight - pointWidth },
+                    { x: window.innerWidth * (2 / 3) - 0.5 * pointWidth, y: window.innerHeight - pointWidth },
+                    { x: window.innerWidth - pointWidth, y: window.innerHeight - pointWidth },
+                ])
+
+            } else {
+                setPointPositions(randomizePointPositions(pointPositions));
+            }
+            // setPointPositions(randomizePointPositions(pointPositions));
             setCurrentPhase(type);
             setHasPhaseStarted(true);
         }
@@ -191,12 +233,6 @@ const Calibration = (props) => {
 
                 updateAccuracyPerPoint();
 
-                // console.log(currentValidationResultS + " out of " + currentValidationCount);
-                // console.log(currentValidationResultM + " out of " + currentValidationCount);
-                // console.log(currentValidationResultL + " out of " + currentValidationCount);
-                console.log(currentValidationResultXL.current + " out of " + currentValidationCount.current);
-
-                // setCurrentValidationCount(0);
                 currentValidationCount.current = 0;
 
                 currentValidationResultS.current = 0;
@@ -259,30 +295,30 @@ const Calibration = (props) => {
     }
 
     // Compare if gaze and point position match and handle 
+    // BUG: NOT WORKING PROPERLY, not detecting gaze estimations
+    // Cause: gaze prediction smoothening results in max. 2 different gaze estimations
     const handleGazeValidation = () => {
         // Check if gaze lies within the target area (= targetSize - pointWidth)
-        console.log("is anyone there?");
 
         // 0.5 targetSize - 0.25 point width == padding 
-        if (isGazeWithinElement("calibrationPoint", 0.5 * targetS - 0.5 * 0.5 * pointWidth, props.context.x, props.context.y)) {
+        if (isGazeWithinElement("calibrationPoint", 0.5 * targetS - 0.5 * 0.5 * pointWidth, contextRef.current.x, contextRef.current.y)) {
             currentValidationResultS.current++;
         }
 
         // 0.5 targetSize - 0.25 point width == padding 
-        if (isGazeWithinElement("calibrationPoint", 0.5 * targetM - 0.5 * 0.5 * pointWidth, props.context.x, props.context.y)) {
+        if (isGazeWithinElement("calibrationPoint", 0.5 * targetM - 0.5 * 0.5 * pointWidth, contextRef.current.x, contextRef.current.y)) {
             currentValidationResultM.current++;
 
         }
 
         // 0.5 targetSize - 0.25 point width == padding 
-        if (isGazeWithinElement("calibrationPoint", 0.5 * targetL - 0.5 * 0.5 * pointWidth, props.context.x, props.context.y)) {
+        if (isGazeWithinElement("calibrationPoint", 0.5 * targetL - 0.5 * 0.5 * pointWidth, contextRef.current.x, contextRef.current.y)) {
             currentValidationResultL.current++;
         }
 
 
         // 0.5 targetSize - 0.25 point width == padding 
-        if (isGazeWithinElement("calibrationPoint", 0.5 * targetXL - 0.5 * 0.5 * pointWidth, props.context.x, props.context.y)) {
-            console.log("FOUND ONE");
+        if (isGazeWithinElement("calibrationPoint", 0.5 * targetXL - 0.5 * 0.5 * pointWidth, contextRef.current.x, contextRef.current.y)) {
             currentValidationResultXL.current++;
         }
         currentValidationCount.current++;
