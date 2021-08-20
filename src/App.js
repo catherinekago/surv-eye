@@ -28,7 +28,7 @@ class WebGazeLoader extends React.Component {
       gazeData: [], // All gaze estimations that webgazer provides 
       accuracyData:[], // All accuracy calculations gathered during calibration-validation process
       phase: "CALIBRATION", // Currently active phase: CALIBRATION, VALIDATION, or QUESTIONNAIRE
-      performValidation: true, // THIS VARIABLE INFLUENCES IF SURVEYE INCLUDES A VALIDATION PHASE WITH DATA GENERATION
+      performValidation: false, // THIS VARIABLE INFLUENCES IF SURVEYE INCLUDES A VALIDATION PHASE WITH DATA GENERATION
 
     };
   }
