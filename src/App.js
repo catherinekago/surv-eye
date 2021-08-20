@@ -78,6 +78,8 @@ class WebGazeLoader extends React.Component {
 
   displaySmoothenedDataPoints(data, elapsedTime, averaged) {
 
+    this.mapGazePredictionsToScreen(data);
+
     if (this.state.gazeSmoothening.length < averaged) {
       let updatedData = this.state.gazeSmoothening;
       updatedData.push({ x: data.x, y: data.y });
@@ -113,6 +115,20 @@ class WebGazeLoader extends React.Component {
       }
 
       document.getElementById("gaze-dot").style.transform = "translate3d(" + this.state.context.x + "px, " + this.state.context.y + "px, 0px)";
+    }
+  }
+
+  mapGazePredictionsToScreen(data) {
+    if (data.x < 0) {
+      data.x = 0; 
+    } else if (data.x > window.innerWidth - 25) {
+      data.x = window.innerWidth - 25;
+    }
+
+    if (data.y < 0) {
+      data.y = 0; 
+    } else if (data.y > window.innerHeight - 25) {
+      data.y = window.innerHeight - 25;
     }
   }
 
