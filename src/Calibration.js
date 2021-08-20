@@ -25,7 +25,7 @@ const Calibration = (props) => {
     const targetSize = convertAngleToPx(4.17);
 
     const [introHeader, setIntroHeader] = useState("Welcome to SurvEye!");
-    const [introText, setIntroText] = useState("");
+    const [introText, setIntroText] = useState("To complete the calibration, please follow the moving dot 🟢. Please try not to move your head or blink too often.");
     // const [introText, setIntroText] = useState("To complete the calibration process, please follow the dot. 🟢")
 
     // Different steps of target sizes to be tested
@@ -94,7 +94,7 @@ const Calibration = (props) => {
 
     // To allow timing length of phases, length of start sequence, and intervals of actions
     const TIMEOUT_SEQUENCE = 3000;
-    const TIMEOUT_INTRO = 2000;
+    const TIMEOUT_INTRO = 5000;
     const INTERVAL_MEASUREMENT = 100;
     const TIMEOUT_TRANSITION = 1000;
 
@@ -112,7 +112,9 @@ const Calibration = (props) => {
             if (!phaseStartedTimeout) {
                 setPhaseStartedTimeout(true);
                 setTimeout(() => {
-                    let type = !calibrationComplete ? "CALIBRATION" : (!validationComplete ? "VALIDATION" : "QUESTIONNAIRE");
+                    // If a validation phase is needed
+                    // let type = !calibrationComplete ? "CALIBRATION" : (!validationComplete ? "VALIDATION" : "QUESTIONNAIRE");
+                    let type = !calibrationComplete ? "CALIBRATION" : "QUESTIONNAIRE";
                     startPhase(type);
                     setPhaseStartedTimeout(false);
                 }, TIMEOUT_INTRO);
@@ -176,46 +178,7 @@ const Calibration = (props) => {
             props.onCalibrationComplete(false);
             // Start calibration or validation phase
         } else {
-            // TODO: ONLY FOR TESTING: create grid OF and BETWEEN 16x16 calibration grid dots to determine differences in accuracy
-            if (type === "VALIDATION") {
-                setPointPositions([
-                    { x: window.innerWidth * (1 / 6) - 0.5 * pointWidth, y: window.innerHeight * (1 / 6) - 0.5 * pointWidth },
-                    { x: window.innerWidth * (3 / 6) - 0.5 * pointWidth, y: window.innerHeight * (1 / 6) - 0.5 * pointWidth },
-                    { x: window.innerWidth * (5 / 6) - 0.5 * pointWidth, y: window.innerHeight * (1 / 6) - 0.5 * pointWidth },
-
-                    { x: window.innerWidth * (1 / 6) - 0.5 * pointWidth, y: window.innerHeight * (3 / 6) - 0.5 * pointWidth },
-                    { x: window.innerWidth * (3 / 6) - 0.5 * pointWidth, y: window.innerHeight * (3 / 6) - 0.5 * pointWidth },
-                    { x: window.innerWidth * (5 / 6) - 0.5 * pointWidth, y: window.innerHeight * (3 / 6) - 0.5 * pointWidth },
-
-                    { x: window.innerWidth * (1 / 6) - 0.5 * pointWidth, y: window.innerHeight * (5 / 6) - 0.5 * pointWidth },
-                    { x: window.innerWidth * (3 / 6) - 0.5 * pointWidth, y: window.innerHeight * (5 / 6) - 0.5 * pointWidth },
-                    { x: window.innerWidth * (5 / 6) - 0.5 * pointWidth, y: window.innerHeight * (5 / 6) - 0.5 * pointWidth },
-
-                    { x: 0, y: 0 },
-                    { x: window.innerWidth * (1 / 3) - 0.5 * pointWidth, y: 0 },
-                    { x: window.innerWidth * (2 / 3) - 0.5 * pointWidth, y: 0 },
-                    { x: window.innerWidth - pointWidth, y: 0 },
-
-                    { x: 0, y: window.innerHeight * (1 / 3) - 0.5 * pointWidth },
-                    { x: window.innerWidth * (1 / 3) - 0.5 * pointWidth, y: window.innerHeight * (1 / 3) - 0.5 * pointWidth },
-                    { x: window.innerWidth * (2 / 3) - 0.5 * pointWidth, y: window.innerHeight * (1 / 3) - 0.5 * pointWidth },
-                    { x: window.innerWidth - pointWidth, y: window.innerHeight * (1 / 3) - 0.5 * pointWidth },
-
-                    { x: 0, y: window.innerHeight * (2 / 3) - 0.5 * pointWidth },
-                    { x: window.innerWidth * (1 / 3) - 0.5 * pointWidth, y: window.innerHeight * (2 / 3) - 0.5 * pointWidth },
-                    { x: window.innerWidth * (2 / 3) - 0.5 * pointWidth, y: window.innerHeight * (2 / 3) - 0.5 * pointWidth },
-                    { x: window.innerWidth - pointWidth, y: window.innerHeight * (2 / 3) - 0.5 * pointWidth },
-
-                    { x: 0, y: window.innerHeight - pointWidth },
-                    { x: window.innerWidth * (1 / 3) - 0.5 * pointWidth, y: window.innerHeight - pointWidth },
-                    { x: window.innerWidth * (2 / 3) - 0.5 * pointWidth, y: window.innerHeight - pointWidth },
-                    { x: window.innerWidth - pointWidth, y: window.innerHeight - pointWidth },
-                ])
-
-            } else {
-                setPointPositions(randomizePointPositions(pointPositions));
-            }
-            // setPointPositions(randomizePointPositions(pointPositions));
+            setPointPositions(randomizePointPositions(pointPositions));
             setCurrentPhase(type);
             setHasPhaseStarted(true);
         }
@@ -366,7 +329,7 @@ const Calibration = (props) => {
                     borderRadius: 25,
                     boxShadow: "0 0 100px 3px rgba(136, 123, 153, 1.0)"
                 }}>
-
+                   
                 <p style={{
                     "textAlign": "center",
                     color: "#ffffff",
