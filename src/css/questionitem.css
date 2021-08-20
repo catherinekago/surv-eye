@@ -4,7 +4,7 @@
     flex-direction: column;
     justify-content: space-around;
     background-color: white;
-    height:100%;
+    height:90%;
     width: -moz-available;          /* WebKit-based browsers will ignore this. */
     width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
 }

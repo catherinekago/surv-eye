@@ -4,6 +4,7 @@ import './radiobuttonrect.css';
 import { isGazeWithinElement } from '../../functions/isGazeWithinElement';
 import { convertAngleToPx } from "../../functions/convertAngleToPx";
 
+
 const RadioButton = (props) => {
 
   const [radioFillClass, setRadioFillClass] = useState(props.selected === props.value ? "radio-fill" : "radio-fill unselected");
@@ -61,14 +62,17 @@ const RadioButton = (props) => {
 
   return (
     <div className="radio-container">
-      <p className="radio-button-label"> {props.label} </p>
+
 
       <div style={{
         minWidth: MINTARGETSIZE
         , minHeight: MINTARGETSIZE
       }} id={props.idTarget} className="total-target-area-radio">
+            <p className="radio-button-label"> {props.label} </p>
+
+
           <div id={props.idFill} className={radioFillClass} >
-            <p style={{ margin: "0", textAlign: "center", fontSize: "32px", color: "white", fontWeight: 800 }}>{props.icon}</p>
+            {/* <p style={{ margin: "0", textAlign: "center", fontSize: "32px", color: "white", fontWeight: 800 }}>{props.icon}</p> */}
         </div>
       </div>
     </div>

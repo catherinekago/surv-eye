@@ -1,5 +1,6 @@
 import RadioButtonRect from "./RadioButtonRect.js";
 import { WebGazeContext } from '../../context/WebGazeContext';
+import Ruler from '../ruler/Ruler.js';
 
 import './radiobuttongrouprect.css'
 
@@ -12,7 +13,10 @@ const RadioButtonGroup = (props) => {
     return (
         <WebGazeContext.Consumer >
             {context => (
-                <div id="radio-button-group-container">
+                <div id="RULER-CONTAINER">
+                    <Ruler/>
+
+ <div id="RADIO-BUTTON-GROUP-CONTAINER">
                     <RadioButtonRect
                         idTarget="radio-target-1"
                         idFill="radio-fill-1"
@@ -102,6 +106,8 @@ const RadioButtonGroup = (props) => {
                     />
 
                 </div>
+                </div>
+               
 
             )}
         </WebGazeContext.Consumer>

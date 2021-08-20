@@ -1,11 +1,12 @@
 .navbar{
     display: flex;
     flex-direction: row;
-    height: 200px;
+    height: 25%;
     width: -webkit-fill-available;
     justify-content: space-between;
     align-items: center;
     user-select: none;
+    margin-bottom: 80px;
 }
 
 #question {

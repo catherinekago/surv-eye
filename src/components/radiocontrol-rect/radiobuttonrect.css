@@ -11,33 +11,40 @@
   }
 
   .radio-button-label {
+
     text-align: center;
+    width:100%;
+    margin-top: 0;
+    margin-bottom: 0;
     font-size: 24px;
     font-weight: 600;
-    margin-top:0;
-    margin-bottom:50px;
-    margin-top: 75px;
+    background-color: #fafafa;
+    grid-row: 1;
+    display:flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
     flex-grow: 0;
   }
 
+
   .total-target-area-radio{
+    display: grid; 
+    grid-template-rows: 0.33fr 0.66fr;
     background-color: white;
+    place-items: stretch;
     margin-top: 0px;
     margin-bottom:0px;
     flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-self: stretch;
-    align-items: center;
-    border: 5px solid #7c9885;
+    border: 5px solid #eaeaea;
   }
   
   .radio-fill {
+    background-color: yellow;
     width: 100%;
     height:100%;
-    display:flex;
-    justify-content: center;
-    align-items: center;
+    grid-column:1; 
+    grid-row:2;
   }
 
   .unselected {
@@ -47,4 +54,9 @@
 
   .transitioning {
   transition: all 0.5s linear;
+  }
+
+  #RULER {
+    height: 20%;
+    width:100%;
   }
