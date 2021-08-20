@@ -27,10 +27,14 @@
     flex-grow: 0;
   }
 
+  .label-inspected{
+    background-color: #c0d9c881;
+  }
+
 
   .total-target-area-radio{
     display: grid; 
-    grid-template-rows: 0.33fr 0.66fr;
+    grid-template-rows: 0.333fr 0.666fr;
     background-color: white;
     place-items: stretch;
     margin-top: 0px;
@@ -38,9 +42,13 @@
     flex-grow: 1;
     border: 5px solid #eaeaea;
   }
+
+  .total-target-inspected{
+    background-color: #d5f2de31;
+  }
   
   .radio-fill {
-    background-color: yellow;
+    background-color: #28666e;
     width: 100%;
     height:100%;
     grid-column:1; 
@@ -48,7 +56,7 @@
   }
 
   .unselected {
-    width: 0;
+    width: 100%;
     height: 0;
   }
 
