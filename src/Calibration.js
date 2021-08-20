@@ -113,9 +113,13 @@ const Calibration = (props) => {
                 setPhaseStartedTimeout(true);
                 setTimeout(() => {
                     // If a validation phase is needed
-                    // let type = !calibrationComplete ? "CALIBRATION" : (!validationComplete ? "VALIDATION" : "QUESTIONNAIRE");
-                    let type = !calibrationComplete ? "CALIBRATION" : "QUESTIONNAIRE";
-                    startPhase(type);
+                    if (props.performValidation) {
+                        let type = !calibrationComplete ? "CALIBRATION" : (!validationComplete ? "VALIDATION" : "QUESTIONNAIRE");
+                        startPhase(type);
+                    } else {
+                        let type = !calibrationComplete ? "CALIBRATION" : "QUESTIONNAIRE";
+                        startPhase(type);
+                    }
                     setPhaseStartedTimeout(false);
                 }, TIMEOUT_INTRO);
             }
@@ -129,8 +133,7 @@ const Calibration = (props) => {
                     const measureInterval = setInterval(() => {
                         if (currentPhase === "CALIBRATION") {
                             click("calibrationPointCenter");
-                        } else if (currentPhase === "VALIDATION") {
-                            // Not working properly since refactoring of calibration structure
+                        } else if (props.performValidation && currentPhase === "VALIDATION") {
                             handleGazeValidation();
                         }
                     }, INTERVAL_MEASUREMENT);
@@ -175,14 +178,14 @@ const Calibration = (props) => {
     const startPhase = (type) => {
         // End calibraiton-validation and switch to questionnaire 
         if (type === "QUESTIONNAIRE") {
-            props.onCalibrationComplete(false);
+                props.onCalibrationComplete(false);
+                props.retrieveData(accuracyPerPoint);
             // Start calibration or validation phase
         } else {
             setPointPositions(randomizePointPositions(pointPositions));
             setCurrentPhase(type);
             setHasPhaseStarted(true);
         }
-        props.onPhaseChange(type);
     }
 
     // Move point to designated position and handle end of sequence 
@@ -192,7 +195,7 @@ const Calibration = (props) => {
 
         } else {
 
-            if (currentPhase === "VALIDATION") {
+            if (props.performValidation && currentPhase === "VALIDATION") {
 
                 updateAccuracyPerPoint();
 
@@ -227,13 +230,21 @@ const Calibration = (props) => {
 
         if (currentPhase === "CALIBRATION") {
             setCalibrationComplete(true);
+            if (props.performValidation) {
             setIntroHeader("One more time! 💪")
-            // setIntroText("Let's do this again one more time to validate the calibration. 🟢 ");
+            setIntroText("Let's do this again one more time to validate the calibration. 🟢 ");
+            props.onPhaseChange("VALIDATION")
+            } else {
+                props.onPhaseChange("QUESTIONNAIRE");
+                // setCalibrationComplete(true);
+                setIntroHeader("You did it! 🎉");
+                setIntroText("You will be directed to the questionnaire immediately.");
+            }
 
         } else if (currentPhase === "VALIDATION") {
             setValidationComplete(true);
             setIntroHeader("You did it! 🎉");
-            setIntroText("");
+            setIntroText("You will be directed to the questionnaire immediately.");
             // setIntroText("Your validation result is: " + resultM + "%");
 
 
@@ -257,9 +268,6 @@ const Calibration = (props) => {
         setHasPhaseStarted(false);
     }
 
-    // Compare if gaze and point position match and handle 
-    // BUG: NOT WORKING PROPERLY, not detecting gaze estimations
-    // Cause: gaze prediction smoothening results in max. 2 different gaze estimations
     const handleGazeValidation = () => {
         // Check if gaze lies within the target area (= targetSize - pointWidth)
 

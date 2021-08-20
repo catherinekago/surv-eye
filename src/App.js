@@ -18,7 +18,7 @@ class WebGazeLoader extends React.Component {
     this.handleAccuracyData = this.handleAccuracyData.bind(this);
 
     this.state = {
-      context: { x: -1, y: -1 },
+      context: { x: -1, y: -1, time: -1 },
       dataNull: true,
       fixRange: convertAngleToPx(4.17), // target size?
       fixTime: 1, // how many seconds a fixation should last
@@ -28,6 +28,7 @@ class WebGazeLoader extends React.Component {
       gazeData: [], // All gaze estimations that webgazer provides 
       accuracyData:[], // All accuracy calculations gathered during calibration-validation process
       phase: "CALIBRATION", // Currently active phase: CALIBRATION, VALIDATION, or QUESTIONNAIRE
+      performValidation: true, // THIS VARIABLE INFLUENCES IF SURVEYE INCLUDES A VALIDATION PHASE WITH DATA GENERATION
 
     };
   }
@@ -36,8 +37,8 @@ class WebGazeLoader extends React.Component {
   handlePhaseChange(phase) {
     this.setState({ phase: phase });
 
-    if (phase === "QUESTIONNAIRE") {
-      // save json 
+    if ( this.state.performValidation && phase === "QUESTIONNAIRE") {
+      // Functionality to save json files of gathered data within calibration-validation sequence
       document.getElementById("downloadGazeData").click();
       document.getElementById("downloadAccuracyData").click();
 
@@ -48,16 +49,6 @@ class WebGazeLoader extends React.Component {
     handleAccuracyData(data) {
       this.setState({ accuracyData: data });
       }
-
-
-  // Set accuracyMeasurement of gaze data to true when measurement is taking place
-  // handleAccuracyMeasurement(time) {
-  // let updatedData = this.state.gazeData;
-  // if (updatedData.find(x => x.time === time) !== undefined) {
-  //   updatedData.find(x => x.time === time).accuracyMeasurement = true;
-  //   this.setState({ gazeSmoothening: updatedData });
-  // }
-  // }
 
   // Check if the user is fixating a point (gaze staying within a defined area for a defined amount of time)
   checkFixation() {
@@ -75,7 +66,7 @@ class WebGazeLoader extends React.Component {
 
   }
 
-
+// Apply smoothening to gaze prediction
   displaySmoothenedDataPoints(data, elapsedTime, averaged) {
 
     this.mapGazePredictionsToScreen(data);
@@ -85,7 +76,7 @@ class WebGazeLoader extends React.Component {
       updatedData.push({ x: data.x, y: data.y });
       this.setState({ gazeSmoothening: updatedData });
 
-      if (this.state.phase !== "QUESTIONNAIRE") {
+      if (this.state.performValidation && this.state.phase !== "QUESTIONNAIRE") {
         let updatedGazeData = this.state.gazeData;
         updatedGazeData.push({ x: data.x, y: data.y, time: elapsedTime, type: "raw", phase: this.state.phase});
         this.setState({ gazeData: updatedGazeData });
@@ -108,7 +99,7 @@ class WebGazeLoader extends React.Component {
       this.setState({ context: webgazer.util.bound({ x: averagedX, y: averagedY, time: elapsedTime }) });
       this.setState({ gazeSmoothening: [{ x: data.x, y: data.y }] });
 
-      if (this.state.phase !== "QUESTIONNAIRE") {
+      if (this.state.performValidation && this.state.phase !== "QUESTIONNAIRE") {
         let updatedGazeData = this.state.gazeData;
         updatedGazeData.push({ x: averagedX, y: averagedY, time: elapsedTime, type: "smoothened", phase: this.state.phase});
         this.setState({ gazeData: updatedGazeData });
@@ -118,6 +109,7 @@ class WebGazeLoader extends React.Component {
     }
   }
 
+  // Restrict gaze prediction to screen boundaries by mapping points outside the boundaries to the corresponding borders
   mapGazePredictionsToScreen(data) {
     if (data.x < 0) {
       data.x = 0; 
@@ -143,11 +135,10 @@ class WebGazeLoader extends React.Component {
           // STUDY
           click("INTRO");
           this.setState({ dataNull: false });
-          // console.log(this.state.dataNull);
         }
 
 
-        // For debugging: set to true. For usability study: debatable
+        // For debugging: set to true
         webgazer.showPredictionPoints(false);
         webgazer.showVideo(false);
         webgazer.showFaceOverlay(false);
@@ -175,27 +166,31 @@ class WebGazeLoader extends React.Component {
             onLoad={this.handleScriptLoad.bind(this)}
             onError={this.handleScriptError.bind(this)}
           />
-          <MainApp onPhaseChange={this.handlePhaseChange} onCalibrationComplete={this.handleAccuracyData}/>
+          <MainApp performValidation={this.state.performValidation} onPhaseChange={this.handlePhaseChange} onCalibrationComplete={this.handleAccuracyData}/>
           <div style={this.state.fixation ? { borderColor: "rgb(255, 63, 137)" } : { borderColor: "rgb(76, 63, 255)" }} id="gaze-dot" />
           
-          
-          <a id="downloadGazeData" style={{ background: "transparent", fontSize: 0 }}
-            href={`data:text/json;charset=utf-8,${encodeURIComponent(
-              JSON.stringify(this.state.gazeData)
-            )}`}
-            download={"gazeData" + ".json"}
-          >
-            {`Download Gaze Data 💌`}
-          </a>
+          {/* Functionality to retrieve gaze and accuracy data of a calibration-validation phase */}
+          {this.state.performValidation ? 
+          (<a id="downloadGazeData" style={{ background: "transparent", fontSize: 0 }}
+          href={`data:text/json;charset=utf-8,${encodeURIComponent(
+            JSON.stringify(this.state.gazeData)
+          )}`}
+          download={"gazeData" + ".json"}
+        >
+          {`Download Gaze Data 💌`}
+        </a>) : null}
 
-          <a id="downloadAccuracyData" style={{ background: "transparent", fontSize: 0 }}
-            href={`data:text/json;charset=utf-8,${encodeURIComponent(
-              JSON.stringify(this.state.accuracyData)
-            )}`}
-            download={"accuracyData" + ".json"}
-          >
-            {`Download Accuracy Data 💌`}
-          </a>
+        {this.state.performValidation ? 
+        (<a id="downloadAccuracyData" style={{ background: "transparent", fontSize: 0 }}
+          href={`data:text/json;charset=utf-8,${encodeURIComponent(
+            JSON.stringify(this.state.accuracyData)
+          )}`}
+          download={"accuracyData" + ".json"}
+        >
+          {`Download Accuracy Data 💌`}
+        </a>)  : null}
+        
+          
 
 
         </WebGazeContext.Provider>
