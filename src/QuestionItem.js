@@ -1,6 +1,7 @@
 
 import "./css/questionitem.css";
-import RatioButtonGroupRect from "./components/radiocontrol-rect/RadioButtonGroupRect";
+import RadioButtonGroupRect from "./components/radiocontrol-rect/RadioButtonGroupRect";
+import RadioButtonGroupRound from "./components/radiocontrol-round/RadioButtonGroupRound";
 import Slider from "./components/slidercontrol/Slider";
 
 const QuestionItem = (props) => {
@@ -9,20 +10,22 @@ const QuestionItem = (props) => {
         props.passUpItemValue(value);
     }
 
+    const determineItem = (type) => {
+        if (type === "radio1")  {
+            return (<RadioButtonGroupRect value={props.value} setItemValue={passUpItemValue} />);
+        } else if (type === "radio2") {
+            //TODO: add inspection AREA
+            return (<RadioButtonGroupRound value={props.value} setItemValue={passUpItemValue} isSelectionArea={false} />); 
+        } else if (type === "slider") {
+            return (
+            <Slider value={props.value} setItemValue={passUpItemValue} min={props.min} max={props.max} measure={props.measure} stepinterval={props.stepinterval}/>);
+        }
+
+        }
+    
     return (
-        <div className="item-container">
-
-            {/* Currently moved to navigation  */}
-            {/* <p id="question">{props.statement}</p> */}
-
-            <div className="controls-container">
-                {props.type === "radio" ?
-                    (<RatioButtonGroupRect value={props.value} setItemValue={passUpItemValue} />)
-                    : 
-                    (<Slider value={props.value} setItemValue={passUpItemValue} min={props.min} max={props.max} measure={props.measure} stepinterval={props.stepinterval}/>)
-                    }
-
-            </div>
+        <div className="controls-container">
+        {determineItem(props.type)}
         </div>
 
     )

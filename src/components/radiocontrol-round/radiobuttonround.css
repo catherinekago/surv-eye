@@ -1,55 +1,76 @@
+.radio-round-container {
+  cursor: pointer;
+  user-select: none;
+  margin-top: 0px;
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content: center;
 
+  flex-direction: column;
+  
+}
 
-.radio-container {
-    cursor: pointer;
-    user-select: none;
-    margin-bottom: 50px; 
-  }
+.radio-button-round-label {
 
-  .radio-button-label {
-    text-align: center;
-    font-size: 24px;
-    font-weight: 600;
-    margin-top:0;
-  }
+  text-align: center;
+  width:100%;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 24px;
+  font-weight: 600;
+  background-color: #fafafa;
+  grid-row: 1;
+  display:flex;
+  flex-direction: column; 
+  justify-content: center;
+  
+  flex-grow: 0;
+}
 
-  .total-target-area-radio{
+  .total-target-area-round-radio{
     border-radius: 50%;
     background-color: white;
-    margin-top: 50px;
     margin-bottom:0px;
     display: flex;
     justify-content: center;
     align-items: center;
   }
   
-  .radio-outer-circle {
+  .radio-outline{ 
 
       /* Style size thickness, and color of outer circle*/
-    width: 80%;
-    height: 80%;
     border: 5px solid;
-    border-radius: 50%;
+    border-radius: 50%; 
     /* Position inner circle in the middle*/
     display: flex;
     justify-content: center;
     align-items: center;
+    border-color: #28666e;
   }
   
-  .radio-inner-circle {
-    width: 90%;
-    height: 90%;
+  .radio-outline-inspected{
+    background-color: #c0d9c881;
+  }
+
+  .radio-round-fill {
+    width: 80%;
+    height: 80%;
     border-radius: 50%;
     display:flex;
     justify-content: center;
     align-items: center;
+    background-color: #28666e;
   }
 
   .unselected-circle {
     width: 0;
     height: 0;
+    border-radius:50%;
+    background-color: #28666e;
+    
   }
 
   .transitioning {
   transition: all 0.5s linear;
-  }
+  } 

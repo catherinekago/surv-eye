@@ -1,4 +1,3 @@
-import { useState } from "react";
 import RadioButtonRect from "./RadioButtonRect.js";
 import { WebGazeContext } from '../../context/WebGazeContext';
 import Ruler from '../ruler/Ruler.js';
@@ -12,16 +11,14 @@ const RadioButtonGroup = (props) => {
         props.setItemValue(value);
     }
 
-    const LABELS = ["Strongly agreee", "Agree", "Somewhat agree", "Neutral", "Somewhat disagree", "Disagree", "Strongly Disagree"];
+    const LABELS = ["Strongly agree", "Agree", "Somewhat agree", "Neutral", "Somewhat disagree", "Disagree", "Strongly Disagree"];
     const RADIOBUTTONCOUNT = [1, 2, 3, 4, 5, 6, 7];
-
-    const countOccurrences = (arr, val) => arr.reduce((a, v) => (v === val ? a + 1 : a), 0);
 
     const radioButtons = (context) => RADIOBUTTONCOUNT.map((radiobutton) =>
         <RadioButtonRect
-            idTarget={"radio-target-" + radiobutton}
-            idLabel={"radio-label-" + radiobutton}
-            idFill={"radio-fill-" + radiobutton}
+            idTarget={"radio-target-rect-" + radiobutton}
+            idLabel={"radio-label-rect-" + radiobutton}
+            idFill={"radio-fill-rect-" + radiobutton}
             value={"" + radiobutton}
             selected={props.value}
             label={LABELS[radiobutton - 1]}
@@ -36,7 +33,7 @@ return (
             <div id="RULER-CONTAINER">
                 <Ruler />
 
-                <div id="RADIO-BUTTON-GROUP-CONTAINER">
+                <div id="RADIO-BUTTON-GROUP-RECT-CONTAINER">
                     {radioButtons(context)}
 
                 </div>

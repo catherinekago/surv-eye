@@ -6,9 +6,9 @@ import { convertAngleToPx } from "../../functions/convertAngleToPx";
 
 const RadioButton = (props) => {
 
-  const [radioFillClass, setRadioFillClass] = useState(props.selected === props.value ? "radio-fill" : "radio-fill unselected");
-  const [totalTargetClass, setTotalTargetClass] = useState("total-target-area-radio");
-  const [labelClass, setLabelClass] = useState("radio-button-label");
+  const [radioFillClass, setRadioFillClass] = useState(props.selected === props.value ? "radio-rect-fill" : "radio-rect-fill unselected-rect");
+  const [totalTargetClass, setTotalTargetClass] = useState("total-target-area-radio-rect");
+  const [labelClass, setLabelClass] = useState("radio-button-rect-label");
   const [lastGazeDetected, setLastGazeDetected] = useState(0);
   const [isInspected, setIsInspected] = useState(false);
   const INSPECTIONTIME = 1000;
@@ -27,12 +27,12 @@ const RadioButton = (props) => {
 
         // Remove all visual feedback when gaze is not detected within radio button and button is currently not selecgted
        } else {
-        setTotalTargetClass("total-target-area-radio");
-        setLabelClass("radio-button-label");
+        setTotalTargetClass("total-target-area-radio-rect");
+        setLabelClass("radio-button-rect-label");
         setIsInspected(false);
 
         if (props.selected !== props.value) {
-          setRadioFillClass("radio-fill unselected transitioning");
+          setRadioFillClass("radio-rect-fill unselected-rect transitioning");
         }
 
       }
@@ -41,8 +41,8 @@ const RadioButton = (props) => {
 
   // Provide visual feedback during inspection of interaction elements
   const handleInspection = () => {
-    setTotalTargetClass("total-target-area-radio total-target-inspected transitioning");
-    setLabelClass("radio-button-label label-inspected transitioning");
+    setTotalTargetClass("total-target-area-radio-rect total-target-inspected transitioning");
+    setLabelClass("radio-button-rect-label label-rect-inspected transitioning");
     // Handle case of radio button being already inspected currently
     if (!isInspected) {
       setIsInspected(true);
@@ -59,12 +59,12 @@ const handleSelection= () => {
     }
       let currentTime = new Date().getTime();
       if (isInspected && currentTime >= lastGazeDetected + INSPECTIONTIME) {
-        setRadioFillClass("radio-fill transitioning");
+        setRadioFillClass("radio-rect-fill transitioning");
         setLastGazeDetected(currentTime);
       }
     }  else {
       if (props.value === props.selected) {
-      setRadioFillClass("radio-fill");
+      setRadioFillClass("radio-rect-fill");
 
         
       }
@@ -84,7 +84,7 @@ const handleSelection= () => {
   }
 
   return (
-    <div className="radio-container">
+    <div className="radio-rect-container">
 
 
       <div style={{

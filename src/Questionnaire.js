@@ -1,4 +1,3 @@
-import NavBar from "./components/navigation/NavBar";
 import NavBarCombined from "./components/navigation/NavBarCombined";
 import { WebGazeContext } from './context/WebGazeContext';
 import QuestionItem from "./QuestionItem";
@@ -7,11 +6,11 @@ import { useState } from 'react';
 const Questionnaire = () => {
 
     const [questionnaireItems, setQuestionnaireItems] = useState([
+        { number: 0, type: "radio2", statement: "I want to know my Patronus.", input: 0 },
         // { number: 0, type: "slider", statement: "How much of an overthinker are you?", min: 0, max: 100, measure:"%", stepinterval: 1, input: 0 },
-        { number: 0, type: "radio", statement: "I would stay at Hogwarts during the holidays as well.", input: 0 },
-        { number: 1, type: "radio", statement: "I feel pitty for Nearly Headless Nick.", input: 0 },
-        { number: 2, type: "radio", statement: "I want to know my Patronus.", input: 0 },
-        { number: 3, type: "radio", statement: "I'd love to possess the Mauderer's Map.", input: 0 }
+        { number: 1, type: "radio1", statement: "I would stay at Hogwarts during the holidays as well.", input: 0 },
+        { number: 2, type: "radio1", statement: "I feel pitty for Nearly Headless Nick.", input: 0 },
+        { number: 3, type: "radio2", statement: "I'd love to possess the Mauderer's Map.", input: 0 }
     ])
 
     const [currentQuestionnaireItem, updateCurrentQuestionnaireItem] = useState(0);
