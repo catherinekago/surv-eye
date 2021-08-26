@@ -1,6 +1,6 @@
 import React from 'react';
-import { WebGazeContext } from './context/WebGazeContext';
-import MainApp from './Main';
+import { WebGazeContext } from '../../context/WebGazeContext';
+import MainApp from '../../Main';
 
 import './css/App.css';
 

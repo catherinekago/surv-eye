@@ -1,6 +1,6 @@
 import './navbar.css';
 
-import NavButton from "./NavButton.js";
+import NavButton from "../navigation/NavButton.js";
 
 const NavBar = (props) => {
 

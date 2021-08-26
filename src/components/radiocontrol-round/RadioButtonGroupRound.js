@@ -14,15 +14,15 @@ const RadioButtonGroup = (props) => {
 
     const radioButtons = (context) => RADIOBUTTONCOUNT.map((radiobutton) =>
         <RadioButtonRound
-            isSelectionArea= {props.isSelectionArea}
-            idTarget={"radio-target-round-" + radiobutton}
-            idLabel={"radio-label-round-" + radiobutton}
-            idOutlineCircle= "radio-outline"
-            idSelectionCircle= {"radio-fill-round-" + radiobutton}
+            isInspectionArea= {props.isInspectionArea}
+            idTarget={props.isInspectionArea ? "radio-target-inspection-round-" + radiobutton : "radio-target-round-" + radiobutton}
+            idLabel={ props.isInspectionArea ? "" : "radio-label-round-" + radiobutton}
+            idSelectionCircle= { props.isInspectionArea ? "" : "radio-fill-round-" + radiobutton}
+            idOutlineCircle={props.isInspectionArea ? "radio-outline-inspection-round-" + radiobutton : "radio-outline-round-" + radiobutton}
             value={"" + radiobutton}
             selected={props.value}
             label={LABELS[radiobutton - 1]}
-            onFixation={onSelection}
+            onFixation={props.isInspectionArea ? "" : onSelection}
             context={context}
         />
     )

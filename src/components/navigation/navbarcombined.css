@@ -1,10 +1,10 @@
 .navbar{
     display: flex;
     flex-direction: row;
-    height: 25%;
+    height: 50%;
     width: -webkit-fill-available;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     user-select: none;
     margin-bottom: 80px;
 }

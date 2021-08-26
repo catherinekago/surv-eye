@@ -1,6 +1,7 @@
 import './navbarcombined.css';
 
 import NavButton from "./NavButton.js";
+import InspectionComponent from "./inspection/InspectionComponent.js"
 
 const NavBarCombined = (props) => {
 
@@ -12,8 +13,14 @@ const NavBarCombined = (props) => {
                 type={"scroll-button-back"}
                 scrollTrigger={props.scrollTrigger}
                 scrollEnabled={props.scrollEnabledBack} />
-
-            <p id="question">{props.statement}</p>
+            {props.hasItemInspectionArea ?
+                (<InspectionComponent
+                    statement={props.statement}
+                    type={props.questionnaireItem.type}
+                    input={props.questionnaireItem.input}
+                />)
+                :
+                (<p id="question">{props.statement}</p>)}
 
             <NavButton
                 context={props.context}
