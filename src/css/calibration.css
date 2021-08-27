@@ -1,0 +1,61 @@
+#CALIBRATION-CONTAINER {
+    margin-bottom: 0;
+    margin-top: 0;
+    height: 100%;
+    display: flex;
+}
+
+#INTRO {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #28666e;
+    height: 40%;
+    width: 60%;
+    margin: auto; 
+    border-radius: 25px;
+    overflow: hidden; 
+    box-shadow: 0 0 100px 3px rgba(136, 123, 153, 1.0);
+
+}
+
+#PROGRESS-BAR {
+    background-color: #8fc0a9;
+    height: 2.5%;
+    border-radius: 10px;
+}
+
+#INTRO-TEXT-BLOCK {
+    display: flex;
+    margin: auto; 
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 80%;
+    width: 80%; 
+}
+
+#INTRO-HEADER {
+    text-align: center ;
+    color: white; 
+    font-size: 40px;
+    line-height: 2;
+    font-weight: bold;
+    margin: 0; 
+}
+
+#INTRO-TEXT {
+    text-align: center ;
+    color: white; 
+    font-size:24px;
+    line-height: 2;
+    font-weight: bold;
+}
+
+.progress-no-fill {
+    width: 0%;
+}
+
+.progress-fill {
+    width:100%; 
+}

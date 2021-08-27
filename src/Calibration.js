@@ -3,6 +3,7 @@ import CalibrationPoint from "./CalibrationPoint";
 import { click } from "./functions/click";
 import { isGazeWithinElement } from './functions/isGazeWithinElement';
 import { convertAngleToPx } from './functions/convertAngleToPx';
+import "./css/calibration.css";
 
 const Calibration = (props) => {
 
@@ -26,29 +27,22 @@ const Calibration = (props) => {
 
     const [introHeader, setIntroHeader] = useState("Welcome to SurvEye!");
     const [introText, setIntroText] = useState("To complete the calibration, please follow the moving dot 🟢. Please try not to move your head or blink too often.");
-    // const [introText, setIntroText] = useState("To complete the calibration process, please follow the dot. 🟢")
 
-    // Different steps of target sizes to be tested
+    // Different steps of target sizes to be tested, for validation phase
     const targetS = 100;
-    const targetM = targetSize; // 168px , calculated min size required
+    const targetM = targetSize; // calculated min size required
     const targetL = 200;
     const targetXL = 300;
-
     const currentValidationResultS = useRef(0);
     const validationTotalS = useRef(0);
-
     const currentValidationResultM = useRef(0);
     const validationTotalM = useRef(0);
-
     const currentValidationResultL = useRef(0);
     const validationTotalL = useRef(0);
-
     const currentValidationResultXL = useRef(0);
     const validationTotalXL = useRef(0);
 
-    // const [currentValidationCount, setCurrentValidationCount] = useState(0);
     const currentValidationCount = useRef(0);
-    // currentValidationCount.current = currentValidationCount;
 
     // Format: {x: , y: , accuracyS: , accuracyM: , accuracyL: , accuracyXL: }
     const [accuracyPerPoint, setAccuracyPerPoint] = useState([]);
@@ -101,6 +95,7 @@ const Calibration = (props) => {
     const [movementTimeout, setMovementTimeout] = useState(false);
     const [phaseStartedTimeout, setPhaseStartedTimeout] = useState(false);
     const [measurementInterval, setMeasurementInterval] = useState(false);
+    const [introProgressClass, setIntroProgressClass] = useState("progress-no-fill");
 
 
 
@@ -109,6 +104,7 @@ const Calibration = (props) => {
 
         // Determine if a phase has already been started or has to be initialized
         if (!hasPhaseStarted) {
+            setIntroProgressClass("progress-fill");
             if (!phaseStartedTimeout) {
                 setPhaseStartedTimeout(true);
                 setTimeout(() => {
@@ -125,7 +121,7 @@ const Calibration = (props) => {
             }
 
         } else {
-
+            setIntroProgressClass("progress-no-fill");
             // Make sure to start click / measurement trigger only after transition of point has been completed
             if (!measurementInterval) {
                 setMeasurementInterval(true);
@@ -178,13 +174,14 @@ const Calibration = (props) => {
     const startPhase = (type) => {
         // End calibraiton-validation and switch to questionnaire 
         if (type === "QUESTIONNAIRE") {
-                props.onCalibrationComplete(false);
-                props.retrieveData(accuracyPerPoint);
+            props.onCalibrationComplete(false);
+            props.retrieveData(accuracyPerPoint);
             // Start calibration or validation phase
         } else {
             setPointPositions(randomizePointPositions(pointPositions));
             setCurrentPhase(type);
             setHasPhaseStarted(true);
+
         }
     }
 
@@ -227,13 +224,12 @@ const Calibration = (props) => {
 
     // Handle end of a phase by resetting the current point and determine what should be displayed next
     const handlePhaseEnd = () => {
-
         if (currentPhase === "CALIBRATION") {
             setCalibrationComplete(true);
             if (props.performValidation) {
-            setIntroHeader("One more time! 💪")
-            setIntroText("Let's do this again one more time to validate the calibration. 🟢 ");
-            props.onPhaseChange("VALIDATION")
+                setIntroHeader("One more time! 💪")
+                setIntroText("Let's do this again one more time to validate the calibration. 🟢 ");
+                props.onPhaseChange("VALIDATION")
             } else {
                 props.onPhaseChange("QUESTIONNAIRE");
                 // setCalibrationComplete(true);
@@ -246,7 +242,6 @@ const Calibration = (props) => {
             setIntroHeader("You did it! 🎉");
             setIntroText("You will be directed to the questionnaire immediately.");
             // setIntroText("Your validation result is: " + resultM + "%");
-
 
             updateAccuracyPerPoint();
             validationTotalS.current = Math.round(validationTotalS.current / pointPositions.length);
@@ -266,6 +261,7 @@ const Calibration = (props) => {
         setCurrentPhase("INACTIVE");
         setCurrentPoint(0);
         setHasPhaseStarted(false);
+        setIntroProgressClass("progress-fill");
     }
 
     const handleGazeValidation = () => {
@@ -279,7 +275,6 @@ const Calibration = (props) => {
         // 0.5 targetSize - 0.25 point width == padding 
         if (isGazeWithinElement("calibrationPoint", 0.5 * targetM - 0.5 * 0.5 * pointWidth, contextRef.current.x, contextRef.current.y)) {
             currentValidationResultM.current++;
-
         }
 
         // 0.5 targetSize - 0.25 point width == padding 
@@ -287,36 +282,18 @@ const Calibration = (props) => {
             currentValidationResultL.current++;
         }
 
-
         // 0.5 targetSize - 0.25 point width == padding 
         if (isGazeWithinElement("calibrationPoint", 0.5 * targetXL - 0.5 * 0.5 * pointWidth, contextRef.current.x, contextRef.current.y)) {
             currentValidationResultXL.current++;
         }
+
         currentValidationCount.current++;
     }
 
-
-
-    const determineIntroColor = () => {
-        if (!calibrationComplete) {
-            return "#28666e";
-        } else if (!validationComplete) {
-            return "#28666e";
-        } else {
-            return "#28666e";
-        }
-    }
-
-
     return (
 
-        <div id="calibration-container" style={{
-            display: hasPhaseStarted ? "block" : "flex",
-            "marginBottom": 0,
-            "marginTop": 0,
-            height: "100%",
-
-        }}>
+        <div id="CALIBRATION-CONTAINER" style={{ display: hasPhaseStarted ? "block" : "flex" }}
+        >
             <CalibrationPoint
                 id={pointReference}
                 phase={currentPhase}
@@ -324,42 +301,13 @@ const Calibration = (props) => {
                 position={pointPositions[currentPoint]}
             />
 
-            <div id="INTRO"
-                style={{
-                    display: hasPhaseStarted ? "none" : "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-evenly",
-                    padding: 40,
-                    backgroundColor: determineIntroColor(),
-                    height: "25%",
-                    width: "60%",
-                    margin: "auto",
-                    borderRadius: 25,
-                    boxShadow: "0 0 100px 3px rgba(136, 123, 153, 1.0)"
-                }}>
-                   
-                <p style={{
-                    "textAlign": "center",
-                    color: "#ffffff",
-                    fontSize: 40,
-                    lineHeight: 2,
-                    fontWeight: "bold",
-                    margin: 0
-                }}>
-
-                    {introHeader} </p>
-                <p style={{
-                    "textAlign": "center",
-                    color: "#ffffff",
-                    fontSize: 24,
-                    lineHeight: 2,
-                    fontWeight: "bold"
-                }}>
-                    {introText} </p>
-
-
+            <div id="INTRO" style={{ opacity: hasPhaseStarted ? 0 : 1 }}>
+            <div id="PROGRESS-BAR" className= {introProgressClass} style={{transitionDuration: TIMEOUT_INTRO + "ms" }} />
+                <div id="INTRO-TEXT-BLOCK">
+                    <p id="INTRO-HEADER">{introHeader} </p>
+                    <p id="INTRO-TEXT">{introText} </p>
+                </div>
             </div>
-
         </div>
     );
 
