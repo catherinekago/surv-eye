@@ -15,7 +15,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "set PORT=10020 && react-scripts start",
+    "start": "set PORT=3000 && react-scripts start",
     "build": "PORT=10020 react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
