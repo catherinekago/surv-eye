@@ -34,6 +34,7 @@ const RadioButton = (props) => {
 
   // Handle adaptation of inspectiona area when input in interaction area has changed the selected value
   const handleInspectionArea = () => {
+    setOutlineCircleClass("radio-outline inspection");
     if (props.selected === props.value) {
       setSelectionCircleClass("radio-round-fill");
     } else {
@@ -51,7 +52,7 @@ const RadioButton = (props) => {
 
       // Remove all visual feedback when gaze is not detected within radio button and button is currently not selecgted
     } else {
-      setOutlineCircleClass("radio-outline");
+      setOutlineCircleClass("radio-outline selection");
       setIsInspected(false);
 
       if (props.selected !== props.value) {
@@ -99,11 +100,13 @@ const RadioButton = (props) => {
       let screenWidth = window.innerWidth * 0.6;
       let spacePerRadio = screenWidth / 7;
       let radioWithoutMargin = spacePerRadio * 0.7
+      props.setWidth(48 + 0.5*radioWithoutMargin + "px");
       return radioWithoutMargin;
     } else {
       let screenWidth = window.innerWidth;
       let spacePerRadio = screenWidth / 7;
-      let radioWithoutMargin = spacePerRadio * 0.9
+      let radioWithoutMargin = spacePerRadio * 0.9;
+      props.setWidth(0.5*radioWithoutMargin + "px");
       return radioWithoutMargin;
     }
 
@@ -123,7 +126,7 @@ const RadioButton = (props) => {
   }
 
   return (
-    <div className="radio-round-container">
+    <div className="radio-round-container" style={{gridRow: 1, gridColumn: parseInt(props.value)}}>
       {props.isInspectionArea ? (<p className="radio-button-round-label"> {props.label} </p>) : null}
 
       <div style={{

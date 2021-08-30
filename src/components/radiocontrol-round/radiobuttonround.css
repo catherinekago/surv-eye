@@ -3,7 +3,7 @@
   user-select: none;
   margin-top: 0px;
   width:100%;
-  height:80%;
+  height:100%;
   display:flex;
   justify-content: center;
   flex-direction: column;
@@ -46,10 +46,19 @@
     align-items: center;
     border-color: #28666e;
     z-index: 2;
+    
+  }
+
+  .selection{
+    background-color: white; 
+  }
+
+  .inspection{
+    background-color: #fafafa; 
   }
   
   .radio-outline-inspected{
-    background-color: #c0d9c881;
+    background-color: #ddeee2;
   }
 
   .radio-round-fill {

@@ -23,7 +23,7 @@ const QuestionItem = (props) => {
         }
     
     return (
-        <div className="controls-container">
+        <div className="controls-container" style={{marginTop: props.type === "radio2" ? "40px" : "0px"}}>
         {determineItem(props.type)}
         </div>
 

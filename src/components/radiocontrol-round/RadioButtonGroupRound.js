@@ -1,9 +1,12 @@
 import RadioButtonRound from "./RadioButtonRound.js";
 import { WebGazeContext } from '../../context/WebGazeContext';
+import {useState} from "react";
 
 import './radiobuttongroupround.css'
 
 const RadioButtonGroup = (props) => {
+
+    const [lineMargin, setLineMargin] = useState("0px");
 
     const onSelection = (value) => {
         props.setItemValue(value);
@@ -15,7 +18,7 @@ const RadioButtonGroup = (props) => {
     const radioButtons = (context) => RADIOBUTTONCOUNT.map((radiobutton) =>
         <RadioButtonRound
             isInspectionArea= {props.isInspectionArea}
-            idTarget={props.isInspectionArea ? "radio-target-inspection-round-" + radiobutton : "radio-target-round-" + radiobutton}
+            idTarget={props.isInspectionArea ? "": "radio-target-round-" + radiobutton}
             idLabel={ props.isInspectionArea ? "" : "radio-label-round-" + radiobutton}
             idSelectionCircle= { props.isInspectionArea ? "" : "radio-fill-round-" + radiobutton}
             idOutlineCircle={props.isInspectionArea ? "radio-outline-inspection-round-" + radiobutton : "radio-outline-round-" + radiobutton}
@@ -24,6 +27,7 @@ const RadioButtonGroup = (props) => {
             label={LABELS[radiobutton - 1]}
             onFixation={props.isInspectionArea ? "" : onSelection}
             context={context}
+            setWidth={setLineMargin}
         />
     )
 
@@ -32,6 +36,7 @@ const RadioButtonGroup = (props) => {
             {context => (
                 <div id="RADIO-BUTTON-GROUP-ROUND-CONTAINER">
                     {radioButtons(context)}
+                    <div style={{marginTop: lineMargin}} class="connecting-line" />
                 </div>
 
             )}
