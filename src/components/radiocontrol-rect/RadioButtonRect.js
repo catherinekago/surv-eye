@@ -75,7 +75,8 @@ const handleSelection= () => {
 
   // Handle fixation on scroll button
   const onTransitionEnd = (event) => {
-    if (document.getElementById(props.idFill).offsetHeight > 0 && event.propertyName === "height") {
+    if (document.getElementById(props.idFill).offsetHeight > 0) {
+      console.log("TRIGGER")
       props.onFixation(props.value);
 
     }

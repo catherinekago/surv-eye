@@ -9,6 +9,7 @@
     justify-content: space-around;
     align-content: center;
     background: white;
+    z-index:30;
     
 }
 

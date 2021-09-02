@@ -1,28 +1,56 @@
 import NavBarCombined from "./components/navigation/NavBarCombined";
 import { WebGazeContext } from './context/WebGazeContext';
 import QuestionItem from "./QuestionItem";
-import { useState, createElement } from 'react';
+import { useState } from 'react';
 
-const Questionnaire = () => {
+
+const Questionnaire = (props) => {
 
     const [questionnaireItems, setQuestionnaireItems] = useState([
-        { number: 0, type: "radio2", statement: "I want to know my Patronus.", input: 0 },
+        // { number: 0, type: "radio2", statement: "I want to know my Patronus.", input: 0, target: -1 },
         // // { number: 0, type: "slider", statement: "How much of an overthinker are you?", min: 0, max: 100, measure:"%", stepinterval: 1, input: 0 },
-        { number: 1, type: "radio1", statement: "I would stay at Hogwarts during the holidays as well.", input: 0 },
-        { number: 2, type: "radio1", statement: "I feel pitty for Nearly Headless Nick.", input: 0 },
-        { number: 3, type: "radio2", statement: "I'd love to possess the Mauderer's Map.", input: 0 }
+        { number: 0, type: "radio1", statement: "Q1-1", input: 0, target: -1 },
+        { number: 1, type: "radio1", statement: "Q1-2", input: 0, target: 1 },
+        { number: 2, type: "radio1", statement: "Q1-3", input: 0, target: 2 },
+        { number: 3, type: "radio1", statement: "Q1-4", input: 0, target: 3 },
+        { number: 4, type: "radio1", statement: "Q1-5", input: 0, target: 4 },
+        { number: 5, type: "radio1", statement: "Q1-6", input: 0, target: 5 },
+        { number: 6, type: "radio1", statement: "Q1-7", input: 0, target: 6 },
+        { number: 7, type: "radio1", statement: "Q1-8", input: 0, target: 7 },
+        { number: 8, type: "radio2", statement: "Q2-1.", input: 0, target: -1 },
+        { number: 9, type: "radio2", statement: "Q1-2", input: 0, target: 1 },
+        { number: 10, type: "radio2", statement: "Q1-3", input: 0, target: 2 },
+        { number: 11, type: "radio2", statement: "Q1-4", input: 0, target: 3 },
+        { number: 12, type: "radio2", statement: "Q1-5", input: 0, target: 4 },
+        { number: 13, type: "radio2", statement: "Q1-6", input: 0, target: 5 },
+        { number: 14, type: "radio2", statement: "Q1-7", input: 0, target: 6 },
+        { number: 15, type: "radio2", statement: "Q1-8", input: 0, target: 7 }
     ])
 
     const [currentQuestionnaireItem, updateCurrentQuestionnaireItem] = useState(0);
+    const [targetReached, setTargetReached] = useState(false);
+    const [targetStartTime, setTargetStartTime] = useState(0);
+
     let RADIOBUTTONCOUNT = [1, 2, 3, 4, 5, 6, 7];
 
     // Handle activation of navigation element
     const navigate = (trig) => {
+        console.log("scroll");
         if (trig === "back") {
-            updateCurrentQuestionnaireItem(previousValue => previousValue - 1)
+            // updateCurrentQuestionnaireItem(previousValue => previousValue - 1)
+            // props.onQuestionChange(questionnaireItems[currentQuestionnaireItem].type === "radio1" ? "R1-" + (currentQuestionnaireItem+1) : "R2-"+ (currentQuestionnaireItem+1-8));
+            // setTargetReached(false);
         } else if (trig === "next") {
-            updateCurrentQuestionnaireItem(previousValue => previousValue + 1);
+            if (currentQuestionnaireItem !== questionnaireItems.length -1) {
+                setTargetStartTime(new Date().getTime());
+                props.onQuestionChange(questionnaireItems[currentQuestionnaireItem].type === "radio1" ? "R1-" + (currentQuestionnaireItem+1) : "R2-"+ (currentQuestionnaireItem+1-8));
+                setTargetReached(false);
+                updateCurrentQuestionnaireItem(previousValue => previousValue + 1);
 
+            } else {
+                console.log(currentQuestionnaireItem + " is the last one! Time to trigger data collection!");
+                document.getElementById("downloadGazeData").click();
+            }
         }
     }
 
@@ -31,6 +59,12 @@ const Questionnaire = () => {
         let allItems = questionnaireItems;
         allItems[currentQuestionnaireItem].input = value;
         setQuestionnaireItems(allItems);
+        if (!targetReached && parseInt(questionnaireItems[currentQuestionnaireItem].input) === parseInt(questionnaireItems[currentQuestionnaireItem].target)) {
+            setTargetReached(true);
+            let currentTime = new Date().getTime();
+            let completionTime = currentTime - targetStartTime; 
+            props.onTargetReached(completionTime);
+        }
     }
 
     const connectingLines = () => RADIOBUTTONCOUNT.map((radiobutton) =>

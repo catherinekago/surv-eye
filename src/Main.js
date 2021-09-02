@@ -21,7 +21,7 @@ const MainApp = (props) => {
       ) :
         (<WebGazeContext.Consumer >
           {context => (
-            <Questionnaire context={context} />
+            <Questionnaire context={context} onQuestionChange={props.onQuestionChange} onTargetReached={props.onTargetReached} onPhaseChange={props.onPhaseChange} />
           )}
         </WebGazeContext.Consumer>)
       }

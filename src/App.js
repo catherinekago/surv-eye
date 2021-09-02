@@ -16,6 +16,9 @@ class WebGazeLoader extends React.Component {
     super();
     this.handlePhaseChange = this.handlePhaseChange.bind(this);
     this.handleAccuracyData = this.handleAccuracyData.bind(this);
+    this.handleTargetReached = this.handleTargetReached.bind(this);
+    this.handleQuestionChange = this.handleQuestionChange.bind(this);
+    this.determinePhase = this.determinePhase.bind(this);
 
     this.state = {
       context: { x: -1, y: -1, time: -1 },
@@ -26,9 +29,11 @@ class WebGazeLoader extends React.Component {
       fixation: false,
       gazeSmoothening: [],
       gazeData: [], // All gaze estimations that webgazer provides 
-      accuracyData:[], // All accuracy calculations gathered during calibration-validation process
-      phase: "CALIBRATION", // Currently active phase: CALIBRATION, VALIDATION, or QUESTIONNAIRE
+      accuracyData: [], // All accuracy calculations gathered during calibration-validation process
+      phase: "CALIBRATION", // Currently active phase: CALIBRATION, VALIDATION, or 
+      question: "",
       performValidation: false, // THIS VARIABLE INFLUENCES IF SURVEYE INCLUDES A VALIDATION PHASE WITH DATA GENERATION
+      targetReached: false,
 
     };
   }
@@ -37,18 +42,32 @@ class WebGazeLoader extends React.Component {
   handlePhaseChange(phase) {
     this.setState({ phase: phase });
 
-    if ( this.state.performValidation && phase === "QUESTIONNAIRE") {
+    if (this.state.performValidation && phase === "QUESTIONNAIRE") {
       // Functionality to save json files of gathered data within calibration-validation sequence
       document.getElementById("downloadGazeData").click();
       document.getElementById("downloadAccuracyData").click();
-
+      setTimeout(() => { this.setState({ gazeData: [] }) }, 300);
     }
   }
 
-    // Set accuracy data after calibration-validation sequence has been completed
-    handleAccuracyData(data) {
-      this.setState({ accuracyData: data });
-      }
+  // Set accuracy data after calibration-validation sequence has been completed
+  handleAccuracyData(data) {
+    this.setState({ accuracyData: data });
+  }
+
+  // Set corresponding variable to true, so that recording of gaze points stops, and add entry to data 
+  handleTargetReached(time) {
+    this.setState({ targetReached: true });
+    let updatedGazeData = this.state.gazeData;
+    updatedGazeData.push({ x: "COMPLETE", y: "COMPLETE", time: time, type: "COMPLETE", phase: this.determinePhase() });
+    this.setState({ gazeData: updatedGazeData });
+    console.log("Completed in " + time + "ms");
+  }
+
+  handleQuestionChange(question) {
+    this.setState({ question: question });
+    this.setState({ targetReached: false });
+  }
 
   // Check if the user is fixating a point (gaze staying within a defined area for a defined amount of time)
   checkFixation() {
@@ -66,7 +85,7 @@ class WebGazeLoader extends React.Component {
 
   }
 
-// Apply smoothening to gaze prediction
+  // Apply smoothening to gaze prediction
   displaySmoothenedDataPoints(data, elapsedTime, averaged) {
 
     this.mapGazePredictionsToScreen(data);
@@ -76,9 +95,9 @@ class WebGazeLoader extends React.Component {
       updatedData.push({ x: data.x, y: data.y });
       this.setState({ gazeSmoothening: updatedData });
 
-      if (this.state.performValidation && this.state.phase !== "QUESTIONNAIRE") {
+      if ((this.state.performValidation && this.state.phase !== "QUESTIONNAIRE") || (this.state.phase === "QUESTIONNAIRE" && !this.state.targetReached)) {
         let updatedGazeData = this.state.gazeData;
-        updatedGazeData.push({ x: data.x, y: data.y, time: elapsedTime, type: "raw", phase: this.state.phase});
+        updatedGazeData.push({ x: data.x, y: data.y, time: elapsedTime, type: "raw", phase: this.determinePhase() });
         this.setState({ gazeData: updatedGazeData });
       }
 
@@ -101,7 +120,7 @@ class WebGazeLoader extends React.Component {
 
       if (this.state.performValidation && this.state.phase !== "QUESTIONNAIRE") {
         let updatedGazeData = this.state.gazeData;
-        updatedGazeData.push({ x: averagedX, y: averagedY, time: elapsedTime, type: "smoothened", phase: this.state.phase});
+        updatedGazeData.push({ x: averagedX, y: averagedY, time: elapsedTime, type: "smoothened", phase: this.state.phase });
         this.setState({ gazeData: updatedGazeData });
       }
 
@@ -109,23 +128,32 @@ class WebGazeLoader extends React.Component {
     }
   }
 
+  determinePhase() {
+    if (this.state.phase === "QUESTIONNAIRE") {
+      return this.state.question;
+    } else {
+      return this.state.phase;
+    }
+  }
+
+
   // Restrict gaze prediction to screen boundaries by mapping points outside the boundaries to the corresponding borders
   mapGazePredictionsToScreen(data) {
     if (data.x < 0) {
-      data.x = 0; 
+      data.x = 0;
     } else if (data.x > window.innerWidth - 25) {
       data.x = window.innerWidth - 25;
     }
 
     if (data.y < 0) {
-      data.y = 0; 
+      data.y = 0;
     } else if (data.y > window.innerHeight - 25) {
       data.y = window.innerHeight - 25;
     }
   }
 
   handleScriptLoad() {
-    
+
     webgazer.setGazeListener((data, elapsedTime) => {
       if (data == null) {
         // console.log("NO gaze detected");
@@ -166,31 +194,30 @@ class WebGazeLoader extends React.Component {
             onLoad={this.handleScriptLoad.bind(this)}
             onError={this.handleScriptError.bind(this)}
           />
-          <MainApp performValidation={this.state.performValidation} onPhaseChange={this.handlePhaseChange} onCalibrationComplete={this.handleAccuracyData}/>
+          <MainApp onTargetReached={this.handleTargetReached} performValidation={this.state.performValidation} onPhaseChange={this.handlePhaseChange} onQuestionChange={this.handleQuestionChange} onCalibrationComplete={this.handleAccuracyData} />
           <div style={this.state.fixation ? { borderColor: "rgb(255, 63, 137)" } : { borderColor: "rgb(76, 63, 255)" }} id="gaze-dot" />
-          
-          {/* Functionality to retrieve gaze and accuracy data of a calibration-validation phase */}
-          {this.state.performValidation ? 
-          (<a id="downloadGazeData" style={{ background: "transparent", fontSize: 0 }}
-          href={`data:text/json;charset=utf-8,${encodeURIComponent(
-            JSON.stringify(this.state.gazeData)
-          )}`}
-          download={"gazeData" + ".json"}
-        >
-          {`Download Gaze Data 💌`}
-        </a>) : null}
 
-        {this.state.performValidation ? 
-        (<a id="downloadAccuracyData" style={{ background: "transparent", fontSize: 0 }}
-          href={`data:text/json;charset=utf-8,${encodeURIComponent(
-            JSON.stringify(this.state.accuracyData)
-          )}`}
-          download={"accuracyData" + ".json"}
-        >
-          {`Download Accuracy Data 💌`}
-        </a>)  : null}
-        
-          
+          {/* Functionality to retrieve gaze and accuracy data of a calibration-validation phase */}
+          <a id="downloadGazeData" style={{ background: "transparent", fontSize: 0 }}
+            href={`data:text/json;charset=utf-8,${encodeURIComponent(
+              JSON.stringify(this.state.gazeData)
+            )}`}
+            download={"gazeData" + ".json"}
+          >
+            {`Download Gaze Data 💌`}
+          </a>
+
+          {this.state.performValidation ?
+            (<a id="downloadAccuracyData" style={{ background: "transparent", fontSize: 0 }}
+              href={`data:text/json;charset=utf-8,${encodeURIComponent(
+                JSON.stringify(this.state.accuracyData)
+              )}`}
+              download={"accuracyData" + ".json"}
+            >
+              {`Download Accuracy Data 💌`}
+            </a>) : null}
+
+
 
 
         </WebGazeContext.Provider>

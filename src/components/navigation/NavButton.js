@@ -13,21 +13,20 @@ const NavButton = (props) => {
 
     const [gazeIndicatorClass, setGazeIndicatorClass] = useState("no-gaze-default");
 
-    const [gazeIndicatorID, setGazeIndicatorID] = useState("gazeIndicatorBack");
+    const [gazeIndicatorID, setGazeIndicatorID] = useState(props.type === "scroll-button-back" ? "gazeIndicatorBack" : "gazeIndicatorNext");
 
     // eslint-disable-next-line
     useEffect(() => {
-        setGazeIndicatorID(props.type === "scroll-button-back" ? "gazeIndicatorBack" : "gazeIndicatorNext");
-        let currentTime = new Date().getTime();
-        document.getElementById(gazeIndicatorID).addEventListener("transitionend", onTransitionEnd, false);
-        if (props.scrollEnabled && currentTime - lastGazeTrigger >= gazeTriggerInterval) {
-            if (isGazeWithinElement(props.type, 0, props.context.x, props.context.y)) {
-                setGazeIndicatorClass(props.type === "scroll-button-back" ? 'gaze-detected-back' : 'gaze-detected-next');
-            } else {
-                setGazeIndicatorClass(props.type === "scroll-button-back" ? 'no-gaze-detected-back' : 'no-gaze-detected-next');
-            }
+        // let currentTime = new Date().getTime();
+        // document.getElementById(gazeIndicatorID).addEventListener("transitionend", onTransitionEnd, false);
+        // if (props.scrollEnabled && currentTime - lastGazeTrigger >= gazeTriggerInterval) {
+        //     if (isGazeWithinElement(props.type, 0, props.context.x, props.context.y)) {
+        //         setGazeIndicatorClass(props.type === "scroll-button-back" ? 'gaze-detected-back' : 'gaze-detected-next');
+        //     } else {
+        //         setGazeIndicatorClass(props.type === "scroll-button-back" ? 'no-gaze-detected-back' : 'no-gaze-detected-next');
+        //     }
 
-        }
+        // }
     });
 
       useEffect(() => {
@@ -41,7 +40,7 @@ const NavButton = (props) => {
 
         if (document.getElementById(gazeIndicatorID).offsetWidth !== 0) {
             console.log("SCROLL TRANSITION");
-            click(props.type === "scroll-button-back" ? "scroll-icon-back" : "scroll-icon-next");
+            // click(props.type === "scroll-button-back" ? "scroll-icon-back" : "scroll-icon-next");
             setLastGazeTrigger(new Date().getTime());
             setGazeIndicatorClass("no-gaze-default");
             props.type === "scroll-button-back" ? props.scrollTrigger("back") : props.scrollTrigger("next");
@@ -50,7 +49,7 @@ const NavButton = (props) => {
     }
 
     return (
-        <div id={props.type} className={"nav-button"}>
+        <div onClick={() => props.type === "scroll-button-back" ? props.scrollTrigger("back") : props.scrollTrigger("next")} id={props.type} className={"nav-button"}>
             <img id={props.type === "scroll-button-back" ? "scroll-icon-back" : "scroll-icon-next"} className="button-icon" src={props.type === "scroll-button-back" ? scrollIconBack : scrollIconNext} alt="Nav Icon" />
             <div id={gazeIndicatorID} className={gazeIndicatorClass} />
         </div>

@@ -6,18 +6,14 @@ import Slider from "./components/slidercontrol/Slider";
 
 const QuestionItem = (props) => {
 
-    const passUpItemValue = (value) => {
-        props.passUpItemValue(value);
-    }
-
     const determineItem = (type) => {
         if (type === "radio1")  {
-            return (<RadioButtonGroupRect value={props.value} setItemValue={passUpItemValue} />);
+            return (<RadioButtonGroupRect value={props.value} setItemValue={props.passUpItemValue} />);
         } else if (type === "radio2") {
-            return (<RadioButtonGroupRound value={props.value} setItemValue={passUpItemValue} isInspectionArea={false} />); 
+            return (<RadioButtonGroupRound value={props.value} setItemValue={props.passUpItemValue} isInspectionArea={false} />); 
         } else if (type === "slider") {
             return (
-            <Slider value={props.value} setItemValue={passUpItemValue} min={props.min} max={props.max} measure={props.measure} stepinterval={props.stepinterval}/>);
+            <Slider value={props.value} setItemValue={props.passUpItemValue} min={props.min} max={props.max} measure={props.measure} stepinterval={props.stepinterval}/>);
         }
 
         }
