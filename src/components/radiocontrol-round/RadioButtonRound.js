@@ -11,7 +11,7 @@ const RadioButton = (props) => {
   const MINTARGETSIZE = convertAngleToPx(4.17);
   const [lastGazeDetected, setLastGazeDetected] = useState(0);
   const [isInspected, setIsInspected] = useState(false);
-  const INSPECTIONTIME = 1000;
+  const INSPECTIONTIME = 400;
 
   const [eventListener, setEventListener] = useState(false);
 
