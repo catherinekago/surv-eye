@@ -19,8 +19,9 @@ const RadioButtonGroup = (props) => {
             idTarget={"radio-target-rect-" + radiobutton}
             idLabel={"radio-label-rect-" + radiobutton}
             idFill={"radio-fill-rect-" + radiobutton}
-            value={"" + radiobutton}
+            value={radiobutton}
             selected={props.value}
+            target={props.target}
             label={LABELS[radiobutton - 1]}
             onFixation={onSelection}
             context={context}

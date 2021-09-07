@@ -9,22 +9,36 @@ const Questionnaire = (props) => {
     const [questionnaireItems, setQuestionnaireItems] = useState([
         // { number: 0, type: "radio2", statement: "I want to know my Patronus.", input: 0, target: -1 },
         // // { number: 0, type: "slider", statement: "How much of an overthinker are you?", min: 0, max: 100, measure:"%", stepinterval: 1, input: 0 },
-        { number: 0, type: "radio1", statement: "Q1-1", input: 0, target: -1 },
-        { number: 1, type: "radio1", statement: "Q1-2", input: 0, target: 1 },
-        { number: 2, type: "radio1", statement: "Q1-3", input: 0, target: 2 },
-        { number: 3, type: "radio1", statement: "Q1-4", input: 0, target: 3 },
-        { number: 4, type: "radio1", statement: "Q1-5", input: 0, target: 4 },
-        { number: 5, type: "radio1", statement: "Q1-6", input: 0, target: 5 },
-        { number: 6, type: "radio1", statement: "Q1-7", input: 0, target: 6 },
-        { number: 7, type: "radio1", statement: "Q1-8", input: 0, target: 7 },
-        { number: 8, type: "radio2", statement: "Q2-1.", input: 0, target: -1 },
-        { number: 9, type: "radio2", statement: "Q1-2", input: 0, target: 1 },
-        { number: 10, type: "radio2", statement: "Q1-3", input: 0, target: 2 },
-        { number: 11, type: "radio2", statement: "Q1-4", input: 0, target: 3 },
-        { number: 12, type: "radio2", statement: "Q1-5", input: 0, target: 4 },
-        { number: 13, type: "radio2", statement: "Q1-6", input: 0, target: 5 },
-        { number: 14, type: "radio2", statement: "Q1-7", input: 0, target: 6 },
-        { number: 15, type: "radio2", statement: "Q1-8", input: 0, target: 7 }
+        { number: 0, type: "radio1", statement: "Q1-0", input: 0, target: -1 },
+        { number: 1, type: "radio1", statement: "Q1-1", input: 0, target: 1 },
+        { number: 2, type: "radio1", statement: "Q1-2", input: 0, target: 2 },
+        { number: 3, type: "radio1", statement: "Q1-3", input: 0, target: 3 },
+        { number: 4, type: "radio1", statement: "Q1-4", input: 0, target: 4 },
+        { number: 5, type: "radio1", statement: "Q1-5", input: 0, target: 5 },
+        { number: 6, type: "radio1", statement: "Q1-6", input: 0, target: 6 },
+        { number: 7, type: "radio1", statement: "Q1-7", input: 0, target: 7 },
+        { number: 8, type: "radio1", statement: "Q1-1", input: 0, target: 1 },
+        { number: 9, type: "radio1", statement: "Q1-2", input: 0, target: 2 },
+        { number: 10, type: "radio1", statement: "Q1-3", input: 0, target: 3 },
+        { number: 11, type: "radio1", statement: "Q1-4", input: 0, target: 4 },
+        { number: 12, type: "radio1", statement: "Q1-5", input: 0, target: 5 },
+        { number: 13, type: "radio1", statement: "Q1-6", input: 0, target: 6 },
+        { number: 14, type: "radio1", statement: "Q1-7", input: 0, target: 7 },
+        { number: 15, type: "radio2", statement: "Q2-0.", input: 0, target: -1 },
+        { number: 16, type: "radio2", statement: "Q2-1", input: 0, target: 1 },
+        { number: 17, type: "radio2", statement: "Q2-2", input: 0, target: 2 },
+        { number: 18, type: "radio2", statement: "Q2-3", input: 0, target: 3 },
+        { number: 19, type: "radio2", statement: "Q2-4", input: 0, target: 4 },
+        { number: 20, type: "radio2", statement: "Q2-5", input: 0, target: 5 },
+        { number: 21, type: "radio2", statement: "Q2-6", input: 0, target: 6 },
+        { number: 22, type: "radio2", statement: "Q2-7", input: 0, target: 7 },
+        { number: 23, type: "radio2", statement: "Q2-1", input: 0, target: 1 },
+        { number: 24, type: "radio2", statement: "Q2-2", input: 0, target: 2 },
+        { number: 25, type: "radio2", statement: "Q2-3", input: 0, target: 3 },
+        { number: 26, type: "radio2", statement: "Q2-4", input: 0, target: 4 },
+        { number: 27, type: "radio2", statement: "Q2-5", input: 0, target: 5 },
+        { number: 28, type: "radio2", statement: "Q2-6", input: 0, target: 6 },
+        { number: 29, type: "radio2", statement: "Q2-7", input: 0, target: 7 }
     ])
 
     const [currentQuestionnaireItem, updateCurrentQuestionnaireItem] = useState(0);
@@ -43,6 +57,7 @@ const Questionnaire = (props) => {
         } else if (trig === "next") {
             if (currentQuestionnaireItem !== questionnaireItems.length -1) {
                 setTargetStartTime(new Date().getTime());
+                // TODO ADAPT TO 4 
                 props.onQuestionChange(questionnaireItems[currentQuestionnaireItem].type === "radio1" ? "R1-" + (currentQuestionnaireItem+1) : "R2-"+ (currentQuestionnaireItem+1-8));
                 setTargetReached(false);
                 updateCurrentQuestionnaireItem(previousValue => previousValue + 1);
@@ -133,6 +148,7 @@ const Questionnaire = (props) => {
                             type={questionnaireItems[currentQuestionnaireItem].type}
                             passUpItemValue={setItemValue}
                             value={questionnaireItems[currentQuestionnaireItem].input}
+                            target={questionnaireItems[currentQuestionnaireItem].target}
                             statement={questionnaireItems[currentQuestionnaireItem].statement}
                             min={questionnaireItems[currentQuestionnaireItem].type === "slider" ? questionnaireItems[currentQuestionnaireItem].min : ""}
                             max={questionnaireItems[currentQuestionnaireItem].type === "slider" ? questionnaireItems[currentQuestionnaireItem].max : ""}

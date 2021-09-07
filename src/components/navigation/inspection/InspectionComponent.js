@@ -8,7 +8,7 @@ const InspectionComponent = (props) => {
         <div id="INSPECTION-AREA"> 
         <p id="question">{props.statement}</p>
 
-        <RadioButtonGroupRound value={props.input} isInspectionArea={true}/>
+        <RadioButtonGroupRound value={props.input} target={props.target} isInspectionArea={true}/>
 
         </div>
     );

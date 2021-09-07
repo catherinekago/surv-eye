@@ -141,7 +141,7 @@ const RadioButton = (props) => {
           width: calculateRadioSize(),
           height: calculateRadioSize()
         }} id={props.idOutlineCircle} className={outlineCircleClass}>
-                <div id={props.idSelectionCircle} className={selectionCircleClass} />
+                <div id={props.idSelectionCircle} className={props.target === props.value ? selectionCircleClass + " target" : selectionCircleClass + " other"} />
         </div>
       </div>
     </div>

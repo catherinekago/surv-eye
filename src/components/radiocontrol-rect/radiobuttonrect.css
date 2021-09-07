@@ -48,11 +48,18 @@
   }
   
   .radio-rect-fill {
-    background-color: #28666e;
     width: 100%;
     height:100%;
     grid-column:1; 
     grid-row:2;
+  }
+
+  .target{
+    background-color: #28666e;
+  }
+
+  .other{
+    background-color: grey;
   }
 
   .unselected-rect {

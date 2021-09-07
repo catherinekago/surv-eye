@@ -22,7 +22,8 @@ const RadioButtonGroup = (props) => {
             idLabel={ props.isInspectionArea ? "" : "radio-label-round-" + radiobutton}
             idSelectionCircle= { props.isInspectionArea ? "" : "radio-fill-round-" + radiobutton}
             idOutlineCircle={props.isInspectionArea ? "radio-outline-inspection-round-" + radiobutton : "radio-outline-round-" + radiobutton}
-            value={"" + radiobutton}
+            value={radiobutton}
+            target= {props.target}
             selected={props.value}
             label={LABELS[radiobutton - 1]}
             onFixation={props.isInspectionArea ? "" : onSelection}

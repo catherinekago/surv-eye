@@ -94,7 +94,7 @@ const handleSelection= () => {
       }} id={props.idTarget} className={totalTargetClass}>
         <p id={props.idLabel} className={labelClass}> {props.label} </p>
 
-        <div id={props.idFill} className={radioFillClass} >
+        <div id={props.idFill} className={props.value === props.target ? radioFillClass + " target" : radioFillClass + " other"} >
           {/* <p style={{ margin: "0", textAlign: "center", fontSize: "32px", color: "white", fontWeight: 800 }}>{props.icon}</p> */}
         </div>
       </div>

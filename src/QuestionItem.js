@@ -8,9 +8,9 @@ const QuestionItem = (props) => {
 
     const determineItem = (type) => {
         if (type === "radio1")  {
-            return (<RadioButtonGroupRect value={props.value} setItemValue={props.passUpItemValue} />);
+            return (<RadioButtonGroupRect value={props.value} target={props.target} setItemValue={props.passUpItemValue} />);
         } else if (type === "radio2") {
-            return (<RadioButtonGroupRound value={props.value} setItemValue={props.passUpItemValue} isInspectionArea={false} />); 
+            return (<RadioButtonGroupRound value={props.value} target={props.target} setItemValue={props.passUpItemValue} isInspectionArea={false} />); 
         } else if (type === "slider") {
             return (
             <Slider value={props.value} setItemValue={props.passUpItemValue} min={props.min} max={props.max} measure={props.measure} stepinterval={props.stepinterval}/>);

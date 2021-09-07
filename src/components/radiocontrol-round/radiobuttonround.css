@@ -68,15 +68,21 @@
     display:flex;
     justify-content: center;
     align-items: center;
+    /* background-color: grey; */
+  }
+
+  .target{
     background-color: #28666e;
+  }
+
+  .other{
+    background-color: grey;
   }
 
   .unselected-circle {
     width: 0;
     height: 0;
-    border-radius:50%;
-    background-color: #28666e;
-    
+    border-radius:50%;    
   }
 
   .transitioning {

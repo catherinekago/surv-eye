@@ -18,6 +18,7 @@ const NavBarCombined = (props) => {
                     statement={props.statement}
                     type={props.questionnaireItem.type}
                     input={props.questionnaireItem.input}
+                    target={props.questionnaireItem.target}
                 />)
                 :
                 (<p id="question">{props.statement}</p>)}
