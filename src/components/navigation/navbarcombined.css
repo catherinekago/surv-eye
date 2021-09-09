@@ -1,11 +1,18 @@
 .navbar{
     display: flex;
     flex-direction: row;
-    height: 50%;
+    height: 500px;
     width: -webkit-fill-available;
     justify-content: space-between;
     align-items: flex-start;
     user-select: none;
+}
+
+.inspectionnav {
+    margin-bottom: 80px;
+}
+
+.noinspectionnav {
     margin-bottom: 80px;
 }
 

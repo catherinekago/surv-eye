@@ -7,7 +7,7 @@ const NavBarCombined = (props) => {
 
     return (
 
-        <div className="navbar">
+        <div className={props.hasItemInspectionArea ? "navbar inspectionnav" : "navbar noinspectionnav"}>
             <NavButton
                 context={props.context}
                 type={"scroll-button-back"}

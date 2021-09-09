@@ -12,7 +12,7 @@ const RadioButtonGroup = (props) => {
         props.setItemValue(value);
     }
 
-    const LABELS = ["Strongly agree", "Agree", "Somewhat agree", "Neutral", "Somewhat disagree", "Disagree", "Strongly Disagree"];
+    const LABELS = ["stimme ganz und gar nicht zu", "stimme nicht zu", "stimme eher nicht zu", "teils-teils", "stimme eher zu", "stimme zu", "stimme voll und ganz zu"];
     const RADIOBUTTONCOUNT = [1, 2, 3, 4, 5, 6, 7];
 
     const radioButtons = (context) => RADIOBUTTONCOUNT.map((radiobutton) =>

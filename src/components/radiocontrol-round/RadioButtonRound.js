@@ -100,7 +100,7 @@ const RadioButton = (props) => {
       let screenWidth = window.innerWidth * 0.6;
       let spacePerRadio = screenWidth / 7;
       let radioWithoutMargin = spacePerRadio * 0.7
-      props.setWidth(48 + 0.5*radioWithoutMargin + "px");
+      props.setWidth(1.5*radioWithoutMargin + "px");
       return radioWithoutMargin;
     } else {
       let screenWidth = window.innerWidth;
