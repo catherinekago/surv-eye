@@ -5,47 +5,80 @@ import { useState } from 'react';
 
 
 const Questionnaire = (props) => {
-
-    const [questionnaireItems, setQuestionnaireItems] = useState([
         // { number: 0, type: "2", statement: "I want to know my Patronus.", input: 0, target: -1 },
         // // { number: 0, type: "slider", statement: "How much of an overthinker are you?", min: 0, max: 100, measure:"%", stepinterval: 1, input: 0 },
-        { number: 0, type: "1", statement: "Q1-0", input: 0, target: 0 },
-        { number: 1, type: "1", statement: "Q1-1", input: 0, target: 1 },
-        { number: 2, type: "1", statement: "Q1-2", input: 0, target: 2 },
-        { number: 3, type: "1", statement: "Q1-3", input: 0, target: 3 },
-        { number: 4, type: "1", statement: "Q1-4", input: 0, target: 4 },
-        { number: 5, type: "1", statement: "Q1-5", input: 0, target: 5 },
-        { number: 6, type: "1", statement: "Q1-6", input: 0, target: 6 },
-        { number: 7, type: "1", statement: "Q1-7", input: 0, target: 7 },
-        { number: 8, type: "2", statement: "Q1-1", input: 0, target: 1 },
-        { number: 9, type: "2", statement: "Q1-2", input: 0, target: 2 },
-        { number: 10, type: "2", statement: "Q1-3", input: 0, target: 3 },
-        { number: 11, type: "2", statement: "Q1-4", input: 0, target: 4 },
-        { number: 12, type: "2", statement: "Q1-5", input: 0, target: 5 },
-        { number: 13, type: "2", statement: "Q1-6", input: 0, target: 6 },
-        { number: 14, type: "2", statement: "Q1-7", input: 0, target: 7 },
-        { number: 15, type: "3", statement: "Q2-0.", input: 0, target: 0 },
-        { number: 16, type: "3", statement: "Q2-1", input: 0, target: 1 },
-        { number: 17, type: "3", statement: "Q2-2", input: 0, target: 2 },
-        { number: 18, type: "3", statement: "Q2-3", input: 0, target: 3 },
-        { number: 19, type: "3", statement: "Q2-4", input: 0, target: 4 },
-        { number: 20, type: "3", statement: "Q2-5", input: 0, target: 5 },
-        { number: 21, type: "3", statement: "Q2-6", input: 0, target: 6 },
-        { number: 22, type: "3", statement: "Q2-7", input: 0, target: 7 },
-        { number: 23, type: "4", statement: "Q2-1", input: 0, target: 1 },
-        { number: 24, type: "4", statement: "Q2-2", input: 0, target: 2 },
-        { number: 25, type: "4", statement: "Q2-3", input: 0, target: 3 },
-        { number: 26, type: "4", statement: "Q2-4", input: 0, target: 4 },
-        { number: 27, type: "4", statement: "Q2-5", input: 0, target: 5 },
-        { number: 28, type: "4", statement: "Q2-6", input: 0, target: 6 },
-        { number: 29, type: "4", statement: "Q2-7", input: 0, target: 7 }
-    ])
+       
+    const [questionnaireItems, setQuestionnaireItems] = useState([{type: "1", statement: "Freie Phase", input: 0, target: 0 }, {type: "3", statement: "Freie Phase", input: 0, target: 0 }]);
 
     const [currentQuestionnaireItem, updateCurrentQuestionnaireItem] = useState(0);
     const [targetReached, setTargetReached] = useState(false);
     const [targetStartTime, setTargetStartTime] = useState(0);
 
     let RADIOBUTTONCOUNT = [1, 2, 3, 4, 5, 6, 7];
+
+
+    // Randomize order of questions presented (within one variant)
+    const randomizeQuestionOrder = () => {
+        let exploration1 = [{type: "1", statement: determineStatement(0), input: 0, target: 0 }];
+        let exploration2 = [{type: "3", statement: determineStatement(0), input: 0, target: 0 }];
+        let variant1 = [{ number: 1, type: "1", statement: determineStatement(1), input: 0, target: 1 },
+        {type: "1", statement: determineStatement(2), input: 0, target: 2 },
+        {type: "1", statement: determineStatement(3), input: 0, target: 3 },
+        {type: "1", statement: determineStatement(4), input: 0, target: 4 },
+        {type: "1", statement: determineStatement(5), input: 0, target: 5 },
+        {type: "1", statement: determineStatement(6), input: 0, target: 6 },
+        {type: "1", statement: determineStatement(7), input: 0, target: 7 },
+        {type: "2", statement: determineStatement(1), input: 0, target: 1 },
+        {type: "2", statement: determineStatement(2), input: 0, target: 2 },
+        {type: "2", statement: determineStatement(3), input: 0, target: 3 },
+        {type: "2", statement: determineStatement(4), input: 0, target: 4 },
+        {type: "2", statement: determineStatement(5), input: 0, target: 5 },
+        {type: "2", statement: determineStatement(6), input: 0, target: 6 },
+        {type: "2", statement: determineStatement(7), input: 0, target: 7 }];
+        let variant2 = [ {type: "3", statement: determineStatement(1), input: 0, target: 1 },
+        {type: "3", statement: determineStatement(2), input: 0, target: 2 },
+        {type: "3", statement: determineStatement(3), input: 0, target: 3 },
+        {type: "3", statement: determineStatement(4), input: 0, target: 4 },
+        {type: "3", statement: determineStatement(5), input: 0, target: 5 },
+        {type: "3", statement: determineStatement(6), input: 0, target: 6 },
+        {type: "3", statement: determineStatement(7), input: 0, target: 7 },
+        {type: "4", statement: determineStatement(1), input: 0, target: 1 },
+        {type: "4", statement: determineStatement(2), input: 0, target: 2 },
+        {type: "4", statement: determineStatement(3), input: 0, target: 3 },
+        {type: "4", statement: determineStatement(4), input: 0, target: 4 },
+        {type: "4", statement: determineStatement(5), input: 0, target: 5 },
+        {type: "4", statement: determineStatement(6), input: 0, target: 6 },
+        {type: "4", statement: determineStatement(7), input: 0, target: 7 }]
+
+        let randomizedVariant1 = randomize(variant1);
+        let randomizedVariant2 = randomize(variant2);
+
+        let combinedQuestions = exploration1.concat(randomizedVariant1.concat(exploration2.concat(randomizedVariant2)));
+        return combinedQuestions; 
+    }
+
+    // Determine statement according to target 
+    const determineStatement = (target) => {
+        if (target !== 0) {
+            const statements = ["stimme ganz und gar nicht zu", "stimme nicht zu", "stimme eher nicht zu", "teils-teils", "stimme eher zu", "stimme zu", "stimme voll und ganz zu"];
+            return (statements[target-1]);
+        } else {
+            return ('Freie Phase')
+        }
+    }
+
+        // Randomize array 
+        const randomize = (array) => {
+            let newArray = array;
+            for (var i = newArray.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = newArray[i];
+                newArray[i] = newArray[j];
+                newArray[j] = temp;
+            }
+            return newArray;
+        }
+
 
     // Handle activation of navigation element
     const navigate = (trig) => {
@@ -54,6 +87,9 @@ const Questionnaire = (props) => {
             // props.onQuestionChange(questionnaireItems[currentQuestionnaireItem].type === "1" ? "1-" + (currentQuestionnaireItem+1) : "2-"+ (currentQuestionnaireItem+1-8));
             // setTargetReached(false);
         } else if (trig === "next") {
+            if (currentQuestionnaireItem === 0) {
+              setQuestionnaireItems(randomizeQuestionOrder());  
+            }
             if (currentQuestionnaireItem !== questionnaireItems.length -1) {
                 setTargetStartTime(new Date().getTime());
                 setTargetReached(false);
