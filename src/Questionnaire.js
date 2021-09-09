@@ -7,38 +7,38 @@ import { useState } from 'react';
 const Questionnaire = (props) => {
 
     const [questionnaireItems, setQuestionnaireItems] = useState([
-        // { number: 0, type: "radio2", statement: "I want to know my Patronus.", input: 0, target: -1 },
+        // { number: 0, type: "2", statement: "I want to know my Patronus.", input: 0, target: -1 },
         // // { number: 0, type: "slider", statement: "How much of an overthinker are you?", min: 0, max: 100, measure:"%", stepinterval: 1, input: 0 },
-        { number: 0, type: "radio1", statement: "Q1-0", input: 0, target: -1 },
-        { number: 1, type: "radio1", statement: "Q1-1", input: 0, target: 1 },
-        { number: 2, type: "radio1", statement: "Q1-2", input: 0, target: 2 },
-        { number: 3, type: "radio1", statement: "Q1-3", input: 0, target: 3 },
-        { number: 4, type: "radio1", statement: "Q1-4", input: 0, target: 4 },
-        { number: 5, type: "radio1", statement: "Q1-5", input: 0, target: 5 },
-        { number: 6, type: "radio1", statement: "Q1-6", input: 0, target: 6 },
-        { number: 7, type: "radio1", statement: "Q1-7", input: 0, target: 7 },
-        { number: 8, type: "radio1", statement: "Q1-1", input: 0, target: 1 },
-        { number: 9, type: "radio1", statement: "Q1-2", input: 0, target: 2 },
-        { number: 10, type: "radio1", statement: "Q1-3", input: 0, target: 3 },
-        { number: 11, type: "radio1", statement: "Q1-4", input: 0, target: 4 },
-        { number: 12, type: "radio1", statement: "Q1-5", input: 0, target: 5 },
-        { number: 13, type: "radio1", statement: "Q1-6", input: 0, target: 6 },
-        { number: 14, type: "radio1", statement: "Q1-7", input: 0, target: 7 },
-        { number: 15, type: "radio2", statement: "Q2-0.", input: 0, target: -1 },
-        { number: 16, type: "radio2", statement: "Q2-1", input: 0, target: 1 },
-        { number: 17, type: "radio2", statement: "Q2-2", input: 0, target: 2 },
-        { number: 18, type: "radio2", statement: "Q2-3", input: 0, target: 3 },
-        { number: 19, type: "radio2", statement: "Q2-4", input: 0, target: 4 },
-        { number: 20, type: "radio2", statement: "Q2-5", input: 0, target: 5 },
-        { number: 21, type: "radio2", statement: "Q2-6", input: 0, target: 6 },
-        { number: 22, type: "radio2", statement: "Q2-7", input: 0, target: 7 },
-        { number: 23, type: "radio2", statement: "Q2-1", input: 0, target: 1 },
-        { number: 24, type: "radio2", statement: "Q2-2", input: 0, target: 2 },
-        { number: 25, type: "radio2", statement: "Q2-3", input: 0, target: 3 },
-        { number: 26, type: "radio2", statement: "Q2-4", input: 0, target: 4 },
-        { number: 27, type: "radio2", statement: "Q2-5", input: 0, target: 5 },
-        { number: 28, type: "radio2", statement: "Q2-6", input: 0, target: 6 },
-        { number: 29, type: "radio2", statement: "Q2-7", input: 0, target: 7 }
+        { number: 0, type: "1", statement: "Q1-0", input: 0, target: 0 },
+        { number: 1, type: "1", statement: "Q1-1", input: 0, target: 1 },
+        { number: 2, type: "1", statement: "Q1-2", input: 0, target: 2 },
+        { number: 3, type: "1", statement: "Q1-3", input: 0, target: 3 },
+        { number: 4, type: "1", statement: "Q1-4", input: 0, target: 4 },
+        { number: 5, type: "1", statement: "Q1-5", input: 0, target: 5 },
+        { number: 6, type: "1", statement: "Q1-6", input: 0, target: 6 },
+        { number: 7, type: "1", statement: "Q1-7", input: 0, target: 7 },
+        { number: 8, type: "2", statement: "Q1-1", input: 0, target: 1 },
+        { number: 9, type: "2", statement: "Q1-2", input: 0, target: 2 },
+        { number: 10, type: "2", statement: "Q1-3", input: 0, target: 3 },
+        { number: 11, type: "2", statement: "Q1-4", input: 0, target: 4 },
+        { number: 12, type: "2", statement: "Q1-5", input: 0, target: 5 },
+        { number: 13, type: "2", statement: "Q1-6", input: 0, target: 6 },
+        { number: 14, type: "2", statement: "Q1-7", input: 0, target: 7 },
+        { number: 15, type: "3", statement: "Q2-0.", input: 0, target: 0 },
+        { number: 16, type: "3", statement: "Q2-1", input: 0, target: 1 },
+        { number: 17, type: "3", statement: "Q2-2", input: 0, target: 2 },
+        { number: 18, type: "3", statement: "Q2-3", input: 0, target: 3 },
+        { number: 19, type: "3", statement: "Q2-4", input: 0, target: 4 },
+        { number: 20, type: "3", statement: "Q2-5", input: 0, target: 5 },
+        { number: 21, type: "3", statement: "Q2-6", input: 0, target: 6 },
+        { number: 22, type: "3", statement: "Q2-7", input: 0, target: 7 },
+        { number: 23, type: "4", statement: "Q2-1", input: 0, target: 1 },
+        { number: 24, type: "4", statement: "Q2-2", input: 0, target: 2 },
+        { number: 25, type: "4", statement: "Q2-3", input: 0, target: 3 },
+        { number: 26, type: "4", statement: "Q2-4", input: 0, target: 4 },
+        { number: 27, type: "4", statement: "Q2-5", input: 0, target: 5 },
+        { number: 28, type: "4", statement: "Q2-6", input: 0, target: 6 },
+        { number: 29, type: "4", statement: "Q2-7", input: 0, target: 7 }
     ])
 
     const [currentQuestionnaireItem, updateCurrentQuestionnaireItem] = useState(0);
@@ -49,21 +49,18 @@ const Questionnaire = (props) => {
 
     // Handle activation of navigation element
     const navigate = (trig) => {
-        console.log("scroll");
         if (trig === "back") {
             // updateCurrentQuestionnaireItem(previousValue => previousValue - 1)
-            // props.onQuestionChange(questionnaireItems[currentQuestionnaireItem].type === "radio1" ? "R1-" + (currentQuestionnaireItem+1) : "R2-"+ (currentQuestionnaireItem+1-8));
+            // props.onQuestionChange(questionnaireItems[currentQuestionnaireItem].type === "1" ? "1-" + (currentQuestionnaireItem+1) : "2-"+ (currentQuestionnaireItem+1-8));
             // setTargetReached(false);
         } else if (trig === "next") {
             if (currentQuestionnaireItem !== questionnaireItems.length -1) {
                 setTargetStartTime(new Date().getTime());
-                // TODO ADAPT TO 4 
-                props.onQuestionChange(questionnaireItems[currentQuestionnaireItem].type === "radio1" ? "R1-" + (currentQuestionnaireItem+1) : "R2-"+ (currentQuestionnaireItem+1-8));
                 setTargetReached(false);
                 updateCurrentQuestionnaireItem(previousValue => previousValue + 1);
-
+                // I am incrementing here again because the changes have not yet applied, leading to a shift (actually measuring the next, but saying it was the last)
+                props.onQuestionChange(questionnaireItems[currentQuestionnaireItem+1].type  + (questionnaireItems[currentQuestionnaireItem+1].target));
             } else {
-                console.log(currentQuestionnaireItem + " is the last one! Time to trigger data collection!");
                 document.getElementById("downloadGazeData").click();
             }
         }
@@ -133,7 +130,7 @@ const Questionnaire = (props) => {
                             scrollEnabledBack={currentQuestionnaireItem - 1 >= 0 ? true : false}
                             scrollEnabledNext={currentQuestionnaireItem < questionnaireItems.length - 1 ? true : false}
                             statement={questionnaireItems[currentQuestionnaireItem].statement}
-                            hasItemInspectionArea={questionnaireItems[currentQuestionnaireItem].type === "radio2" ? true : false}
+                            hasItemInspectionArea={questionnaireItems[currentQuestionnaireItem].type === "3" || questionnaireItems[currentQuestionnaireItem].type === "4"? true : false}
                             questionnaireItem={questionnaireItems[currentQuestionnaireItem]}
                         />
 
@@ -167,7 +164,7 @@ const Questionnaire = (props) => {
 
                     </div >
 
-                    {(questionnaireItems[currentQuestionnaireItem].type === "radio2" && document.getElementById("radio-outline-inspection-round-1") !== null) ? connectingLines() : null}
+                    {((questionnaireItems[currentQuestionnaireItem].type === "3" || questionnaireItems[currentQuestionnaireItem].type === "4") && document.getElementById("radio-outline-inspection-round-1") !== null) ? connectingLines() : null}
                 </div>
             )}
         </WebGazeContext.Consumer>

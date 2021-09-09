@@ -7,9 +7,9 @@ import Slider from "./components/slidercontrol/Slider";
 const QuestionItem = (props) => {
 
     const determineItem = (type) => {
-        if (type === "radio1")  {
+        if (type === "1" || type == "2")  {
             return (<RadioButtonGroupRect value={props.value} target={props.target} setItemValue={props.passUpItemValue} />);
-        } else if (type === "radio2") {
+        } else if (type === "3" || type === "4") {
             return (<RadioButtonGroupRound value={props.value} target={props.target} setItemValue={props.passUpItemValue} isInspectionArea={false} />); 
         } else if (type === "slider") {
             return (
@@ -19,7 +19,7 @@ const QuestionItem = (props) => {
         }
     
     return (
-        <div className="controls-container" style={{marginTop: props.type === "radio2" ? "40px" : "0px"}}>
+        <div className="controls-container" style={{marginTop: props.type === "3" && props.type ==="4" ? "40px" : "0px"}}>
         {determineItem(props.type)}
         </div>
 

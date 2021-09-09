@@ -31,14 +31,14 @@ class WebGazeLoader extends React.Component {
       gazeData: [], // All gaze estimations that webgazer provides 
       accuracyData: [], // All accuracy calculations gathered during calibration-validation process
       phase: "CALIBRATION", // Currently active phase: CALIBRATION, VALIDATION, or 
-      question: "",
+      question: "10",
       performValidation: false, // THIS VARIABLE INFLUENCES IF SURVEYE INCLUDES A VALIDATION PHASE WITH DATA GENERATION
       targetReached: false,
 
     };
   }
 
-  // Change phase variable according to actual face and provide jsons after calibration has been completed
+  // Change phase variable according to actual phase and provide jsons after calibration has been completed
   handlePhaseChange(phase) {
     this.setState({ phase: phase });
 
@@ -57,11 +57,11 @@ class WebGazeLoader extends React.Component {
 
   // Set corresponding variable to true, so that recording of gaze points stops, and add entry to data 
   handleTargetReached(time) {
+
     this.setState({ targetReached: true });
     let updatedGazeData = this.state.gazeData;
-    updatedGazeData.push({ x: "COMPLETE", y: "COMPLETE", time: time, type: "COMPLETE", phase: this.determinePhase() });
+    updatedGazeData.push({completiontime: time, phase: this.determinePhase() });
     this.setState({ gazeData: updatedGazeData });
-    console.log("Completed in " + time + "ms");
   }
 
   handleQuestionChange(question) {
@@ -98,6 +98,8 @@ class WebGazeLoader extends React.Component {
       if ((this.state.performValidation && this.state.phase !== "QUESTIONNAIRE") || (this.state.phase === "QUESTIONNAIRE" && !this.state.targetReached)) {
         let updatedGazeData = this.state.gazeData;
         updatedGazeData.push({ x: data.x, y: data.y, time: elapsedTime, type: "raw", phase: this.determinePhase() });
+        if (this.determinePhase() === "47") {
+        }
         this.setState({ gazeData: updatedGazeData });
       }
 
@@ -118,9 +120,9 @@ class WebGazeLoader extends React.Component {
       this.setState({ context: webgazer.util.bound({ x: averagedX, y: averagedY, time: elapsedTime }) });
       this.setState({ gazeSmoothening: [{ x: data.x, y: data.y }] });
 
-      if (this.state.performValidation && this.state.phase !== "QUESTIONNAIRE") {
+      if ((this.state.performValidation && this.state.phase !== "QUESTIONNAIRE") || (this.state.phase === "QUESTIONNAIRE" && !this.state.targetReached)) {
         let updatedGazeData = this.state.gazeData;
-        updatedGazeData.push({ x: averagedX, y: averagedY, time: elapsedTime, type: "smoothened", phase: this.state.phase });
+        updatedGazeData.push({ x: averagedX, y: averagedY, time: elapsedTime, type: "smoothened", phase: this.determinePhase()});
         this.setState({ gazeData: updatedGazeData });
       }
 
