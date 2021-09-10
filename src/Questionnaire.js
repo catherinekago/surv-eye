@@ -8,7 +8,7 @@ const Questionnaire = (props) => {
         // { number: 0, type: "2", statement: "I want to know my Patronus.", input: 0, target: -1 },
         // // { number: 0, type: "slider", statement: "How much of an overthinker are you?", min: 0, max: 100, measure:"%", stepinterval: 1, input: 0 },
        
-    const [questionnaireItems, setQuestionnaireItems] = useState([{type: "1", statement: "Freie Phase", input: 0, target: 0 }, {type: "3", statement: "Freie Phase", input: 0, target: 0 }]);
+    const [questionnaireItems, setQuestionnaireItems] = useState([{type: "1", statement: "Freie Phase", input: 0, target: null }, { type: "1", statement: "stimme ganz und gar nicht zu", input: 0, target: 1 },]);
 
     const [currentQuestionnaireItem, updateCurrentQuestionnaireItem] = useState(0);
     const [targetReached, setTargetReached] = useState(false);
@@ -19,9 +19,9 @@ const Questionnaire = (props) => {
 
     // Randomize order of questions presented (within one variant)
     const randomizeQuestionOrder = () => {
-        let exploration1 = [{type: "1", statement: determineStatement(0), input: 0, target: 0 }];
-        let exploration2 = [{type: "3", statement: determineStatement(0), input: 0, target: 0 }];
-        let variant1 = [{ number: 1, type: "1", statement: determineStatement(1), input: 0, target: 1 },
+        let exploration1 = [{type: "1", statement: determineStatement(0), input: 0, target: null }, { type: "1", statement: determineStatement(1), input: 0, target: 1 }];
+        let exploration2 = [{type: "3", statement: determineStatement(0), input: 0, target: null }];
+        let variant1 = [
         {type: "1", statement: determineStatement(2), input: 0, target: 2 },
         {type: "1", statement: determineStatement(3), input: 0, target: 3 },
         {type: "1", statement: determineStatement(4), input: 0, target: 4 },
@@ -54,6 +54,7 @@ const Questionnaire = (props) => {
         let randomizedVariant2 = randomize(variant2);
 
         let combinedQuestions = exploration1.concat(randomizedVariant1.concat(exploration2.concat(randomizedVariant2)));
+        console.log(combinedQuestions)
         return combinedQuestions; 
     }
 
@@ -93,9 +94,9 @@ const Questionnaire = (props) => {
             if (currentQuestionnaireItem !== questionnaireItems.length -1) {
                 setTargetStartTime(new Date().getTime());
                 setTargetReached(false);
-                updateCurrentQuestionnaireItem(previousValue => previousValue + 1);
-                // I am incrementing here again because the changes have not yet applied, leading to a shift (actually measuring the next, but saying it was the last)
+                                // I am incrementing here again because the changes have not yet applied, leading to a shift (actually measuring the next, but saying it was the last)
                 props.onQuestionChange(questionnaireItems[currentQuestionnaireItem+1].type  + (questionnaireItems[currentQuestionnaireItem+1].target));
+                updateCurrentQuestionnaireItem(previousValue => previousValue + 1);
             } else {
                 document.getElementById("downloadGazeData").click();
             }
