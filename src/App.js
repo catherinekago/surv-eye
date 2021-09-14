@@ -95,9 +95,9 @@ class WebGazeLoader extends React.Component {
       updatedData.push({ x: data.x, y: data.y });
       this.setState({ gazeSmoothening: updatedData });
 
-      if ((this.state.performValidation && this.state.phase !== "QUESTIONNAIRE") || (this.state.phase === "QUESTIONNAIRE" && !this.state.targetReached)) {
+      if ((this.state.performValidation && this.state.phase !== "QUESTIONNAIRE") || this.state.phase === "QUESTIONNAIRE") {
         let updatedGazeData = this.state.gazeData;
-        updatedGazeData.push({ x: data.x, y: data.y, time: elapsedTime, type: "raw", phase: this.determinePhase() });
+        updatedGazeData.push({ x: data.x, y: data.y, time: elapsedTime, type: "raw", phase: this.determinePhase(), state: this.state.targetReached ? "post-selection" : "pre-selection" });
         if (this.determinePhase() === "47") {
         }
         this.setState({ gazeData: updatedGazeData });
@@ -120,9 +120,9 @@ class WebGazeLoader extends React.Component {
       this.setState({ context: webgazer.util.bound({ x: averagedX, y: averagedY, time: elapsedTime }) });
       this.setState({ gazeSmoothening: [{ x: data.x, y: data.y }] });
 
-      if ((this.state.performValidation && this.state.phase !== "QUESTIONNAIRE") || (this.state.phase === "QUESTIONNAIRE" && !this.state.targetReached)) {
+      if ((this.state.performValidation && this.state.phase !== "QUESTIONNAIRE") || this.state.phase === "QUESTIONNAIRE") {
         let updatedGazeData = this.state.gazeData;
-        updatedGazeData.push({ x: averagedX, y: averagedY, time: elapsedTime, type: "smoothened", phase: this.determinePhase()});
+        updatedGazeData.push({ x: averagedX, y: averagedY, time: elapsedTime, type: "smoothened", phase: this.determinePhase(), state: this.state.targetReached ? "post-selection" : "pre-selection"});
         this.setState({ gazeData: updatedGazeData });
       }
 
@@ -181,6 +181,7 @@ class WebGazeLoader extends React.Component {
       this.checkFixation();
 
     }).saveDataAcrossSessions(false).begin();
+
   }
 
   handleScriptError() {

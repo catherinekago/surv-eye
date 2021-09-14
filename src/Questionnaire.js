@@ -169,6 +169,7 @@ const Questionnaire = (props) => {
                             statement={questionnaireItems[currentQuestionnaireItem].statement}
                             hasItemInspectionArea={questionnaireItems[currentQuestionnaireItem].type === "3" || questionnaireItems[currentQuestionnaireItem].type === "4"? true : false}
                             questionnaireItem={questionnaireItems[currentQuestionnaireItem]}
+                            currentItemCount={currentQuestionnaireItem}
                         />
 
                         {/* <NavBar

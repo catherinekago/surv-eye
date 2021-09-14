@@ -13,6 +13,10 @@
     
 }
 
+.end-of-variant{
+    background: #c0d9c881;
+}
+
 .no-gaze-default{
     max-width: 0px;
     height: 300px;

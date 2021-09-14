@@ -15,8 +15,15 @@ const NavButton = (props) => {
 
     const [gazeIndicatorID, setGazeIndicatorID] = useState(props.type === "scroll-button-back" ? "gazeIndicatorBack" : "gazeIndicatorNext");
 
+    const [navButtonClass, setNavButtonClass] = useState("nav-button")
+
     // eslint-disable-next-line
     useEffect(() => {
+        if ((props.currentItemCount === 14 || props.currentItemCount === 29) && props.type === "scroll-button-next") {
+          setNavButtonClass("nav-button end-of-variant")
+        } else {
+          setNavButtonClass("nav-button")
+        }
         // let currentTime = new Date().getTime();
         // document.getElementById(gazeIndicatorID).addEventListener("transitionend", onTransitionEnd, false);
         // if (props.scrollEnabled && currentTime - lastGazeTrigger >= gazeTriggerInterval) {
@@ -49,7 +56,7 @@ const NavButton = (props) => {
     }
 
     return (
-        <div onClick={() => props.type === "scroll-button-back" ? props.scrollTrigger("back") : props.scrollTrigger("next")} id={props.type} className={"nav-button"}>
+        <div onClick={() => props.type === "scroll-button-back" ? props.scrollTrigger("back") : props.scrollTrigger("next")} id={props.type} className={navButtonClass}>
             <img id={props.type === "scroll-button-back" ? "scroll-icon-back" : "scroll-icon-next"} className="button-icon" src={props.type === "scroll-button-back" ? scrollIconBack : scrollIconNext} alt="Nav Icon" />
             <div id={gazeIndicatorID} className={gazeIndicatorClass} />
         </div>

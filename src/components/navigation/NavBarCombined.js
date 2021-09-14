@@ -12,7 +12,8 @@ const NavBarCombined = (props) => {
                 context={props.context}
                 type={"scroll-button-back"}
                 scrollTrigger={props.scrollTrigger}
-                scrollEnabled={props.scrollEnabledBack} />
+                scrollEnabled={props.scrollEnabledBack}
+                currentItemCount={props.currentItemCount} />
             {props.hasItemInspectionArea ?
                 (<InspectionComponent
                     statement={props.statement}
@@ -27,7 +28,8 @@ const NavBarCombined = (props) => {
                 context={props.context}
                 type={"scroll-button-next"}
                 scrollTrigger={props.scrollTrigger}
-                scrollEnabled={props.scrollEnabledNext} />
+                scrollEnabled={props.scrollEnabledNext} 
+                currentItemCount={props.currentItemCount} />
 
         </div>
 
