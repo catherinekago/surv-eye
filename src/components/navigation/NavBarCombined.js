@@ -18,6 +18,10 @@ const NavBarCombined = (props) => {
                     statement={props.statement}
                     type={props.questionnaireItem.type}
                     input={props.questionnaireItem.input}
+                    min={props.questionnaireItem.type === "slider1" ? props.min : ""}
+                    max={props.questionnaireItem.type === "slider1" ? props.max : ""}
+                    measure={props.questionnaireItem.type === "slider1" ? props.measure : ""}
+                    value={props.value}
                 />)
                 :
                 (<p id="question">{props.statement}</p>)}
