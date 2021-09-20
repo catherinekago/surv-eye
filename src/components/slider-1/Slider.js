@@ -13,6 +13,7 @@ import "./slider.css";
 
 const Slider = (props) => {
     const [sliderID, setSliderID] = useState(props.id);
+    const [isReset, setIsReset] = useState(false);
     const [knobAreaSelectionClass, setKnobAreaSelectionClass] = useState("knob-area-no-fill");
     const [lastGazeSelection, setLastGazeSelection] = useState(0);
     const [lastTransitionStart, setLastTransitionStart] = useState(0);
@@ -24,9 +25,13 @@ const Slider = (props) => {
     useEffect(() => {
         if (!props.isInspectionArea) {
             if (props.id !== sliderID) {
-                setSliderID(props.id);
-                resetKnob();
-            
+                if (!isReset) {
+                    resetKnob();
+                } else {
+                    document.getElementById("KNOB-AREA-INTERACTION").style.transform = "translate(0px)";
+                    setSliderID(props.id);
+                    setIsReset(false);
+                }
             }
             // If gaze stays on knob area long enough, log it in and update value with props.setItemValue
             if (props.value === calculateCurrentValue()) {
@@ -39,11 +44,13 @@ const Slider = (props) => {
 
     // Move interaction knob to min value
     const resetKnob = () => {
-        let KNOB_POS = document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left;
-        let translateBy = -1* (KNOB_POS);
+        let KNOB_POS = document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left ;
+        console.log("left is at " + KNOB_POS)
+        let translateBy = KNOB_POS  - 0.05* window.innerWidth;
         console.log("reset Knob by " + translateBy);
-        document.getElementById("KNOB-AREA-INTERACTION").style.transform = "translate(" + translateBy + "px)"
-        document.getElementById("INTERACTION-AREA-LEFT").style.offsetWidth = "0px";
+        document.getElementById("KNOB-AREA-INTERACTION").style.transform = "translate(" + (-1* translateBy) + "px)"
+        setIsReset(true);
+        // document.getElementById("INTERACTION-AREA-LEFT").style.offsetWidth = "0px";
         // document.getElementById("INTERACTION-AREA-RIGHT").style.offsetWidth = (window.innerWidth - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right) + "px";
     }
 
@@ -155,7 +162,7 @@ const Slider = (props) => {
             let SCALE_WIDTH = document.getElementById("SCALE-INTERACTION").offsetWidth;
             let SCALE_UNIT = props.measure === "" ? SCALE_WIDTH / 100 : SCALE_WIDTH / props.max;
 
-            let positionOnScale = document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left;
+            let positionOnScale = document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left - window.innerWidth*0.05;
             let value = Math.round((positionOnScale) / SCALE_UNIT);
             return value;
         } else {
@@ -202,12 +209,12 @@ const Slider = (props) => {
 
     // Calculate position of knob within inspection area according to size of scale and given range
     const translateInspectionKnob = () => {
-        if (document.getElementById("KNOB-AREA-INSPECTION") !== null || document.getElementById("") !== null) {
+        if (document.getElementById("KNOB-AREA-INSPECTION") !== null || document.getElementById("SCALE-INSPECTION") !== null) {
             let SCALE_WIDTH = document.getElementById("SCALE-INSPECTION").offsetWidth;
             let SCALE_UNIT = props.measure === "" ? SCALE_WIDTH / 100 : SCALE_WIDTH / props.max;
             let KNOB_AREA_WIDTH = document.getElementById("KNOB-AREA-INSPECTION").offsetWidth;
             let MARGIN_LEFT = (window.innerWidth - SCALE_WIDTH) / 2;
-            let newPosition = 54 + (SCALE_UNIT * props.value - 0.5 * KNOB_AREA_WIDTH);
+            let newPosition = (SCALE_UNIT * props.value - KNOB_AREA_WIDTH);
             return (newPosition);
 
 
@@ -234,7 +241,7 @@ const Slider = (props) => {
 
             </div>
 
-            <div id="SCALE-COMPONENT" style={{ marginTop: !props.isInspectionArea ? "2px" : "75px", width: !props.isInspectionArea ? "80%" : "89%" }}>
+            <div id="SCALE-COMPONENT" style={{ marginTop: !props.isInspectionArea ? "2px" : "75px", width: !props.isInspectionArea ? "72%" : "90%" }}>
 
                 <p id="SCALE-MIN">{props.min + props.measure}</p>
 
