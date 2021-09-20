@@ -8,7 +8,7 @@ import { useState } from 'react';
 const MainApp = (props) => {
 
   // STUDY
-  const [calibrationActive, setCalibrationActive] = useState(false);
+  const [calibrationActive, setCalibrationActive] = useState(true);
   return (
     <div id="MainContainer" style={{ height: "100%" }}>
 

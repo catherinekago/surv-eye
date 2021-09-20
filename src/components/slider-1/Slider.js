@@ -209,16 +209,15 @@ const Slider = (props) => {
 
     // Calculate position of knob within inspection area according to size of scale and given range
     const translateInspectionKnob = () => {
-        if (document.getElementById("KNOB-AREA-INSPECTION") !== null || document.getElementById("SCALE-INSPECTION") !== null) {
+        if (document.getElementById("KNOB-AREA-INSPECTION") !== null && document.getElementById("SCALE-INSPECTION") !== null) {
             let SCALE_WIDTH = document.getElementById("SCALE-INSPECTION").offsetWidth;
             let SCALE_UNIT = props.measure === "" ? SCALE_WIDTH / 100 : SCALE_WIDTH / props.max;
             let KNOB_AREA_WIDTH = document.getElementById("KNOB-AREA-INSPECTION").offsetWidth;
             let MARGIN_LEFT = (window.innerWidth - SCALE_WIDTH) / 2;
-            let newPosition = (SCALE_UNIT * props.value - KNOB_AREA_WIDTH);
+            let newPosition = (SCALE_UNIT * props.value - 0.5*KNOB_AREA_WIDTH);
             return (newPosition);
-
-
         }
+
     }
 
 
