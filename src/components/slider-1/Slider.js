@@ -3,9 +3,16 @@ import { isGazeWithinElement } from '../../functions/isGazeWithinElement';
 import { useState, useEffect } from 'react';
 import "./slider.css";
 
-const Slider = (props) => {
+// How to make a questionnaire item for this slider: 
+// Without numeric scale
+// { number: 0, type: "slider1", statement: "How much of an overthinker are you?", min: "low", max: "high", measure:"", input: null },
+// With numeric scale
+// { number: 1, type: "slider1", statement: "How much of an overthinker are you?", min: 0, max: 100, measure:"%", input: null },
 
-    // const [currentValue, setCurrentValue] = useState(props.min);
+// Where does it have to be added? --> Questionnaire, QuestionnaireItem, InspectionComponent
+
+const Slider = (props) => {
+    const [sliderID, setSliderID] = useState(props.id);
     const [knobAreaSelectionClass, setKnobAreaSelectionClass] = useState("knob-area-no-fill");
     const [lastGazeSelection, setLastGazeSelection] = useState(0);
     const [lastTransitionStart, setLastTransitionStart] = useState(0);
@@ -14,10 +21,13 @@ const Slider = (props) => {
     const INSPECTIONTIME = 500;
     const [isKnobTransitioning, setIsKnobTransitioning] = useState(false);
 
-
-
     useEffect(() => {
         if (!props.isInspectionArea) {
+            if (props.id !== sliderID) {
+                setSliderID(props.id);
+                resetKnob();
+            
+            }
             // If gaze stays on knob area long enough, log it in and update value with props.setItemValue
             if (props.value === calculateCurrentValue()) {
                 handleInteractionUnlock();
@@ -26,6 +36,16 @@ const Slider = (props) => {
             }
         }
     });
+
+    // Move interaction knob to min value
+    const resetKnob = () => {
+        let KNOB_POS = document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left;
+        let translateBy = -1* (KNOB_POS);
+        console.log("reset Knob by " + translateBy);
+        document.getElementById("KNOB-AREA-INTERACTION").style.transform = "translate(" + translateBy + "px)"
+        document.getElementById("INTERACTION-AREA-LEFT").style.offsetWidth = "0px";
+        // document.getElementById("INTERACTION-AREA-RIGHT").style.offsetWidth = (window.innerWidth - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right) + "px";
+    }
 
     // Handle gaze detection within knob area: when to trigger dwell time, when to trigger selection, when to remove selection
     const handleGazeWithinKnobArea = () => {
@@ -49,11 +69,8 @@ const Slider = (props) => {
                 }
                 // Trigger selection once transition has completed 
                 if (isKnobTransitioning && currentTime >= lastTransitionStart + 800) {
-                    console.log("transition done");
-
                     setKnobAreaSelectionClass("knob-area-fill");
                     setIsKnobTransitioning(false);
-                    console.log(calculateCurrentValue())
                     props.setItemValue(calculateCurrentValue());
                 }
 
@@ -81,7 +98,7 @@ const Slider = (props) => {
         if (props.value === calculateCurrentValue()) {
             let currentTime = new Date().getTime();
             // Perform unlock if gaze has been detected within one of the interaction sides
-            if (isGazeWithinElement("INTERACTION-AREA-LEFT", 0, props.context.x, props.context.y) || isGazeWithinElement("INTERACTION-AREA-RIGHT", 0, props.context.x, props.context.y)) {
+            if (isGazeWithinElement("INTERACTION-AREA-LEFT", 0, props.context.x, props.context.y) || isGazeWithinElement("INTERACTION-AREA-RIGHT", 0, props.context.x, props.context.y) || (props.context.x < window.innerWidth*0.05 &&  props.context.y >= document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().top) || (props.context.x > window.innerWidth - window.innerWidth*0.05 &&  props.context.y >= document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().top)) {
                 // Start delay timer if side is currently not being inspected
                 if (!isSideInspected) {
                     console.log("inspect")
@@ -105,13 +122,13 @@ const Slider = (props) => {
                     let SCALE_WIDTH = document.getElementById("SCALE-INTERACTION").offsetWidth;
                     let SCALE_UNIT = props.measure === "" ? SCALE_WIDTH / 100 : SCALE_WIDTH / props.max;
                     let translateBy = 0;
-                    if (isGazeWithinElement("INTERACTION-AREA-LEFT", 0, props.context.x, props.context.y)) {
+                    if (isGazeWithinElement("INTERACTION-AREA-LEFT", 0, props.context.x, props.context.y) || (props.context.x < window.innerWidth*0.05 &&  props.context.y >= document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().top)) {
                         if (document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left < SCALE_UNIT) {
                             translateBy = -1 * document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left
                         } else {
                             translateBy = (-1 * SCALE_UNIT);
                         }
-                    } else if (isGazeWithinElement("INTERACTION-AREA-RIGHT", 0, props.context.x, props.context.y)) {
+                    } else if (isGazeWithinElement("INTERACTION-AREA-RIGHT", 0, props.context.x, props.context.y) || (props.context.x > window.innerWidth - window.innerWidth*0.05 &&  props.context.y >= document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().top)) {
                         if (window.innerWidth - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right < SCALE_UNIT) {
                             translateBy = (window.innerWidth - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left)
                         } else {
@@ -158,16 +175,20 @@ const Slider = (props) => {
                 let SCALE_WIDTH = document.getElementById("SCALE-INTERACTION").offsetWidth;
                 let SCALE_UNIT = props.measure === "" ? SCALE_WIDTH / 100 : SCALE_WIDTH / props.max;
                 // If gaze has been detected in left area, move to left by one unit
-                if (isGazeWithinElement("INTERACTION-AREA-LEFT", 0, props.context.x, props.context.y)) {
-                    if (document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left < SCALE_UNIT) {
-                        return (-1 * document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left)
+                if (isGazeWithinElement("INTERACTION-AREA-LEFT", 0, props.context.x, props.context.y) || (props.context.x < window.innerWidth*0.05 &&  props.context.y >= document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().top)) {
+                    if (document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left - window.innerWidth*0.05 <= 0) {
+                        return 0;
+                } else if (document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left - window.innerWidth*0.05 < SCALE_UNIT) {
+                        return (-1 * (document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left - window.innerWidth*0.05 ))
                     } else {
                         return (-1 * SCALE_UNIT);
                     }
-                } else if (isGazeWithinElement("INTERACTION-AREA-RIGHT", 0, props.context.x, props.context.y)) {
+                } else if (isGazeWithinElement("INTERACTION-AREA-RIGHT", 0, props.context.x, props.context.y) || (props.context.x > window.innerWidth - window.innerWidth*0.05 &&  props.context.y >= document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().top)) {
                     // Else if gaze has been detected in right area, move to right by one unit
-                    if (window.innerWidth - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right < SCALE_UNIT) {
-                        return (window.innerWidth - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left)
+                    if (window.innerWidth - window.innerWidth*0.05 - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right  <= 0 ) {
+                        return 0; 
+                    } else if (window.innerWidth - window.innerWidth*0.05 - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right < SCALE_UNIT) {
+                        return (window.innerWidth - window.innerWidth*0.05 - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right)
                     } else {
                         return SCALE_UNIT;
                     }
@@ -199,7 +220,7 @@ const Slider = (props) => {
         <div id="SLIDER-COMPONENT">
 
             <div id="INTERACTION-AREA">
-                {!props.isInspectionArea ? <div id="INTERACTION-AREA-LEFT" style={{ width: document.getElementById("KNOB-AREA-INTERACTION") !== null ? document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left + "px" : "0px" }}> </div> : null}
+                {!props.isInspectionArea ? <div id="INTERACTION-AREA-LEFT" style={{ width: document.getElementById("KNOB-AREA-INTERACTION") !== null ? (document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left - window.innerWidth*0.05) + "px" : "0px" }}> </div> : null}
 
 
                 <div id={!props.isInspectionArea ? "KNOB-AREA-INTERACTION" : "KNOB-AREA-INSPECTION"} style={{ transform: !props.isInspectionArea ? "translate(" + translateInteractionKnob() + "px)" : "translate(" + translateInspectionKnob() + "px)" }}>
@@ -208,7 +229,7 @@ const Slider = (props) => {
                     </div>
                     {props.measure === "" ? null : <p id={!props.isInspectionArea ? "KNOB-INTERACTION-LABEL" : "KNOB-INSPECTION-LABEL"}>{calculateCurrentValue() + props.measure}</p>}
                 </div>
-                {!props.isInspectionArea ? <div id="INTERACTION-AREA-RIGHT" style={{ width: document.getElementById("KNOB-AREA-INTERACTION") !== null ? window.innerWidth - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right + "px" : "0px" }}></div> : null}
+                {!props.isInspectionArea ? <div id="INTERACTION-AREA-RIGHT" style={{ width: document.getElementById("KNOB-AREA-INTERACTION") !== null ? (window.innerWidth - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right - window.innerWidth*0.05) + "px" : "0px" }}></div> : null}
 
 
             </div>

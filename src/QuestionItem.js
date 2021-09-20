@@ -21,7 +21,7 @@ const QuestionItem = (props) => {
             return (
                 <WebGazeContext.Consumer >
                 {context => (
-            <Slider1 context={context} value={props.value} setItemValue={passUpItemValue} min={props.min} max={props.max} measure={props.measure} isInspectionArea= {false}/>)
+            <Slider1 id={props.id} context={context} value={props.value} setItemValue={passUpItemValue} min={props.min} max={props.max} measure={props.measure} isInspectionArea= {false}/>)
             }
             </WebGazeContext.Consumer>)
         }

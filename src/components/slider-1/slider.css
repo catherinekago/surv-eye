@@ -13,7 +13,9 @@
 #INTERACTION-AREA{
     grid-column: 1/1;
     grid-row: 1/1;
-    width: 100%;
+    margin-left:5%;
+    margin-right: 5%;
+    width: 90%;
     height: 100%;
     background-color: transparent;
 }
@@ -114,7 +116,7 @@
     grid-row: 1/1;
     place-self: center;
     height:10%;
-    width: 80%;
+    width: 70%;
     display:grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
