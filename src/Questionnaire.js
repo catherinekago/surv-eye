@@ -4,11 +4,21 @@ import QuestionItem from "./QuestionItem";
 import { useState } from 'react';
 
 
+<<<<<<< HEAD
 const Questionnaire = (props) => {
         // { number: 0, type: "2", statement: "I want to know my Patronus.", input: 0, target: -1 },
         // // { number: 0, type: "slider", statement: "How much of an overthinker are you?", min: 0, max: 100, measure:"%", stepinterval: 1, input: 0 },
        
     const [questionnaireItems, setQuestionnaireItems] = useState([{type: "1", statement: "Freie Phase", input: 0, target: null }, { type: "1", statement: "stimme ganz und gar nicht zu", input: 0, target: 1 },]);
+=======
+    const [questionnaireItems, setQuestionnaireItems] = useState([
+        // { number: 0, type: "radio2", statement: "I want to know my Patronus.", input: 0 },
+        { number: 0, type: "slider1", statement: "How much stress are you experiencing?", min: "low", max: "high", measure:"", input: null },
+        { number: 1, type: "slider1", statement: "How much of an overthinker are you?", min: 0, max: 100, measure:"%", input: null },
+        { number: 2, type: "radio1", statement: "I feel pitty for Nearly Headless Nick.", input: 0 },
+        { number: 3, type: "radio2", statement: "I'd love to possess the Mauderer's Map.", input: 0 }
+    ])
+>>>>>>> master
 
     const [currentQuestionnaireItem, updateCurrentQuestionnaireItem] = useState(0);
     const [targetReached, setTargetReached] = useState(false);
@@ -167,9 +177,18 @@ const Questionnaire = (props) => {
                             scrollEnabledBack={currentQuestionnaireItem - 1 >= 0 ? true : false}
                             scrollEnabledNext={currentQuestionnaireItem < questionnaireItems.length - 1 ? true : false}
                             statement={questionnaireItems[currentQuestionnaireItem].statement}
+<<<<<<< HEAD
                             hasItemInspectionArea={questionnaireItems[currentQuestionnaireItem].type === "3" || questionnaireItems[currentQuestionnaireItem].type === "4"? true : false}
                             questionnaireItem={questionnaireItems[currentQuestionnaireItem]}
                             currentItemCount={currentQuestionnaireItem}
+=======
+                            hasItemInspectionArea={questionnaireItems[currentQuestionnaireItem].type === "radio1" ? false : true}
+                            questionnaireItem={questionnaireItems[currentQuestionnaireItem]}
+                            min={questionnaireItems[currentQuestionnaireItem].type === "slider1" ? questionnaireItems[currentQuestionnaireItem].min : ""}
+                            max={questionnaireItems[currentQuestionnaireItem].type === "slider1" ? questionnaireItems[currentQuestionnaireItem].max : ""}
+                            measure={questionnaireItems[currentQuestionnaireItem].type === "slider1" ? questionnaireItems[currentQuestionnaireItem].measure : ""}
+                            value={questionnaireItems[currentQuestionnaireItem].input}
+>>>>>>> master
                         />
 
                         {/* <NavBar
@@ -180,15 +199,16 @@ const Questionnaire = (props) => {
                     /> */}
 
                         <QuestionItem
+                            id ={currentQuestionnaireItem}
                             type={questionnaireItems[currentQuestionnaireItem].type}
                             passUpItemValue={setItemValue}
                             value={questionnaireItems[currentQuestionnaireItem].input}
                             target={questionnaireItems[currentQuestionnaireItem].target}
                             statement={questionnaireItems[currentQuestionnaireItem].statement}
-                            min={questionnaireItems[currentQuestionnaireItem].type === "slider" ? questionnaireItems[currentQuestionnaireItem].min : ""}
-                            max={questionnaireItems[currentQuestionnaireItem].type === "slider" ? questionnaireItems[currentQuestionnaireItem].max : ""}
-                            measure={questionnaireItems[currentQuestionnaireItem].type === "slider" ? questionnaireItems[currentQuestionnaireItem].measure : ""}
-                            stepinterval={questionnaireItems[currentQuestionnaireItem].type === "slider" ? questionnaireItems[currentQuestionnaireItem].stepinterval : ""}
+                            min={questionnaireItems[currentQuestionnaireItem].type === "slider1" ? questionnaireItems[currentQuestionnaireItem].min : ""}
+                            max={questionnaireItems[currentQuestionnaireItem].type === "slider1" ? questionnaireItems[currentQuestionnaireItem].max : ""}
+                            measure={questionnaireItems[currentQuestionnaireItem].type === "slider1" ? questionnaireItems[currentQuestionnaireItem].measure : ""}
+                            stepinterval={questionnaireItems[currentQuestionnaireItem].type === "slider1" ? questionnaireItems[currentQuestionnaireItem].stepinterval : ""}
                         />
 
                         {/* <NavBar
