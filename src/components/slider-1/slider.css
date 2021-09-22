@@ -62,7 +62,7 @@
 #KNOB-INTERACTION{
     grid-column: 1/1;
     grid-row: 1/1;
-    margin-top:13%;
+    margin-top:5%;
     margin-right:auto;
     margin-left:auto;
     width: 0;
@@ -80,13 +80,13 @@
     margin-left:auto;
     width: 0;
 	height: 0;
-	border-left: 50px solid transparent;
-	border-right: 50px solid transparent;
-	border-top: 80px solid #28666e;
+	border-left: 60px solid transparent;
+	border-right: 60px solid transparent;
+	border-top: 110px solid #28666e;
 }
 
 #KNOB-INTERACTION-LABEL{
-    margin-top:30%;
+    margin-top:20%;
     grid-column: 1/1;
     grid-row: 1/1;
     margin-bottom: 0;

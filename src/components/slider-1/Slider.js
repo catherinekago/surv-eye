@@ -192,10 +192,10 @@ const Slider = (props) => {
                     }
                 } else if (isGazeWithinElement("INTERACTION-AREA-RIGHT", 0, props.context.x, props.context.y) || (props.context.x > window.innerWidth - window.innerWidth*0.05 &&  props.context.y >= document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().top)) {
                     // Else if gaze has been detected in right area, move to right by one unit
-                    if (window.innerWidth - window.innerWidth*0.05 - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right  <= 0 ) {
+                    if (window.innerWidth - window.innerWidth*0.0504 - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right  <= 0 ) {
                         return 0; 
-                    } else if (window.innerWidth - window.innerWidth*0.05 - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right < SCALE_UNIT) {
-                        return (window.innerWidth - window.innerWidth*0.05 - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right)
+                    } else if (window.innerWidth - window.innerWidth*0.0504 - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right < SCALE_UNIT) {
+                        return (window.innerWidth - window.innerWidth*0.0504 - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right)
                     } else {
                         return SCALE_UNIT;
                     }
@@ -235,7 +235,7 @@ const Slider = (props) => {
                     </div>
                     {props.measure === "" ? null : <p id={!props.isInspectionArea ? "KNOB-INTERACTION-LABEL" : "KNOB-INSPECTION-LABEL"}>{calculateCurrentValue() + props.measure}</p>}
                 </div>
-                {!props.isInspectionArea ? <div id="INTERACTION-AREA-RIGHT" style={{ width: document.getElementById("KNOB-AREA-INTERACTION") !== null ? (window.innerWidth - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right - window.innerWidth*0.05) + "px" : "0px" }}></div> : null}
+                {!props.isInspectionArea ? <div id="INTERACTION-AREA-RIGHT" style={{ width: document.getElementById("KNOB-AREA-INTERACTION") !== null ? (window.innerWidth - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right - window.innerWidth*0.0504) + "px" : "0px" }}></div> : null}
 
 
             </div>

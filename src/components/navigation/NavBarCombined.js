@@ -20,9 +20,9 @@ const NavBarCombined = (props) => {
                     type={props.questionnaireItem.type}
                     input={props.questionnaireItem.input}
                     target={props.questionnaireItem.target}
-                    min={props.questionnaireItem.type === "slider1" ? props.min : ""}
-                    max={props.questionnaireItem.type === "slider1" ? props.max : ""}
-                    measure={props.questionnaireItem.type === "slider1" ? props.measure : ""}
+                    min={props.questionnaireItem.type === "5" ? props.min : ""}
+                    max={props.questionnaireItem.type === "5" ? props.max : ""}
+                    measure={props.questionnaireItem.type === "5" ? props.measure : ""}
                     value={props.value}
                 />)
                 :
