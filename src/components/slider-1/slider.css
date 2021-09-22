@@ -80,9 +80,9 @@
     margin-left:auto;
     width: 0;
 	height: 0;
-	border-left: 60px solid transparent;
-	border-right: 60px solid transparent;
-	border-top: 110px solid #28666e;
+	border-left: 50px solid transparent;
+	border-right: 50px solid transparent;
+	border-top: 80px solid #28666e;
 }
 
 #KNOB-INTERACTION-LABEL{

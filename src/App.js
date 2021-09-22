@@ -56,11 +56,16 @@ class WebGazeLoader extends React.Component {
   }
 
   // Set corresponding variable to true, so that recording of gaze points stops, and add entry to data 
-  handleTargetReached(time) {
+  handleTargetReached(time, optionalValue) {
 
-    this.setState({ targetReached: true });
     let updatedGazeData = this.state.gazeData;
-    updatedGazeData.push({completiontime: time, phase: this.determinePhase() });
+    if (typeof optionalValue === 'undefined') {
+      updatedGazeData.push({completiontime: time, phase: this.determinePhase()});
+      this.setState({ targetReached: true });
+    } else {
+      updatedGazeData.push({completiontime: time, phase: this.determinePhase(), input: optionalValue});
+    }
+
     this.setState({ gazeData: updatedGazeData });
   }
 
