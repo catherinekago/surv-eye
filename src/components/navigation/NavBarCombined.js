@@ -7,7 +7,7 @@ const NavBarCombined = (props) => {
 
     return (
 
-        <div className="navbar">
+        <div className="navbar" style={{marginBottom: props.questionnaireItem.type === "slider2" ? "0px" : "80px" }}>
             <NavButton
                 context={props.context}
                 type={"scroll-button-back"}
