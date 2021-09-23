@@ -3,6 +3,7 @@ import "./css/questionitem.css";
 import RadioButtonGroupRect from "./components/radiocontrol-rect/RadioButtonGroupRect";
 import RadioButtonGroupRound from "./components/radiocontrol-round/RadioButtonGroupRound";
 import Slider1 from "./components/slider-1/Slider"
+import Slider2 from "./components/slider-2/Slider"
 import { WebGazeContext } from './context/WebGazeContext';
 // import Slider from "./components/slidercontrol/Slider";
 
@@ -24,6 +25,13 @@ const QuestionItem = (props) => {
             <Slider1 id={props.id} context={context} value={props.value} setItemValue={passUpItemValue} min={props.min} max={props.max} measure={props.measure} isInspectionArea= {false}/>)
             }
             </WebGazeContext.Consumer>)
+        } else if (type ==="slider2") {
+            return (
+            <WebGazeContext.Consumer >
+            {context => (
+        <Slider2 id={props.id} context={context} value={props.value} setItemValue={passUpItemValue} min={props.min} max={props.max} measure={props.measure}/>)
+        }
+        </WebGazeContext.Consumer>)
         }
 
         }
