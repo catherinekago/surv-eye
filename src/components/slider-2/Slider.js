@@ -24,7 +24,7 @@ const Slider = (props) => {
     const [leftArrowIndicatorClass, setLeftArrowIndicatorClass] = useState("arrow-no-fill arrow-left")
     const [knobLocked, setIsKnobLocked] = useState(false);
     const INSPECTIONTIME = 500;
-    const [stopAreaSelectionClass, setStopAreaSelectionClass] = useState("stop-area-no-fill");
+    const [stopAreaSelectionClass, setStopAreaSelectionClass] = useState("stop-area-fill");
 
     // to do: change to stopAreaSelectionClass
 
@@ -37,15 +37,20 @@ const Slider = (props) => {
 
     useEffect(() => {
         if (props.id !== sliderID) {
+
             if (!isReset) {
-                setTimeout(() => { resetKnob();  }, 200)
+                setIsReset(true);
+                resetKnob();
 
             } else {
                 // document.getElementById("KNOB-SLIDER2").style.transform = "translate(0px)";
                 setSliderID(props.id);
                 setIsReset(false);
+
+
             }
         }
+
         // Determine if direction has been triggered / is going on
         handleGazeWithinDirectionButtons();
         // Determine if selection has been triggered / is going on
@@ -66,16 +71,13 @@ const Slider = (props) => {
 
     // Move knob to middle
     const resetKnob = () => {
-        let KNOB_POS = document.getElementById("KNOB-SLIDER2").getBoundingClientRect().left ;
-        let KNOB_WIDTH = + document.getElementById("KNOB-SLIDER2").offsetWidth; 
-        console.log("knob pos " + KNOB_POS)
-        console.log("knob width " + KNOB_WIDTH)
+        let KNOB_POS = document.getElementById("KNOB-SLIDER2").getBoundingClientRect().left;
+        let KNOB_WIDTH = + document.getElementById("KNOB-SLIDER2").offsetWidth;
         let MIDDLE = document.getElementById("SCALE-SLIDER2").offsetWidth / 2;
-        console.log("scale middle " + MIDDLE)
-        let translateBy = KNOB_POS > 0.05 * window.innerWidth + MIDDLE - 0.5*KNOB_WIDTH ? Math.round(KNOB_POS - MIDDLE - 0.5*window.innerWidth + 0.5*KNOB_WIDTH) : Math.round(MIDDLE - KNOB_POS);
-        console.log("translate by" + translateBy)
-        document.getElementById("KNOB-SLIDER2").style.transform = "translate(" + (translateBy) + "px)"
-        setIsReset(true);
+        let zero = KNOB_POS - KNOB_WIDTH/2 + 0.05 * window.innerWidth 
+        document.getElementById("KNOB-SLIDER2").style.transform = "translate(" + (-1*zero) + "px)"
+        document.getElementById("KNOB-SLIDER2").style.transform = "translate(" + (MIDDLE) + "px)"
+
     }
 
     // Calculate current value according to scale dimensions and knob position
@@ -86,7 +88,7 @@ const Slider = (props) => {
             let SCALE_WIDTH = document.getElementById("SCALE-SLIDER2").offsetWidth;
             let SCALE_UNIT = props.measure === "" ? SCALE_WIDTH / 100 : SCALE_WIDTH / props.max;
 
-            let positionOnScale = document.getElementById("KNOB-SLIDER2").getBoundingClientRect().left + document.getElementById("KNOB-SLIDER2").offsetWidth / 2 - window.innerWidth*0.05;
+            let positionOnScale = document.getElementById("KNOB-SLIDER2").getBoundingClientRect().left + document.getElementById("KNOB-SLIDER2").offsetWidth / 2 - window.innerWidth * 0.05;
             let value = Math.round((positionOnScale) / SCALE_UNIT);
             return value;
         }
@@ -117,11 +119,11 @@ const Slider = (props) => {
                 </div>
             </div>
 
-            <div id="SCALE-COMPONENT-SLIDER2">               
-             <div id={"SCALE-SLIDER2"}></div>
+            <div id="SCALE-COMPONENT-SLIDER2">
+                <div id={"SCALE-SLIDER2"}></div>
                 <div id={"KNOB-SLIDER2"} style={{ transform: "translate(" + translateKnob() + "px)" }}>
-                    {props.measure === "" ? null : <p id={"KNOB-SLIDER2-LABEL"}>{ calculateCurrentValue() + props.measure}</p>}
-                    
+                    {props.measure === "" ? null : <p id={"KNOB-SLIDER2-LABEL"}>{calculateCurrentValue() + props.measure}</p>}
+
                 </div>
                 <p id="SCALE-SLIDER2-MIN">{props.min + props.measure}</p>
                 <p id="SCALE-SLIDER2-MAX">{props.max + props.measure}</p>
@@ -129,13 +131,16 @@ const Slider = (props) => {
 
             </div>
 
-            <div id="STOP-COMPONENT"></div> 
-                {/* <div id="STOP-MARKER">
-                    {props.measure === "" ? null : <p id={"STOP-MARKER-LABEL"}>{calculateCurrentValue() + props.measure}</p>}
+            <div id="STOP-COMPONENT">
+
+                <p id="STOP-LABEL">STOP</p>
+                <div id="STOP-MARKER">
+                {props.measure === "" ? null : <p id={"STOP-MARKER-LABEL"}>{calculateCurrentValue() + props.measure}</p>}
                 </div>
                 <div id="STOP-GAZE-INDICATOR" className={stopAreaSelectionClass}></div>
-            </div>  */}
 
+
+            </div>
 
 
         </div>
