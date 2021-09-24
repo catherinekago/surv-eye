@@ -77,13 +77,14 @@ const Slider = (props) => {
                 let currentKnobCenter = document.getElementById("KNOB-SLIDER2").getBoundingClientRect().left - document.getElementById("KNOB-SLIDER2").offsetWidth/2 + 2; 
                 translateElementToPosition("STOP-MARKER-CONTAINER", currentKnobCenter);
                 setIsKnobLocking(true);
-                console.log(isLockingOn)
                 setStopAreaSelectionClass("stop-transitioning stop-area-fill")
                 // Change class of gaze indicator 
             }
         } else if (document.getElementById("STOP-COMPONENT") !== null && !isGazeWithinElement("STOP-COMPONENT", 0, props.context.x, props.context.y)) {
             if (props.value !== isLockingOn) {
                 setStopAreaSelectionClass("stop-transitioning stop-area-no-fill");
+                setIsKnobLocking(false);
+                setIsLockingOn(null);
             } else if (props.value === calculateCurrentValue()) {
                 setStopAreaSelectionClass("stop-area-fill")
             }
@@ -91,7 +92,7 @@ const Slider = (props) => {
         }
 
         // setIsKnobLocking(true) if gaze detected for first time, translate marker ONCE
-        // setIsKnobLocked(true) if selection was successful 
+        // > {(true) if selection was successful 
         // props.setItemValue() if selection was successful
     }
 
@@ -100,9 +101,11 @@ const Slider = (props) => {
           console.log("selected!")
           props.setItemValue(isLockingOnRef.current);
           console.log(isLockingOnRef.current);
-          setIsKnobLocked(true);
           setIsKnobLocking(false);
           setIsLockingOn(null);
+          translateElementToPosition("KNOB-SLIDER2", document.getElementById("SCALE-SLIDER2").offsetWidth / 2);
+          setTimeout(() => setIsKnobLocked(true) , 400);
+
         }
         document.getElementById("STOP-GAZE-INDICATOR").removeEventListener("transitionend", onTransitionEnd);
         setEventListener(false);
