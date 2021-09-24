@@ -1,5 +1,5 @@
 import { isGazeWithinElement } from '../../functions/isGazeWithinElement';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ArrowLeft from '../../assets/arrow-left.svg';
 import ArrowRight from '../../assets/arrow-right.svg';
 import "./slider.css";
@@ -22,32 +22,33 @@ const Slider = (props) => {
     const [movement, setMovement] = useState(null); // right and left set in handleGazeWithinDirectionButtons
     const [isLeftInspected, setIsLeftInspected] = useState(true);
     const [leftArrowIndicatorClass, setLeftArrowIndicatorClass] = useState("arrow-no-fill arrow-left")
-    const [knobLocked, setIsKnobLocked] = useState(false);
-    const INSPECTIONTIME = 500;
-    const [stopAreaSelectionClass, setStopAreaSelectionClass] = useState("stop-area-fill");
+    const [isKnobLocking, setIsKnobLocking] = useState(false);
 
-    // to do: change to stopAreaSelectionClass
+    const [isLockingOn, setIsLockingOn] = useState(null);
+    const isLockingOnRef = useRef(isLockingOn);
+    isLockingOnRef.current = isLockingOn;
+
+    const [isKnobLocked, setIsKnobLocked] = useState(false);
+    const INSPECTIONTIME = 500;
+    const [stopAreaSelectionClass, setStopAreaSelectionClass] = useState("stop-area-no-fill");
+
+    const [eventListener, setEventListener] = useState(false);
 
     const [lastGazeSelection, setLastGazeSelection] = useState(0);
     const [lastTransitionStart, setLastTransitionStart] = useState(0);
     const [isKnobInspected, setIsKnobInspected] = useState(false);
 
-    // ? 
-    const [isKnobTransitioning, setIsKnobTransitioning] = useState(false);
 
     useEffect(() => {
         if (props.id !== sliderID) {
 
             if (!isReset) {
                 setIsReset(true);
-                resetKnob();
-
+                    translateElementToPosition("KNOB-SLIDER2", document.getElementById("SCALE-SLIDER2").offsetWidth / 2);
+            
             } else {
-                // document.getElementById("KNOB-SLIDER2").style.transform = "translate(0px)";
                 setSliderID(props.id);
                 setIsReset(false);
-
-
             }
         }
 
@@ -64,20 +65,58 @@ const Slider = (props) => {
 
     // Handle interaction with stop area: trigger selection of a value
     const handleGazeWithinStopArea = () => {
+        if (!eventListener) {
+            document.getElementById("STOP-GAZE-INDICATOR").addEventListener("transitionend", onTransitionEnd, false);
+            setEventListener(true);
+          }
 
+        if (document.getElementById("STOP-COMPONENT") !== null && isGazeWithinElement("STOP-COMPONENT", 0, props.context.x, props.context.y)) {
+            if (!isKnobLocking && document.getElementById("STOP-MARKER-CONTAINER") !== null && document.getElementById("KNOB-SLIDER2") !== null) {
+                let currentValue = calculateCurrentValue();
+                setIsLockingOn(currentValue);
+                let currentKnobCenter = document.getElementById("KNOB-SLIDER2").getBoundingClientRect().left - document.getElementById("KNOB-SLIDER2").offsetWidth/2 + 2; 
+                translateElementToPosition("STOP-MARKER-CONTAINER", currentKnobCenter);
+                setIsKnobLocking(true);
+                console.log(isLockingOn)
+                setStopAreaSelectionClass("stop-transitioning stop-area-fill")
+                // Change class of gaze indicator 
+            }
+        } else if (document.getElementById("STOP-COMPONENT") !== null && !isGazeWithinElement("STOP-COMPONENT", 0, props.context.x, props.context.y)) {
+            if (props.value !== isLockingOn) {
+                setStopAreaSelectionClass("stop-transitioning stop-area-no-fill");
+            } else if (props.value === calculateCurrentValue()) {
+                setStopAreaSelectionClass("stop-area-fill")
+            }
+
+        }
+
+        // setIsKnobLocking(true) if gaze detected for first time, translate marker ONCE
         // setIsKnobLocked(true) if selection was successful 
         // props.setItemValue() if selection was successful
     }
 
-    // Move knob to middle
-    const resetKnob = () => {
-        let KNOB_POS = document.getElementById("KNOB-SLIDER2").getBoundingClientRect().left;
-        let KNOB_WIDTH = + document.getElementById("KNOB-SLIDER2").offsetWidth;
-        let MIDDLE = document.getElementById("SCALE-SLIDER2").offsetWidth / 2;
-        let zero = KNOB_POS - KNOB_WIDTH/2 + 0.05 * window.innerWidth 
-        document.getElementById("KNOB-SLIDER2").style.transform = "translate(" + (-1*zero) + "px)"
-        document.getElementById("KNOB-SLIDER2").style.transform = "translate(" + (MIDDLE) + "px)"
+    const onTransitionEnd = (event) => {
+        if (document.getElementById("STOP-GAZE-INDICATOR").offsetHeight !== 0 && (event.propertyName === "height")) {
+          console.log("selected!")
+          props.setItemValue(isLockingOnRef.current);
+          console.log(isLockingOnRef.current);
+          setIsKnobLocked(true);
+          setIsKnobLocking(false);
+          setIsLockingOn(null);
+        }
+        document.getElementById("STOP-GAZE-INDICATOR").removeEventListener("transitionend", onTransitionEnd);
+        setEventListener(false);
+        console.log("REMOVED EVENTLISTENER");
+    
+      }
 
+    // Move element to a defined horizontal posiiton
+    const translateElementToPosition = (element, targetPosition) => {
+        let elementPosition = document.getElementById(element).getBoundingClientRect().left;
+        let elementWidth = + document.getElementById(element).offsetWidth;
+        let zero = elementPosition - elementWidth / 2 + 0.05 * window.innerWidth;
+        document.getElementById(element).style.transform = "translate(" + (-1 * zero) + "px)"
+        document.getElementById(element).style.transform = "translate(" + (targetPosition) + "px)"
     }
 
     // Calculate current value according to scale dimensions and knob position
@@ -96,6 +135,24 @@ const Slider = (props) => {
 
     const translateKnob = () => {
         return 0;
+    }
+
+    // const translateMarker = (value) => {
+    //     let MARKER_POS = document.getElementById("").getBoundingClientRect().left;
+    //     let KNOB_WIDTH = + document.getElementById("KNOB-SLIDER2").offsetWidth;
+    //     let MIDDLE = document.getElementById("SCALE-SLIDER2").offsetWidth / 2;
+    //     let zero = KNOB_POS - KNOB_WIDTH / 2 + 0.05 * window.innerWidth
+    //     document.getElementById("KNOB-SLIDER2").style.transform = "translate(" + (-1 * zero) + "px)"
+    //     document.getElementById("KNOB-SLIDER2").style.transform = "translate(" + (MIDDLE) + "px)"
+    // }
+
+    const determineMarkerVisibility = () => {
+        // only show marker during selection process, remove if gaze is removed from stop area or selection has been completed
+        if (document.getElementById("STOP-COMPONENT") !== null && isGazeWithinElement("STOP-COMPONENT", 0, props.context.x, props.context.y) && !isKnobLocked) {
+            return("block");
+        } else {
+            return("none");
+        }
     }
 
 
@@ -131,17 +188,16 @@ const Slider = (props) => {
 
             </div>
 
-            <div id="STOP-COMPONENT">
-
-                <p id="STOP-LABEL">STOP</p>
-                <div id="STOP-MARKER">
-                {props.measure === "" ? null : <p id={"STOP-MARKER-LABEL"}>{calculateCurrentValue() + props.measure}</p>}
-                </div>
+            <div id="STOP-COMPONENT" >
                 <div id="STOP-GAZE-INDICATOR" className={stopAreaSelectionClass}></div>
-
-
+                {!isKnobLocked && !isKnobLocking? <p id="STOP-LABEL">STOP</p> : null}
             </div>
 
+            <div id="STOP-MARKER-CONTAINER">
+
+                <div id="STOP-MARKER" style={{display: determineMarkerVisibility() }}>  </div>
+                {props.measure === "" ? null : <p id={"STOP-MARKER-LABEL"} style={{display: determineMarkerVisibility() }}>{isLockingOn + props.measure}</p>}
+            </div>
 
         </div>
     );

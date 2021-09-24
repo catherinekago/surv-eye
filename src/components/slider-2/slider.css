@@ -197,7 +197,7 @@
     display:grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
-    align-items: center;
+    align-items: flex-end;
     justify-items: center;
 
 }
@@ -205,8 +205,8 @@
 #STOP-LABEL{
     grid-column: 1;
     grid-row: 1;
-    margin-top:8px;
-    margin-bottom: 0;
+    margin-top:0px;
+    margin-bottom: 40px;
     font-size: 120px;
     color: #28666e50; 
     font-weight: 400;
@@ -214,22 +214,45 @@
 
 }
 
+#STOP-MARKER-CONTAINER{
+    grid-column: 1;
+    grid-row: 2/4;
+    width: 15%;
+    height: 100%;
+    display: grid;
+    grid-column: 1fr;
+    grid-row: 1fr;
+    align-content: flex-end;
+    justify-items: flex-end;
+
+}
+
 #STOP-MARKER{
     grid-column: 1;
     grid-row: 1;
-    margin-top:0%;
+    margin-top:82px;
     margin-right:auto;
     margin-left:auto;
     width: 0;
 	height: 0;
 	border-left: 90px solid transparent;
 	border-right: 90px solid transparent;
-	border-bottom: 210px solid #28666e;
+	border-bottom: 318px solid #28666e;
+    align-self: flex-end;
+
 }
 
 #STOP-MARKER-LABEL{
     grid-column: 1;
     grid-row: 1;
+    font-size: 24px;
+    height:30px;
+    width:30px;
+    color:white; 
+    margin-top: 200px;
+    font-weight: 800;
+    align-self: center;
+    justify-self: center;
 }
 
 #STOP-GAZE-INDICATOR{
@@ -250,7 +273,7 @@
 }
 
 .stop-transitioning{
-    transition: width 800ms linear;
+    transition: height 800ms linear;
 }
 
 
