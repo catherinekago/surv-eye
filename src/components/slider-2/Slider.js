@@ -24,6 +24,8 @@ const Slider = (props) => {
 
     const [inspectLeftTime, setInspectLeftTime] = useState(0);
     const [movement, setMovement] = useState(null); // right and left set in handleGazeWithinDirectionButtons
+    const movementRef = useRef(movement);
+    movementRef.current = movement;
     const [isLeftInspected, setIsLeftInspected] = useState(false);
     const [leftArrowIndicatorClass, setLeftArrowIndicatorClass] = useState("arrow-no-fill arrow-left")
     const [leftArrowContainerClass, setLeftArrowContainerClass] = useState("")
@@ -40,6 +42,11 @@ const Slider = (props) => {
     const [eventListenerLeft, setEventListenerLeft] = useState(false);
     const [eventListenerRight, setEventListenerRight] = useState(false);
 
+    const [currentKnobMarginLeft, setCurrentKnobMarginLeft] = useState(0);
+    const currentKnobMarginLeftRef = useRef(currentKnobMarginLeft);
+    currentKnobMarginLeftRef.current = currentKnobMarginLeft
+    const MIN_MARGIN_KNOB = 16; 
+
 
 
 
@@ -49,7 +56,7 @@ const Slider = (props) => {
             if (!isReset) {
                 setIsReset(true);
                 setMovement(null);
-                translateElementToPosition("KNOB-SLIDER2", document.getElementById("SCALE-SLIDER2").offsetWidth / 2);
+                setKnobPosition(0.05*window.innerWidth + document.getElementById("SCALE-SLIDER2").offsetWidth / 2);
 
             } else {
                 setSliderID(props.id);
@@ -61,7 +68,19 @@ const Slider = (props) => {
         handleGazeWithinDirectionButtons();
         // Determine if selection has been triggered / is going on
         handleGazeWithinStopArea();
+
     });
+
+    // Transate knob position if movement is triggered
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if(movement !== "none") {
+                translateKnob();
+            }
+          }, 20);
+
+          return () => clearInterval(interval);
+    }, [])
 
     // Handle interaction with direction buttons: set triggered direction
     const handleGazeWithinDirectionButtons = () => {
@@ -133,12 +152,14 @@ const Slider = (props) => {
         if (document.getElementById("STOP-COMPONENT") !== null && isGazeWithinElement("STOP-COMPONENT", 0, props.context.x, props.context.y)) {
             if (!isKnobLocking && document.getElementById("STOP-MARKER-CONTAINER") !== null && document.getElementById("KNOB-SLIDER2") !== null) {
                 let currentValue = calculateCurrentValue();
+                let SCALE_WIDTH = document.getElementById("SCALE-SLIDER2").offsetWidth;
+                let SCALE_UNIT = props.measure === "" ? SCALE_WIDTH / 100 : SCALE_WIDTH / props.max;
+                let margin = Math.round(SCALE_UNIT * currentValue - (document.getElementById("STOP-MARKER-CONTAINER").offsetWidth /2 - 0.05*window.innerWidth));
+                console.log(margin);
+                document.getElementById("STOP-MARKER-CONTAINER").style.marginLeft = margin + "px";
                 setIsLockingOn(currentValue);
-                let currentKnobCenter = document.getElementById("KNOB-SLIDER2").getBoundingClientRect().left - document.getElementById("KNOB-SLIDER2").offsetWidth / 2 + 2;
-                translateElementToPosition("STOP-MARKER-CONTAINER", currentKnobCenter);
                 setIsKnobLocking(true);
                 setStopAreaSelectionClass("stop-transitioning stop-area-fill")
-                // Change class of gaze indicator 
             }
 
             // Handle gaze removed from area
@@ -156,15 +177,16 @@ const Slider = (props) => {
 
     // Handlecompletion of stop transition 
     const onTransitionEnd = (event) => {
-        console.log(event.target)
         if (event.target === document.getElementById("STOP-GAZE-INDICATOR")) {
             if (document.getElementById("STOP-GAZE-INDICATOR").offsetHeight !== 0 && (event.propertyName === "height")) {
                 props.setItemValue(isLockingOnRef.current);
                 setIsKnobLocking(false);
-                setIsLockingOn(null);
-                setMovement(null);
-                translateElementToPosition("KNOB-SLIDER2", document.getElementById("SCALE-SLIDER2").offsetWidth / 2);
-                setTimeout(() => setIsKnobLocked(true), 400);
+                setMovement("none");
+                setKnobPosition(document.getElementById("STOP-MARKER-CONTAINER").offsetLeft + document.getElementById("STOP-MARKER-CONTAINER").offsetWidth/2);
+                
+                setTimeout(() => {
+                    setIsKnobLocked(true); 
+                    setIsLockingOn(null); }, 400);
 
             }
             document.getElementById("STOP-GAZE-INDICATOR").removeEventListener("transitionend", onTransitionEnd);
@@ -192,32 +214,50 @@ const Slider = (props) => {
         }
     }
 
-    // Move element to a defined horizontal posiiton
-    const translateElementToPosition = (element, targetPosition) => {
-        let elementPosition = document.getElementById(element).getBoundingClientRect().left;
-        let elementWidth = + document.getElementById(element).offsetWidth;
-        let zero = elementPosition - elementWidth / 2 + 0.05 * window.innerWidth;
-        document.getElementById(element).style.transform = "translate(" + (-1 * zero) + "px)"
-        document.getElementById(element).style.transform = "translate(" + (targetPosition) + "px)"
+
+    // Manualla set position of knob to specified x coordinate
+    const setKnobPosition = (xcoor) => {
+        let knobWidth = document.getElementById("KNOB-SLIDER2").offsetWidth;
+        let marginToTarget = xcoor - knobWidth/2;
+    
+        setCurrentKnobMarginLeft(marginToTarget);
     }
 
     // Calculate current value according to scale dimensions and knob position
     const calculateCurrentValue = () => {
-        if (props.value === null) {
+        if (props.value === null && movement === "none") {
             return props.measure === "" ? 50 : props.max / 2;
         } else if (document.getElementById("SCALE-SLIDER2") !== null) {
             let SCALE_WIDTH = document.getElementById("SCALE-SLIDER2").offsetWidth;
             let SCALE_UNIT = props.measure === "" ? SCALE_WIDTH / 100 : SCALE_WIDTH / props.max;
 
-            let positionOnScale = document.getElementById("KNOB-SLIDER2").getBoundingClientRect().left + document.getElementById("KNOB-SLIDER2").offsetWidth / 2 - window.innerWidth * 0.05;
+            let positionOnScale = document.getElementById("KNOB-SLIDER2").offsetLeft + document.getElementById("KNOB-SLIDER2").offsetWidth / 2 - window.innerWidth * 0.05;
             let value = Math.round((positionOnScale) / SCALE_UNIT);
             return value;
         }
     }
 
+    // Translate knob according to selected direction
     const translateKnob = () => {
-        return 0;
-    }
+            if (movementRef.current === "left") {
+                // console.log(currentKnobMarginLeftRef.current )
+                    if (currentKnobMarginLeftRef.current - 1 <= MIN_MARGIN_KNOB) {
+                        setCurrentKnobMarginLeft(MIN_MARGIN_KNOB);
+                } else {
+                        setCurrentKnobMarginLeft(prev => prev - 1);
+                    }
+            } else if (movementRef.current === "right") {
+                let maxPos = window.innerWidth - (MIN_MARGIN_KNOB + document.getElementById("KNOB-SLIDER2").offsetWidth) ;
+                if (currentKnobMarginLeftRef.current + 1 >= maxPos) {
+                    setCurrentKnobMarginLeft(maxPos);
+            } else {
+                    setCurrentKnobMarginLeft(prev => prev + 1);
+                }
+            } else if (movementRef.current === "none"){
+
+            }
+        }
+    
 
     const determineMarkerVisibility = () => {
         // only show marker during selection process, remove if gaze is removed from stop area or selection has been completed
@@ -233,14 +273,14 @@ const Slider = (props) => {
         <div id="SLIDER2-COMPONENT">
 
             <div id="MOVE-BUTTON-AREA">
-                <div id="MOVE-BUTTON-LEFT" style={{ width: document.getElementById("KNOB-SLIDER2") !== null ? (document.getElementById("KNOB-SLIDER2").getBoundingClientRect().left + document.getElementById("KNOB-SLIDER2").offsetWidth / 2 - window.innerWidth * 0.05) + "px" : "0px" }}>
+                <div id="MOVE-BUTTON-LEFT" style={{ width: document.getElementById("KNOB-SLIDER2") !== null ? (Math.round(document.getElementById("KNOB-SLIDER2").getBoundingClientRect().left + document.getElementById("KNOB-SLIDER2").offsetWidth / 2 - window.innerWidth * 0.05)) + "px" : "0px" }}>
                     <div id="ARROW-LEFT-CONTAINER" className={leftArrowContainerClass}>
                         <div id="ARROW-LEFT-INDICATOR" className={leftArrowIndicatorClass}></div>
                         <img id="ARROW-LEFT" className="arrow-img" src={ArrowLeft} alt="Slider Arrow Left" />
                     </div>
                 </div>
 
-                <div id="MOVE-BUTTON-RIGHT" style={{ width: document.getElementById("KNOB-SLIDER2") !== null ? (window.innerWidth - document.getElementById("KNOB-SLIDER2").getBoundingClientRect().right + document.getElementById("KNOB-SLIDER2").offsetWidth / 2 - window.innerWidth * 0.05) + "px" : "0px" }}>
+                <div id="MOVE-BUTTON-RIGHT" style={{ width: document.getElementById("KNOB-SLIDER2") !== null ? (Math.round(window.innerWidth - document.getElementById("KNOB-SLIDER2").getBoundingClientRect().right + document.getElementById("KNOB-SLIDER2").offsetWidth / 2 - window.innerWidth * 0.05)) + "px" : "0px" }}>
                     <div id="ARROW-RIGHT-CONTAINER" className={rightArrowContainerClass}>
                         <div id="ARROW-RIGHT-INDICATOR" className={rightArrowIndicatorClass}></div>
                         <img id="ARROW-RIGHT" className="arrow-img" src={ArrowRight} alt="Slider Arrow Right" />
@@ -251,7 +291,7 @@ const Slider = (props) => {
 
             <div id="SCALE-COMPONENT-SLIDER2">
                 <div id={"SCALE-SLIDER2"}></div>
-                <div id={"KNOB-SLIDER2"} style={{ transform: "translate(" + translateKnob() + "px)" }}>
+                <div id={"KNOB-SLIDER2"} style={{marginLeft: currentKnobMarginLeftRef.current + "px"}}>
                     {props.measure === "" ? null : <p id={"KNOB-SLIDER2-LABEL"}>{calculateCurrentValue() + props.measure}</p>}
 
                 </div>
