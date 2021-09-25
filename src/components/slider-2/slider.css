@@ -258,17 +258,17 @@
 .stop-area-no-fill{
     width: 100%;
     height: 0%;
-    background-color: #28666e9a;
+    background-color: #7DA3A7;
 }
 
 .stop-area-fill{
-    background-color: #28666e9a;
+    background-color: #7DA3A7;
     width: 100%;
     height:100%;
 }
 
 .stop-transitioning{
-    transition: height 800ms linear;
+    transition: height 1000ms linear;
 }
 
 
