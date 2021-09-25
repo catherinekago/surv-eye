@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import ArrowLeft from '../../assets/arrow-left.svg';
 import ArrowRight from '../../assets/arrow-right.svg';
 import "./slider.css";
+import { POINT_CONVERSION_COMPRESSED } from 'constants';
 
 // How to make a questionnaire item for this slider: 
 // Without numeric scale
@@ -62,8 +63,15 @@ const Slider = (props) => {
             if (!isReset) {
                 setIsReset(true);
                 setMovement(null);
-                setKnobPosition(0.05 * window.innerWidth + document.getElementById("SCALE-SLIDER2").offsetWidth / 2);
-
+                if (sliderID === null || props.value === null) {
+                    setKnobPosition(0.05 * window.innerWidth + document.getElementById("SCALE-SLIDER2").offsetWidth / 2);
+                } else {
+                    let SCALE_WIDTH = document.getElementById("SCALE-SLIDER2").offsetWidth;
+                    let SCALE_UNIT = props.measure === "" ? SCALE_WIDTH / 100 : SCALE_WIDTH / props.max;
+                    let margin = Math.round(SCALE_UNIT * props.value + 0.05 * window.innerWidth);
+                    setKnobPosition(margin);
+                    setIsKnobLocked(true);
+                }
             } else {
                 setSliderID(props.id);
                 setIsReset(false);
@@ -162,6 +170,7 @@ const Slider = (props) => {
 
         // Handle gaze within area
         if (movement !== "none") {
+            setIsKnobLocked(false);
             if (document.getElementById("STOP-COMPONENT") !== null && isGazeWithinElement("STOP-COMPONENT", 0, props.context.x, props.context.y) && !isKnobLocked) {
                 if (!isKnobLocking && document.getElementById("STOP-MARKER-CONTAINER") !== null && document.getElementById("KNOB-SLIDER2") !== null) {
                     let currentValue = calculateCurrentValue();
@@ -183,7 +192,7 @@ const Slider = (props) => {
             setStopAreaSelectionClass("stop-transitioning stop-area-fill");
             setIsKnobLocking(false);
             setIsLockingOn(props.value);
-            setIsKnobLocked(false);
+            setIsKnobLocked(true);
         }
 
     }
@@ -322,7 +331,7 @@ const Slider = (props) => {
 
 
             <div id="STOP-COMPONENT" >
-                {!isKnobLocking ? <p id="STOP-LABEL">STOP</p> : null}
+                {!isKnobLocking && !isKnobLocked ? <p id="STOP-LABEL">STOP</p> : null}
                 <div id="STOP-GAZE-INDICATOR" className={stopAreaSelectionClass}></div>
 
             </div>
