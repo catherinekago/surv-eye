@@ -19,7 +19,7 @@ const NavButton = (props) => {
 
     // eslint-disable-next-line
     useEffect(() => {
-        if ((props.currentItemCount === 14 || props.currentItemCount === 29) && props.type === "scroll-button-next") {
+        if ((props.currentItemCount === 14 || props.currentItemCount === 29 ||props.currentItemCount === 37 || props.currentItemCount === 44 ) && props.type === "scroll-button-next") {
           setNavButtonClass("nav-button end-of-variant")
         } else {
           setNavButtonClass("nav-button")
