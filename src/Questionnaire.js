@@ -3,10 +3,10 @@ import { WebGazeContext } from './context/WebGazeContext';
 import QuestionItem from "./QuestionItem";
 import { useState } from 'react';
 
-
 const Questionnaire = (props) => {
     // { number: 0, type: "2", statement: "I want to know my Patronus.", input: 0, target: -1 },
     // // { number: 0, type: "slider", statement: "How much of an overthinker are you?", min: 0, max: 100, measure:"%", stepinterval: 1, input: 0 },
+
 
     const [questionnaireItems, setQuestionnaireItems] = useState([{ type: "1", statement: "Freie Phase", input: 0, target: null }, { type: "1", statement: "stimme ganz und gar nicht zu", input: 0, target: 1 }]);
     const [currentQuestionnaireItem, updateCurrentQuestionnaireItem] = useState(0);
@@ -22,6 +22,7 @@ const Questionnaire = (props) => {
         let exploration2 = [{ type: "3", statement: determineStatement(0), input: 0, target: null }];
         let exploration3 = [{ type: "5", statement: determineStatement(0), min: "0", max: "100", measure: "%", input: null, target: -1 }]
         let end3 = [{ type: "5", statement: "Wie gern trinken Sie Tee?", min: "gar nicht gern", max: "sehr gern", measure: "", input: null, target: 101 }]
+        let end4 = [{ type: "6", statement: "Wie gern trinken Sie Tee?", min: "gar nicht gern", max: "sehr gern", measure: "", input: null, target: 101 }]
         let variant1 = [
             { type: "1", statement: determineStatement(2), input: 0, target: 2 },
             { type: "1", statement: determineStatement(3), input: 0, target: 3 },
@@ -56,12 +57,19 @@ const Questionnaire = (props) => {
         { type: "5", statement: "Bitte wählen Sie 50% aus", min: 0, max: 100, measure: "%", input: null, target: 50 },
         { type: "5", statement: "Bitte wählen Sie 83% aus", min: 0, max: 100, measure: "%", input: null, target:  83},
         { type: "5", statement: "Bitte wählen Sie 100% aus", min: 0, max: 100, measure: "%", input: null, target: 100 }]
+        let variant4 = [{ type: "6", statement: "Bitte wählen Sie 0% aus", min: 0, max: 100, measure: "%", input: null, target: 0 },
+        { type: "6", statement: "Bitte wählen Sie 14% aus", min: 0, max: 100, measure: "%", input: null, target: 14 },
+        { type: "6", statement: "Bitte wählen Sie 32% aus", min: 0, max: 100, measure: "%", input: null, target: 32 },
+        { type: "6", statement: "Bitte wählen Sie 50% aus", min: 0, max: 100, measure: "%", input: null, target: 50 },
+        { type: "6", statement: "Bitte wählen Sie 83% aus", min: 0, max: 100, measure: "%", input: null, target:  83},
+        { type: "6", statement: "Bitte wählen Sie 100% aus", min: 0, max: 100, measure: "%", input: null, target: 100 }]
 
         let randomizedVariant1 = randomize(variant1);
         let randomizedVariant2 = randomize(variant2);
         let randomizedVariant3 = randomize(variant3);
+        let randomizedVariant4 = randomize(variant4);
 
-        let combinedQuestions = exploration1.concat(randomizedVariant1.concat(exploration2.concat(randomizedVariant2.concat(exploration3.concat(randomizedVariant3.concat(end3))))));
+        let combinedQuestions = exploration1.concat(randomizedVariant1.concat(exploration2.concat(randomizedVariant2.concat(exploration3.concat(randomizedVariant3.concat(end3.concat(randomizedVariant4.concat(end4))))))));
         console.log(combinedQuestions)
         return combinedQuestions;
     }
@@ -198,10 +206,9 @@ const Questionnaire = (props) => {
                             value={questionnaireItems[currentQuestionnaireItem].input}
                             target={questionnaireItems[currentQuestionnaireItem].target}
                             statement={questionnaireItems[currentQuestionnaireItem].statement}
-                            min={questionnaireItems[currentQuestionnaireItem].type === "5" ? questionnaireItems[currentQuestionnaireItem].min : ""}
-                            max={questionnaireItems[currentQuestionnaireItem].type === "5" ? questionnaireItems[currentQuestionnaireItem].max : ""}
-                            measure={questionnaireItems[currentQuestionnaireItem].type === "5" ? questionnaireItems[currentQuestionnaireItem].measure : ""}
-                            stepinterval={questionnaireItems[currentQuestionnaireItem].type === "5" ? questionnaireItems[currentQuestionnaireItem].stepinterval : ""}
+                            min={questionnaireItems[currentQuestionnaireItem].type === "5" || questionnaireItems[currentQuestionnaireItem].type === "6"? questionnaireItems[currentQuestionnaireItem].min : ""}
+                            max={questionnaireItems[currentQuestionnaireItem].type === "5" || questionnaireItems[currentQuestionnaireItem].type === "6" ? questionnaireItems[currentQuestionnaireItem].max : ""}
+                            measure={questionnaireItems[currentQuestionnaireItem].type === "5" || questionnaireItems[currentQuestionnaireItem].type === "6"? questionnaireItems[currentQuestionnaireItem].measure : ""}
                         />
                     </div >
 
