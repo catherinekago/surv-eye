@@ -100,9 +100,7 @@ const Questionnaire = (props) => {
     // Handle activation of navigation element
     const navigate = (trig) => {
         if (trig === "back") {
-            // updateCurrentQuestionnaireItem(previousValue => previousValue - 1)
-            // props.onQuestionChange(questionnaireItems[currentQuestionnaireItem].type === "1" ? "1-" + (currentQuestionnaireItem+1) : "2-"+ (currentQuestionnaireItem+1-8));
-            // setTargetReached(false);
+
         } else if (trig === "next") {
             if (currentQuestionnaireItem === 0) {
                 setQuestionnaireItems(randomizeQuestionOrder());

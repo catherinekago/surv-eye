@@ -1,7 +1,6 @@
 .navbar{
     display: flex;
     flex-direction: row;
-    height: 500px;
     width: -webkit-fill-available;
     justify-content: space-between;
     align-items: flex-start;
