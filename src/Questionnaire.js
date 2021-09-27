@@ -9,9 +9,10 @@ const Questionnaire = (props) => {
 
 
     const [questionnaireItems, setQuestionnaireItems] = useState([{ type: "1", statement: "Freie Phase", input: 0, target: null }, { type: "1", statement: "stimme ganz und gar nicht zu", input: 0, target: 1 }]);
-    const [currentQuestionnaireItem, updateCurrentQuestionnaireItem] = useState(0);
+    const [currentQuestionnaireItem, updatecurrentQuestionnaireItem] = useState(0);
     const [targetReached, setTargetReached] = useState(false);
     const [targetStartTime, setTargetStartTime] = useState(0);
+    const [trigger, setTrigger] = useState(null);
 
     let RADIOBUTTONCOUNT = [1, 2, 3, 4, 5, 6, 7];
 
@@ -21,6 +22,7 @@ const Questionnaire = (props) => {
         let exploration1 = [{ type: "1", statement: determineStatement(0), input: 0, target: null }, { type: "1", statement: determineStatement(1), input: 0, target: 1 }];
         let exploration2 = [{ type: "3", statement: determineStatement(0), input: 0, target: null }];
         let exploration3 = [{ type: "5", statement: determineStatement(0), min: "0", max: "100", measure: "%", input: null, target: -1 }]
+        let exploration4 = [{ type: "6", statement: determineStatement(0), min: "0", max: "100", measure: "%", input: null, target: -1 }]
         let end3 = [{ type: "5", statement: "Wie gern trinken Sie Tee?", min: "gar nicht gern", max: "sehr gern", measure: "", input: null, target: 101 }]
         let end4 = [{ type: "6", statement: "Wie gern trinken Sie Tee?", min: "gar nicht gern", max: "sehr gern", measure: "", input: null, target: 101 }]
         let variant1 = [
@@ -69,7 +71,7 @@ const Questionnaire = (props) => {
         let randomizedVariant3 = randomize(variant3);
         let randomizedVariant4 = randomize(variant4);
 
-        let combinedQuestions = exploration1.concat(randomizedVariant1.concat(exploration2.concat(randomizedVariant2.concat(exploration3.concat(randomizedVariant3.concat(end3.concat(randomizedVariant4.concat(end4))))))));
+        const combinedQuestions = exploration1.concat(randomizedVariant1.concat(exploration2.concat(randomizedVariant2.concat(exploration3.concat(randomizedVariant3.concat(end3.concat(exploration4.concat(randomizedVariant4.concat(end4)))))))));
         console.log(combinedQuestions)
         return combinedQuestions;
     }
