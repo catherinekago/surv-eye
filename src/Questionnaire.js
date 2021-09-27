@@ -9,7 +9,7 @@ const Questionnaire = (props) => {
 
 
     const [questionnaireItems, setQuestionnaireItems] = useState([{ type: "1", statement: "Freie Phase", input: 0, target: null }, { type: "1", statement: "stimme ganz und gar nicht zu", input: 0, target: 1 }]);
-    const [currentQuestionnaireItem, updatecurrentQuestionnaireItem] = useState(0);
+    const [currentQuestionnaireItem, updateCurrentQuestionnaireItem] = useState(0);
     const [targetReached, setTargetReached] = useState(false);
     const [targetStartTime, setTargetStartTime] = useState(0);
     const [trigger, setTrigger] = useState(null);
