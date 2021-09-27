@@ -91,7 +91,7 @@ const Slider = (props) => {
             if (movement !== "none") {
                 translateKnob();
             }
-        }, 20);
+        }, 5);
 
         return () => clearInterval(interval);
     }, [])
