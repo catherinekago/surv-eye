@@ -148,14 +148,14 @@ class WebGazeLoader extends React.Component {
   mapGazePredictionsToScreen(data) {
     if (data.x < 0) {
       data.x = 0;
-    } else if (data.x > window.innerWidth - 25) {
-      data.x = window.innerWidth - 25;
+    } else if (data.x > window.innerWidth - 5) {
+      data.x = window.innerWidth - 5;
     }
 
     if (data.y < 0) {
       data.y = 0;
-    } else if (data.y > window.innerHeight - 25) {
-      data.y = window.innerHeight - 25;
+    } else if (data.y > window.innerHeight - 5) {
+      data.y = window.innerHeight - 5;
     }
   }
 
@@ -183,7 +183,7 @@ class WebGazeLoader extends React.Component {
       }
       this.displaySmoothenedDataPoints(data, Math.round(elapsedTime), 8);
 
-      this.checkFixation();
+      // this.checkFixation();
 
     }).saveDataAcrossSessions(false).begin();
 

@@ -25,8 +25,8 @@ const Calibration = (props) => {
     const pointWidth = 50 + 50  // margin of point 
     const targetSize = convertAngleToPx(4.17);
 
-    const [introHeader, setIntroHeader] = useState("Welcome to SurvEye!");
-    const [introText, setIntroText] = useState("To complete the calibration, please follow the moving dot 🟢. Please try not to move your head or blink too often.");
+    const [introHeader, setIntroHeader] = useState("Willkommen bei SurvEye!");
+    const [introText, setIntroText] = useState("Kalibrierungssequenz wird geladen ...");
 
     // Different steps of target sizes to be tested, for validation phase
     const targetS = 100;
@@ -233,8 +233,8 @@ const Calibration = (props) => {
             } else {
                 props.onPhaseChange("QUESTIONNAIRE");
                 // setCalibrationComplete(true);
-                setIntroHeader("You did it! 🎉");
-                setIntroText("You will be directed to the questionnaire immediately.");
+                setIntroHeader("Fertig! 🎉");
+                setIntroText("Sie werden zum Fragebogen weitergeleitet ...");
             }
 
         } else if (currentPhase === "VALIDATION") {

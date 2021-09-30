@@ -56,13 +56,13 @@ const Questionnaire = (props) => {
         let variant3 = [{ type: "5", statement: "Bitte wählen Sie 0% aus", min: 0, max: 100, measure: "%", input: null, target: 0 },
         { type: "5", statement: "Bitte wählen Sie 14% aus", min: 0, max: 100, measure: "%", input: null, target: 14 },
         { type: "5", statement: "Bitte wählen Sie 32% aus", min: 0, max: 100, measure: "%", input: null, target: 32 },
-        { type: "5", statement: "Bitte wählen Sie 50% aus", min: 0, max: 100, measure: "%", input: null, target: 50 },
+        { type: "5", statement: "Bitte wählen Sie 51% aus", min: 0, max: 100, measure: "%", input: null, target: 51 },
         { type: "5", statement: "Bitte wählen Sie 83% aus", min: 0, max: 100, measure: "%", input: null, target:  83},
         { type: "5", statement: "Bitte wählen Sie 100% aus", min: 0, max: 100, measure: "%", input: null, target: 100 }]
         let variant4 = [{ type: "6", statement: "Bitte wählen Sie 0% aus", min: 0, max: 100, measure: "%", input: null, target: 0 },
         { type: "6", statement: "Bitte wählen Sie 14% aus", min: 0, max: 100, measure: "%", input: null, target: 14 },
         { type: "6", statement: "Bitte wählen Sie 32% aus", min: 0, max: 100, measure: "%", input: null, target: 32 },
-        { type: "6", statement: "Bitte wählen Sie 50% aus", min: 0, max: 100, measure: "%", input: null, target: 50 },
+        { type: "6", statement: "Bitte wählen Sie 51% aus", min: 0, max: 100, measure: "%", input: null, target: 51 },
         { type: "6", statement: "Bitte wählen Sie 83% aus", min: 0, max: 100, measure: "%", input: null, target:  83},
         { type: "6", statement: "Bitte wählen Sie 100% aus", min: 0, max: 100, measure: "%", input: null, target: 100 }]
 
