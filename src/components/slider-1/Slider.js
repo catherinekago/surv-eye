@@ -21,7 +21,7 @@ const Slider = (props) => {
     const [isSideInspected, setIsSideInspected] = useState(false);
     const INSPECTIONTIME = 500;
     const [isKnobTransitioning, setIsKnobTransitioning] = useState(false);
-    const [movement, setMovement] = useState(null); // right and left set in handleGazeWithinDirectionButtons
+    const [movement, setMovement] = useState("none"); // right and left set in handleGazeWithingMoveButtons
     const movementRef = useRef(movement);
     movementRef.current = movement;
     const [translateKnobTo, setTranslateKnobTo] = useState(0);
@@ -50,10 +50,8 @@ const Slider = (props) => {
     // Transate knob position if movement is triggered
     useEffect(() => {
         const interval = setInterval(() => {
-            // Determine movement only if knob is not locked or in the process of being locked
-            if (movement !== "none") {
+            // Determine movement
                 translateInteractionKnob();
-            }
         }, 5);
 
         return () => clearInterval(interval);
@@ -75,7 +73,7 @@ const Slider = (props) => {
     const handleGazeWithinKnobArea = () => {
         if (document.getElementById("KNOB-AREA-INTERACTION") !== null && document.getElementById("KNOB-AREA-SELECTION") !== null) {
             if (isGazeWithinElement("KNOB-AREA-INTERACTION", 0, props.context.x, props.context.y)) {
-
+                setMovement("none");
                 let currentTime = new Date().getTime();
                 // Start clock for selection delay
                 if (props.value !== calculateCurrentValue() && !isKnobInspected) {
@@ -89,7 +87,6 @@ const Slider = (props) => {
                     setIsKnobTransitioning(true);
                     setLastTransitionStart(currentTime);
                     setLastGazeSelection(currentTime);
-                    setMovement("none");
 
                 }
                 // Trigger selection once transition has completed 
@@ -177,9 +174,15 @@ const Slider = (props) => {
 
         // If gaze has been detected in left area, move to left by one unit
         if (isGazeWithinElement("INTERACTION-AREA-LEFT", 0, props.context.x, props.context.y) || (props.context.x < window.innerWidth * 0.05 && props.context.y >= document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().top)) {
-            setMovement("left");
+            if (movement !== "left") {
+                setMovement("left");
+            }
+
         } else if (isGazeWithinElement("INTERACTION-AREA-RIGHT", 0, props.context.x, props.context.y) || (props.context.x > window.innerWidth - window.innerWidth * 0.05 && props.context.y >= document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().top)) {
-            setMovement("right");
+            if (movement !== "right") {
+                setMovement("right");
+            }
+
         } else {
             setMovement("none");
         }
@@ -193,21 +196,23 @@ const Slider = (props) => {
                         setTranslateKnobTo(0);
                         setMovement("none");
                         // If remaining space is smaller than 1, move by that available space
-                    } else if (document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left - window.innerWidth * 0.05 < 1) {
-                        setTranslateKnobTo(prev => prev - (-1 * (document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left - window.innerWidth * 0.05)));
+                    } else if (document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left - window.innerWidth * 0.05 < 5) {
+                        setTranslateKnobTo(-1 * (document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().left - window.innerWidth * 0.05));
                     // Move by 1 otherwise
                     } else {
-                        setTranslateKnobTo(prev => prev - 1);
+                        setTranslateKnobTo(-5);
                     }
                 } else if (movementRef.current === "right" && document.getElementById("INTERACTION-AREA-RIGHT") !== null) {
                     if (window.innerWidth - window.innerWidth * 0.05 - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right <= 0) {
                         setTranslateKnobTo(0);
                         setMovement("none");
-                    } else if (window.innerWidth - window.innerWidth * 0.05 - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right < SCALE_UNIT) {
-                        setTranslateKnobTo(prev => prev + (window.innerWidth - window.innerWidth * 0.05 - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right)); 
+                    } else if (window.innerWidth - window.innerWidth * 0.05 - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right < 5) {
+                        setTranslateKnobTo(window.innerWidth - window.innerWidth * 0.05 - document.getElementById("KNOB-AREA-INTERACTION").getBoundingClientRect().right); 
                     } else {
-                        setTranslateKnobTo(prev => prev + 1);
+                        setTranslateKnobTo(5);
                     }
+                } else if (movementRef.current === "none") {
+                    setTranslateKnobTo(0);
                 }
             }
 
