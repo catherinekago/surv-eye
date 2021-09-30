@@ -91,7 +91,7 @@ const Slider = (props) => {
             if (movement !== "none") {
                 translateKnob();
             }
-        }, 20);
+        }, 5);
 
         return () => clearInterval(interval);
     }, [])
@@ -218,6 +218,7 @@ const Slider = (props) => {
                 setMovement("left");
                 setLeftArrowIndicatorClass("arrow-no-fill arrow-left");
                 setLeftArrowContainerClass("")
+                setIsKnobLocked(false);
 
             }
             document.getElementById("ARROW-LEFT-INDICATOR").removeEventListener("transitionend", onTransitionEnd);
@@ -228,6 +229,7 @@ const Slider = (props) => {
                 setMovement("right");
                 setRightArrowIndicatorClass("arrow-no-fill");
                 setRightArrowContainerClass("")
+                setIsKnobLocked(false);
 
             }
             document.getElementById("ARROW-RIGHT-INDICATOR").removeEventListener("transitionend", onTransitionEnd);
