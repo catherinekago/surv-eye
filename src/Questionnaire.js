@@ -7,7 +7,6 @@ const Questionnaire = (props) => {
     // { number: 0, type: "2", statement: "I want to know my Patronus.", input: 0, target: -1 },
     // // { number: 0, type: "slider", statement: "How much of an overthinker are you?", min: 0, max: 100, measure:"%", stepinterval: 1, input: 0 },
 
-
     const [questionnaireItems, setQuestionnaireItems] = useState([{ type: "1", statement: "Freie Phase", input: 0, target: null }, { type: "1", statement: "stimme ganz und gar nicht zu", input: 0, target: 1 }]);
     const [currentQuestionnaireItem, updateCurrentQuestionnaireItem] = useState(0);
     const [targetReached, setTargetReached] = useState(false);
