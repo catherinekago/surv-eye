@@ -11,7 +11,7 @@ const Questionnaire = (props) => {
     const [currentQuestionnaireItem, updateCurrentQuestionnaireItem] = useState(0);
     const [targetReached, setTargetReached] = useState(false);
     const [targetStartTime, setTargetStartTime] = useState(0);
-    const [trigger, setTrigger] = useState(null);
+    const [submitted, setSubmitted] = useState(false);
 
     let RADIOBUTTONCOUNT = [1, 2, 3, 4, 5, 6, 7];
 
@@ -56,13 +56,13 @@ const Questionnaire = (props) => {
         { type: "5", statement: "Bitte wählen Sie 14% aus", min: 0, max: 100, measure: "%", input: null, target: 14 },
         { type: "5", statement: "Bitte wählen Sie 32% aus", min: 0, max: 100, measure: "%", input: null, target: 32 },
         { type: "5", statement: "Bitte wählen Sie 51% aus", min: 0, max: 100, measure: "%", input: null, target: 51 },
-        { type: "5", statement: "Bitte wählen Sie 83% aus", min: 0, max: 100, measure: "%", input: null, target:  83},
+        { type: "5", statement: "Bitte wählen Sie 83% aus", min: 0, max: 100, measure: "%", input: null, target: 83 },
         { type: "5", statement: "Bitte wählen Sie 100% aus", min: 0, max: 100, measure: "%", input: null, target: 100 }]
         let variant4 = [{ type: "6", statement: "Bitte wählen Sie 0% aus", min: 0, max: 100, measure: "%", input: null, target: 0 },
         { type: "6", statement: "Bitte wählen Sie 14% aus", min: 0, max: 100, measure: "%", input: null, target: 14 },
         { type: "6", statement: "Bitte wählen Sie 32% aus", min: 0, max: 100, measure: "%", input: null, target: 32 },
         { type: "6", statement: "Bitte wählen Sie 51% aus", min: 0, max: 100, measure: "%", input: null, target: 51 },
-        { type: "6", statement: "Bitte wählen Sie 83% aus", min: 0, max: 100, measure: "%", input: null, target:  83},
+        { type: "6", statement: "Bitte wählen Sie 83% aus", min: 0, max: 100, measure: "%", input: null, target: 83 },
         { type: "6", statement: "Bitte wählen Sie 100% aus", min: 0, max: 100, measure: "%", input: null, target: 100 }]
 
         let randomizedVariant1 = randomize(variant1);
@@ -101,26 +101,32 @@ const Questionnaire = (props) => {
     // Handle activation of navigation element
     const navigate = (trig) => {
         if (trig === "back") {
-
+            props.onTargetReached(new Date().getTime() - targetStartTime, questionnaireItems[currentQuestionnaireItem].input, "submitted");
+            console.log("back")
         } else if (trig === "next") {
-            if (currentQuestionnaireItem === 0) {
+            if (currentQuestionnaireItem === 0 && !submitted) {
+                setSubmitted(true);
                 setQuestionnaireItems(randomizeQuestionOrder());
             }
             if (currentQuestionnaireItem !== questionnaireItems.length - 1) {
+                if (!submitted) {
+                    console.log("submitted");
+                    setSubmitted(true);
+                    props.onTargetReached(new Date().getTime() - targetStartTime, questionnaireItems[currentQuestionnaireItem].input, "submitted");
+                } else {
+                    setSubmitted(false);
+                    props.onQuestionChange(questionnaireItems[currentQuestionnaireItem + 1].type + (questionnaireItems[currentQuestionnaireItem + 1].target));
+                    updateCurrentQuestionnaireItem(previousValue => previousValue + 1);
+                    setTargetStartTime(new Date().getTime());
+                }
 
-                if (questionnaireItems[currentQuestionnaireItem].target !== -1 && questionnaireItems[currentQuestionnaireItem].target !== null && !targetReached) {
-                    props.onTargetReached(new Date().getTime() - targetStartTime, questionnaireItems[currentQuestionnaireItem].input);   
-                }
-                setTargetStartTime(new Date().getTime());
-                setTargetReached(false);
-                props.onQuestionChange(questionnaireItems[currentQuestionnaireItem + 1].type + (questionnaireItems[currentQuestionnaireItem + 1].target));
-                updateCurrentQuestionnaireItem(previousValue => previousValue + 1);
             } else {
-                if (questionnaireItems[currentQuestionnaireItem].target !== -1 && questionnaireItems[currentQuestionnaireItem].target !== null && !targetReached) {
-                    props.onTargetReached(new Date().getTime() - targetStartTime, questionnaireItems[currentQuestionnaireItem].input);   
+                if (!submitted) {
+                    setSubmitted(true);
+                    props.onTargetReached(new Date().getTime() - targetStartTime, questionnaireItems[currentQuestionnaireItem].input, "submitted");
+                } else {
+                    setTimeout(() => { document.getElementById("downloadGazeData").click() }, 500);
                 }
-                setTimeout(() => { document.getElementById("downloadGazeData").click()}, 500);
-                
             }
         }
     }
@@ -130,11 +136,8 @@ const Questionnaire = (props) => {
         let allItems = questionnaireItems;
         allItems[currentQuestionnaireItem].input = value;
         setQuestionnaireItems(allItems);
-        if (!targetReached && parseInt(questionnaireItems[currentQuestionnaireItem].input) === parseInt(questionnaireItems[currentQuestionnaireItem].target)) {
-            setTargetReached(true);
-            let currentTime = new Date().getTime();
-            let completionTime = currentTime - targetStartTime;
-            props.onTargetReached(completionTime);
+        if (parseInt(questionnaireItems[currentQuestionnaireItem].input) === parseInt(questionnaireItems[currentQuestionnaireItem].target)) {
+            props.onTargetReached(new Date().getTime() - targetStartTime, questionnaireItems[currentQuestionnaireItem].input, "selected");
         }
     }
 
@@ -205,9 +208,9 @@ const Questionnaire = (props) => {
                             value={questionnaireItems[currentQuestionnaireItem].input}
                             target={questionnaireItems[currentQuestionnaireItem].target}
                             statement={questionnaireItems[currentQuestionnaireItem].statement}
-                            min={questionnaireItems[currentQuestionnaireItem].type === "5" || questionnaireItems[currentQuestionnaireItem].type === "6"? questionnaireItems[currentQuestionnaireItem].min : ""}
+                            min={questionnaireItems[currentQuestionnaireItem].type === "5" || questionnaireItems[currentQuestionnaireItem].type === "6" ? questionnaireItems[currentQuestionnaireItem].min : ""}
                             max={questionnaireItems[currentQuestionnaireItem].type === "5" || questionnaireItems[currentQuestionnaireItem].type === "6" ? questionnaireItems[currentQuestionnaireItem].max : ""}
-                            measure={questionnaireItems[currentQuestionnaireItem].type === "5" || questionnaireItems[currentQuestionnaireItem].type === "6"? questionnaireItems[currentQuestionnaireItem].measure : ""}
+                            measure={questionnaireItems[currentQuestionnaireItem].type === "5" || questionnaireItems[currentQuestionnaireItem].type === "6" ? questionnaireItems[currentQuestionnaireItem].measure : ""}
                         />
                     </div >
 

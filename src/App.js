@@ -33,7 +33,6 @@ class WebGazeLoader extends React.Component {
       phase: "CALIBRATION", // Currently active phase: CALIBRATION, VALIDATION, or 
       question: "10",
       performValidation: false, // THIS VARIABLE INFLUENCES IF SURVEYE INCLUDES A VALIDATION PHASE WITH DATA GENERATION
-      targetReached: false,
 
     };
   }
@@ -55,23 +54,17 @@ class WebGazeLoader extends React.Component {
     this.setState({ accuracyData: data });
   }
 
-  // Set corresponding variable to true, so that recording of gaze points stops, and add entry to data 
-  handleTargetReached(time, optionalValue) {
-
+  // Add another data entry about when target has been reached
+  handleTargetReached(time, value, useraction) {
     let updatedGazeData = this.state.gazeData;
-    if (typeof optionalValue === 'undefined') {
-      updatedGazeData.push({completiontime: time, phase: this.determinePhase()});
-      this.setState({ targetReached: true });
-    } else {
-      updatedGazeData.push({completiontime: time, phase: this.determinePhase(), input: optionalValue});
+    if (this.state.question !== "10" && this.state.question !== "20" && this.state.question !== "30" && this.state.question !== "40" && this.state.question !== null) {
+      updatedGazeData.push({completiontime: time, phase: this.determinePhase(), input: value, useraction: useraction});
+      this.setState({ gazeData: updatedGazeData });
     }
-
-    this.setState({ gazeData: updatedGazeData });
   }
 
   handleQuestionChange(question) {
-    this.setState({ question: question });
-    this.setState({ targetReached: false });
+    this.setState({ question: question })
   }
 
   // Check if the user is fixating a point (gaze staying within a defined area for a defined amount of time)
@@ -102,7 +95,7 @@ class WebGazeLoader extends React.Component {
 
       if ((this.state.performValidation && this.state.phase !== "QUESTIONNAIRE") || this.state.phase === "QUESTIONNAIRE") {
         let updatedGazeData = this.state.gazeData;
-        updatedGazeData.push({ x: data.x, y: data.y, time: elapsedTime, type: "raw", phase: this.determinePhase(), state: this.state.targetReached ? "post-selection" : "pre-selection" });
+        updatedGazeData.push({ x: data.x, y: data.y, time: elapsedTime, type: "raw", phase: this.determinePhase()});
         if (this.determinePhase() === "47") {
         }
         this.setState({ gazeData: updatedGazeData });
@@ -127,7 +120,7 @@ class WebGazeLoader extends React.Component {
 
       if ((this.state.performValidation && this.state.phase !== "QUESTIONNAIRE") || this.state.phase === "QUESTIONNAIRE") {
         let updatedGazeData = this.state.gazeData;
-        updatedGazeData.push({ x: averagedX, y: averagedY, time: elapsedTime, type: "smoothened", phase: this.determinePhase(), state: this.state.targetReached ? "post-selection" : "pre-selection"});
+        updatedGazeData.push({ x: averagedX, y: averagedY, time: elapsedTime, type: "smoothened", phase: this.determinePhase()});
         this.setState({ gazeData: updatedGazeData });
       }
 

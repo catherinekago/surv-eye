@@ -2,7 +2,7 @@ import './navbutton.css';
 import { useState, useEffect } from 'react';
 import { click } from "../../functions/click";
 import { isGazeWithinElement } from '../../functions/isGazeWithinElement';
-import scrollIconBack from '../../assets/scrollArrowBack.svg';
+import save from '../../assets/save.svg';
 import scrollIconNext from '../../assets/scrollArrowNext.svg';
 
 const NavButton = (props) => {
@@ -57,7 +57,7 @@ const NavButton = (props) => {
 
     return (
         <div onClick={() => props.type === "scroll-button-back" ? props.scrollTrigger("back") : props.scrollTrigger("next")} id={props.type} className={navButtonClass}>
-            <img id={props.type === "scroll-button-back" ? "scroll-icon-back" : "scroll-icon-next"} className="button-icon" src={props.type === "scroll-button-back" ? scrollIconBack : scrollIconNext} alt="Nav Icon" />
+            {props.type === "scroll-button-next" ? <img id={props.type === "scroll-button-next" ? "scroll-icon-next" : ""} className={props.type === "scroll-button-next" ? "button-icon": ""} src={props.type === "scroll-button-next" ? scrollIconNext : null} alt="Nav Icon" /> : null }
             <div id={gazeIndicatorID} className={gazeIndicatorClass} />
         </div>
 

@@ -56,7 +56,7 @@
   height: 0px;
   border-radius: 50% !important;
   border: solid 0px;	
-  box-shadow: 0 0 100px 10px rgb(39, 63, 50), 0 0 50px 15px rgb(22, 218, 110);	
+  box-shadow: 0 0 100px 10px rgb(39, 63, 50), 0 0 50px 15px rgba(22, 218, 110, 0.651);	
   pointer-events: none;
   background: none;	
   z-index: 999999;

@@ -273,10 +273,10 @@ const Slider = (props) => {
                     setMovement(null);
                 }
 
-            } else if (currentKnobMarginLeftRef.current - 1 < MIN_MARGIN_KNOB) {
+            } else if (currentKnobMarginLeftRef.current - 2 < MIN_MARGIN_KNOB) {
                 setCurrentKnobMarginLeft(MIN_MARGIN_KNOB);
             } else {
-                setCurrentKnobMarginLeft(prev => prev - 1);
+                setCurrentKnobMarginLeft(prev => prev - 2);
             }
         } else if (movementRef.current === "right") {
             let maxPos = window.innerWidth - (MIN_MARGIN_KNOB + document.getElementById("KNOB-SLIDER2").offsetWidth);
@@ -290,10 +290,10 @@ const Slider = (props) => {
                     setMovement(null);
                 }
 
-            } else if (currentKnobMarginLeftRef.current + 1 > maxPos) {
+            } else if (currentKnobMarginLeftRef.current + 2 > maxPos) {
                 setCurrentKnobMarginLeft(maxPos);
             } else {
-                setCurrentKnobMarginLeft(prev => prev + 1);
+                setCurrentKnobMarginLeft(prev => prev + 2);
             }
         } else if (movementRef.current === "none") {
 
